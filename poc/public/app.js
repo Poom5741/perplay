@@ -73,7 +73,7 @@ async function pagePay(id) {
     const b = document.getElementById('paid'); b.disabled = true; b.textContent = 'กำลังตรวจ…';
     try {
       const j = await api(`/plays/${id}/confirm-paid`, { method: 'POST' });
-      if (j.play.status === 'verified') {
+      if (['verified', 'anchoring', 'anchored'].includes(j.play.status)) {
         toast('✅ ยืนยันเพลงสำเร็จ — ไปหน้าจอฉาย');
         location.hash = `#/screen/${id}`;
       } else if (j.next === 'scan-audio') {
@@ -96,7 +96,7 @@ function addScanButton(id) {
     const buf = await e.target.files[0].arrayBuffer();
     document.getElementById('scanbtn').textContent = 'กำลัง match fingerprint…';
     const j = await api(`/plays/${id}/verify/scan`, { method: 'POST', body: buf });
-    if (j.play.status === 'verified') { toast('✅ fingerprint match — เพลงถูกยืนยัน'); location.hash = `#/screen/${id}`; }
+      if (['verified', 'anchoring', 'anchored'].includes(j.play.status)) { toast('✅ fingerprint match — เพลงถูกยืนยัน'); location.hash = `#/screen/${id}`; }
     else toast(j.play.verifyResult.detail);
   };
 }
@@ -135,6 +135,7 @@ async function pageDashboard() {
   const songsById = Object.fromEntries(songs.map(s => [s.id, s]));
   const L = await api('/ledger');
   const { plays: recent } = await api('/plays/recent');
+  const rows = recent;
   const partyRows = Object.entries(L.labelByParty).map(([k, v]) => `<tr><td>${k}</td><td>${THB(v)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">ยังไม่มีรายการ</td></tr>';
   const venueRows = Object.entries(L.venueByParty).map(([k, v]) => `<tr><td>${k}</td><td>${THB(v)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">ยังไม่มีรายการ</td></tr>';
   const pct = (v, t) => `${((v / t) * 100).toFixed(0)}%`;

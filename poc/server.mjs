@@ -156,6 +156,11 @@ const server = http.createServer(async (req, res) => {
       if (!play) return json(res, 404, { error: 'play not found' });
 
       if (url.pathname.endsWith('/confirm-paid')) {
+        // idempotent: already past payment → return current state (demo-safe double click)
+        if (['paid', 'verified', 'anchoring', 'anchored'].includes(play.status)) {
+          const stillSetlist = play.verifyMode === 'acr' && play.status === 'paid';
+          return json(res, 200, { play, ...(stillSetlist ? { next: 'scan-audio' } : {}) });
+        }
         if (play.status !== 'qr_pending') return json(res, 409, { error: `bad state ${play.status}` });
         play.status = 'paid';
         play.timings.paidConfirmed = Date.now();

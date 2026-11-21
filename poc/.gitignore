@@ -1,0 +1,6 @@
+node_modules/
+data/
+audio/
+.env
+.a2awire-identity.json
+*.log

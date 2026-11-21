@@ -1,8 +1,8 @@
 {
-  "a0a16612": {
-    "id": "a0a16612",
+  "809c92f4": {
+    "id": "809c92f4",
     "seq": 0,
-    "ref": "PRMWQ7QPLQA0A",
+    "ref": "PRMWQ7ZF99809",
     "songId": "S001",
     "title": "หอมกลิ่นฝนอำเภอเก่า ปลายถนนไม่มีเพลง",
     "artist": "โจทย์ แอนด์ เดอะเฟด",
@@ -17,25 +17,25 @@
     "verifyMode": "setlist",
     "status": "anchored",
     "timings": {
-      "requested": 1795253768990,
-      "paidConfirmed": 1795253769085,
-      "verified": 1795253769085,
-      "anchored": 1795253769680
+      "requested": 1795254175485,
+      "paidConfirmed": 1795254175608,
+      "verified": 1795254175608,
+      "anchored": 1795254176183
     },
-    "createdAt": "2026-11-21T09:36:08.990Z",
+    "createdAt": "2026-11-21T09:42:55.485Z",
     "verifyResult": {
       "method": "setlist",
       "ok": true,
       "detail": "อยู่ในเซ็ตลิสต์คืนนี้ (2026-11-21)"
     },
-    "txHash": "0x4b6eea3084cd00b53ec103f79cf6f4cec95d80e41af730d4cfc0c75458b86ead",
-    "explorerUrl": "https://sepolia.basescan.org/tx/0x4b6eea3084cd00b53ec103f79cf6f4cec95d80e41af730d4cfc0c75458b86ead",
+    "txHash": "0x9c3494e3abf2f65d0c9534cc0d84ea7b510eca9929360da98408e14710e135d1",
+    "explorerUrl": "https://sepolia.basescan.org/tx/0x9c3494e3abf2f65d0c9534cc0d84ea7b510eca9929360da98408e14710e135d1",
     "e2eSeconds": 0.7
   },
-  "e3822e6c": {
-    "id": "e3822e6c",
+  "0c8dc373": {
+    "id": "0c8dc373",
     "seq": 1,
-    "ref": "PRMWQ7QQGPE38",
+    "ref": "PRMWQ7ZG5B0C8",
     "songId": "S005",
     "title": "รถไฟสายหลับใหล ปลายถนนไม่มีเพลง",
     "artist": "วง ห้องซ้อม",
@@ -50,26 +50,26 @@
     "verifyMode": "acr",
     "status": "anchored",
     "timings": {
-      "requested": 1795253770105,
-      "paidConfirmed": 1795253770144,
-      "verified": 1795253770173,
-      "anchored": 1795253770684
+      "requested": 1795254176639,
+      "paidConfirmed": 1795254176661,
+      "verified": 1795254176668,
+      "anchored": 1795254177747
     },
-    "createdAt": "2026-11-21T09:36:10.105Z",
+    "createdAt": "2026-11-21T09:42:56.639Z",
     "verifyResult": {
       "method": "audio-scan (mock fingerprint)",
       "ok": true,
       "matchedSong": "S005",
       "detail": "fingerprint ตรงกับ catalog (PoC: ใช้ mock fingerprint — production ใช้ ACRCloud ~0.17฿/จับ)"
     },
-    "txHash": "0xe141c3ca617aadbaed855d7cff3f1460ebcb87c0a336b3c627a6a7f0c0e261fa",
-    "explorerUrl": "https://sepolia.basescan.org/tx/0xe141c3ca617aadbaed855d7cff3f1460ebcb87c0a336b3c627a6a7f0c0e261fa",
-    "e2eSeconds": 0.6
+    "txHash": "0x9a1de7debc60a520a14096849ce8d1a723eac85428ce2e056cb4d838f2ea6fca",
+    "explorerUrl": "https://sepolia.basescan.org/tx/0x9a1de7debc60a520a14096849ce8d1a723eac85428ce2e056cb4d838f2ea6fca",
+    "e2eSeconds": 1.1
   },
-  "77da5191": {
-    "id": "77da5191",
+  "434612df": {
+    "id": "434612df",
     "seq": 2,
-    "ref": "PRMWQ7QRAW77D",
+    "ref": "PRMWQ7ZHQL434",
     "songId": "S042",
     "title": "ดาวตกหล่นกลางกรุง วงเล็บกลางคืน (Acoustic)",
     "artist": "โจทย์ แอนด์ เดอะเฟด",
@@ -84,10 +84,10 @@
     "verifyMode": "acr",
     "status": "paid",
     "timings": {
-      "requested": 1795253771193,
-      "paidConfirmed": 1795253771231
+      "requested": 1795254178701,
+      "paidConfirmed": 1795254178738
     },
-    "createdAt": "2026-11-21T09:36:11.193Z",
+    "createdAt": "2026-11-21T09:42:58.701Z",
     "verifyResult": {
       "method": "audio-scan",
       "ok": false,
