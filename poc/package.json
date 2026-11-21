@@ -1,0 +1,18 @@
+{
+  "name": "perplay-poc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "PerPlay PoC — per-play music licensing demo (TED fund) · desk-based 100%",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "e2e": "node scripts/e2e.mjs",
+    "wallet": "node scripts/wallet.mjs",
+    "make-audio": "node scripts/make-audio.mjs"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "viem": "^2.21.0"
+  }
+}

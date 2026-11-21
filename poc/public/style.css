@@ -1,0 +1,50 @@
+:root{--bg:#0b0e14;--panel:#141a24;--line:#232c3d;--txt:#e8eef6;--mut:#9db4d0;--acc:#3b82f6;--ok:#22c55e;--warn:#eab308;--bad:#ef4444}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Sukhumvit Set','Noto Sans Thai',system-ui,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:5}
+.brand{font-weight:800;font-size:1.25rem;letter-spacing:.3px}
+.brand .tag{font-size:.7rem;background:var(--acc);color:#fff;border-radius:99px;padding:2px 10px;vertical-align:middle;margin-left:8px}
+nav a{color:var(--mut);text-decoration:none;margin-left:18px;font-size:.95rem}
+nav a:hover{color:var(--txt)}
+.dot{color:var(--bad);cursor:default}
+.dot.ok{color:var(--ok)}
+main{max-width:1080px;margin:0 auto;padding:26px 18px 60px}
+footer{border-top:1px solid var(--line);color:var(--mut);font-size:.75rem;padding:14px 22px;text-align:center}
+h1{font-size:1.5rem;margin:6px 0 18px}
+h2{font-size:1.1rem;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.15s}
+.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card .t{font-weight:700;line-height:1.35}
+.card .a{color:var(--mut);font-size:.85rem;margin:4px 0 10px}
+.card .p{font-size:1.05rem;font-weight:800;color:var(--ok)}
+.modebar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);border-radius:99px;padding:7px 16px;color:var(--mut);cursor:pointer;background:var(--panel)}
+.chip.on{border-color:var(--acc);color:#fff;background:#1d2a44}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:12px 0}
+.muted{color:var(--mut);font-size:.9rem}
+.qrbox{text-align:center}
+.qrbox img{background:#fff;border-radius:12px;padding:8px}
+.paybtn{display:block;width:100%;margin-top:14px;background:var(--acc);color:#fff;border:0;border-radius:12px;padding:14px;font-size:1.05rem;font-weight:700;cursor:pointer}
+.paybtn:disabled{opacity:.5;cursor:not-allowed}
+.status{display:inline-block;border-radius:99px;padding:4px 14px;font-size:.85rem;font-weight:700}
+.s-qr_pending{background:#374151;color:#d1d5db}.s-paid{background:#1e3a8a;color:#bfdbfe}
+.s-verified{background:#14532d;color:#bbf7d0}.s-anchored{background:var(--ok);color:#052e16}.s-anchoring{background:#713f12;color:#fde68a}
+.screen{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.screen .now{font-size:clamp(2rem,6vw,4.2rem);font-weight:800;line-height:1.2}
+.screen .okline{font-size:clamp(1.2rem,3vw,2rem);color:var(--ok);font-weight:700;margin-top:18px}
+.screen .meta{color:var(--mut);margin-top:14px;font-size:1rem}
+.txlink{color:var(--acc);word-break:break-all}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.kpi{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}
+.kpi .k{flex:1;min-width:160px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi .n{font-size:1.6rem;font-weight:800}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}
+th{color:var(--mut);font-weight:600;font-size:.8rem;text-transform:uppercase}
+.warn{color:var(--warn);font-size:.85rem;margin-top:10px}
+.bar{height:10px;border-radius:6px;background:#334155;overflow:hidden;display:flex;margin-top:6px}
+.bar i{display:block;height:100%}
+input,select{background:#0e1420;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px 12px;font-size:.95rem}
+button{font-family:inherit}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:10px 18px;border-radius:10px;font-size:.9rem;display:none;z-index:9}

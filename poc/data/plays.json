@@ -1,0 +1,97 @@
+{
+  "a0a16612": {
+    "id": "a0a16612",
+    "seq": 0,
+    "ref": "PRMWQ7QPLQA0A",
+    "songId": "S001",
+    "title": "หอมกลิ่นฝนอำเภอเก่า ปลายถนนไม่มีเพลง",
+    "artist": "โจทย์ แอนด์ เดอะเฟด",
+    "label": "GMM-Mock B",
+    "venue": "ผับ Demo (Bangkok)",
+    "amountTHB": 30,
+    "splits": {
+      "label": 0.7,
+      "venue": 0.1,
+      "platform": 0.2
+    },
+    "verifyMode": "setlist",
+    "status": "anchored",
+    "timings": {
+      "requested": 1795253768990,
+      "paidConfirmed": 1795253769085,
+      "verified": 1795253769085,
+      "anchored": 1795253769680
+    },
+    "createdAt": "2026-11-21T09:36:08.990Z",
+    "verifyResult": {
+      "method": "setlist",
+      "ok": true,
+      "detail": "อยู่ในเซ็ตลิสต์คืนนี้ (2026-11-21)"
+    },
+    "txHash": "0x4b6eea3084cd00b53ec103f79cf6f4cec95d80e41af730d4cfc0c75458b86ead",
+    "explorerUrl": "https://sepolia.basescan.org/tx/0x4b6eea3084cd00b53ec103f79cf6f4cec95d80e41af730d4cfc0c75458b86ead",
+    "e2eSeconds": 0.7
+  },
+  "e3822e6c": {
+    "id": "e3822e6c",
+    "seq": 1,
+    "ref": "PRMWQ7QQGPE38",
+    "songId": "S005",
+    "title": "รถไฟสายหลับใหล ปลายถนนไม่มีเพลง",
+    "artist": "วง ห้องซ้อม",
+    "label": "GMM-Mock B",
+    "venue": "ผับ Demo (Bangkok)",
+    "amountTHB": 25,
+    "splits": {
+      "label": 0.7,
+      "venue": 0.1,
+      "platform": 0.2
+    },
+    "verifyMode": "acr",
+    "status": "anchored",
+    "timings": {
+      "requested": 1795253770105,
+      "paidConfirmed": 1795253770144,
+      "verified": 1795253770173,
+      "anchored": 1795253770684
+    },
+    "createdAt": "2026-11-21T09:36:10.105Z",
+    "verifyResult": {
+      "method": "audio-scan (mock fingerprint)",
+      "ok": true,
+      "matchedSong": "S005",
+      "detail": "fingerprint ตรงกับ catalog (PoC: ใช้ mock fingerprint — production ใช้ ACRCloud ~0.17฿/จับ)"
+    },
+    "txHash": "0xe141c3ca617aadbaed855d7cff3f1460ebcb87c0a336b3c627a6a7f0c0e261fa",
+    "explorerUrl": "https://sepolia.basescan.org/tx/0xe141c3ca617aadbaed855d7cff3f1460ebcb87c0a336b3c627a6a7f0c0e261fa",
+    "e2eSeconds": 0.6
+  },
+  "77da5191": {
+    "id": "77da5191",
+    "seq": 2,
+    "ref": "PRMWQ7QRAW77D",
+    "songId": "S042",
+    "title": "ดาวตกหล่นกลางกรุง วงเล็บกลางคืน (Acoustic)",
+    "artist": "โจทย์ แอนด์ เดอะเฟด",
+    "label": "GMM-Mock A",
+    "venue": "ผับ Demo (Bangkok)",
+    "amountTHB": 50,
+    "splits": {
+      "label": 0.7,
+      "venue": 0.1,
+      "platform": 0.2
+    },
+    "verifyMode": "acr",
+    "status": "paid",
+    "timings": {
+      "requested": 1795253771193,
+      "paidConfirmed": 1795253771231
+    },
+    "createdAt": "2026-11-21T09:36:11.193Z",
+    "verifyResult": {
+      "method": "audio-scan",
+      "ok": false,
+      "detail": "ไม่พบ fingerprint ตรง — ถือว่า unlicensed (นี่คือประเด็นขาย: ระบบรู้ว่าเพลงไหนยังไม่ได้จ่าย)"
+    }
+  }
+}
