@@ -1,0 +1,52 @@
+# Issue tracker: GitHub
+
+Issues and specs for this repo live as GitHub issues in **Poom5741/perplay**. Every issue must also appear on the project board — see "Project board" below.
+
+## Conventions
+
+- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
+- **Read an issue**: `gh issue view <number> --comments`, filtering comments by `jq` and also fetching labels.
+- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
+- **Comment on an issue**: `gh issue comment <number> --body "..."`
+- **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
+- **Close**: `gh issue close <number> --comment "..."`
+
+Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
+
+### `gh` CLI on this machine (note, 2026-11-21)
+
+`gh` is **not installed** on the host that runs Hermes. Where `gh` is unavailable, use the GitHub REST/GraphQL API with the OAuth token at `/root/.config/gh/hosts.yml` (never print the token; never commit it). Installing `gh` is welcome; keep these conventions either way.
+
+## Project board (mandatory)
+
+Every issue created in this repo **must be added to the board**:
+
+- **Board**: "perplay board" — GitHub Project v2, owner `@Poom5741`, number **15**, id `PVT_kwHOAfefzM4BsmFj`
+- After `issue create`, add the issue to the project (GraphQL `addProjectV2ItemById` with the issue's node id) and set at minimum:
+  - **Status**: `Backlog` / `Ready` / `In progress` / `In review` / `Done`
+  - **Priority**: `P0` / `P1` / `P2` (P0 = needed for the Friday demo, P1 = real-but-not-blocker, P2 = nice-to-have)
+- Default for a newly specified ticket: `Status: Ready`, `Priority` per impact.
+- Default assignee: **Poom5741** (he executes the tickets himself; planning sessions only open cards).
+
+## Pull requests as a triage surface
+
+**PRs as a request surface: no.** _(Set to `yes` if this repo treats external PRs as feature requests; `/triage` reads this flag.)_
+
+## When a skill says "publish to the issue tracker"
+
+Create a GitHub issue **and** add it to the perplay board per the section above.
+
+## When a skill says "fetch the relevant ticket"
+
+Run `gh issue view <number> --comments`.
+
+## Wayfinding operations
+
+Used by `/wayfinder`. The **map** is a single issue with **child** issues as tickets.
+
+- **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body. `gh issue create --label wayfinder:map` (then add to the board).
+- **Child ticket**: an issue linked to the map as a GitHub sub-issue (`gh api` on the sub-issues endpoint). Where sub-issues aren't enabled, add the child to a task list in the map body and put `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.
+- **Blocking**: GitHub's **native issue dependencies**, the canonical, UI-visible representation. Add an edge with `gh api --method POST repos/Poom5741/perplay/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where `<blocker-db-id>` is the blocker's numeric **database id** (`gh api repos/Poom5741/perplay/issues/<n> --jq .id`, _not_ the `#number` or `node_id`). Where dependencies aren't available, fall back to a `Blocked by: #<n>, #<n>` line at the top of the child body. A ticket is unblocked when every blocker is closed.
+- **Frontier query**: list the map's open children, drop any with an open blocker or an assignee; first in map order wins.
+- **Claim**: `gh issue edit <n> --add-assignee poom5741` (or `@me` when running as Poom), the session's first write.
+- **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer to the map's Decisions-so-far.
