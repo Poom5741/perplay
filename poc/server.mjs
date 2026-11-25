@@ -3,7 +3,7 @@
 import http from 'node:http';
 import { randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import QRCode from 'qrcode';
 import { buildCatalog, ensureFingerprints, sha256Buf } from './lib/catalog.mjs';
@@ -64,9 +64,12 @@ async function anchorIfReady(play) {
 async function readBody(req, limit = 15 * 1024 * 1024) {
   const chunks = [];
   let size = 0;
-  for await (const c of req) { size += c.length; if (size > limit) throw new Error('body too large'); chunks.push(c); }
+  for await (const c of req) { size += c.length; if (size > limit) throw clientError(413, 'body too large'); chunks.push(c); }
   return Buffer.concat(chunks);
 }
+
+// #19: mark client-fault errors so the outer catch answers 4xx, never 500
+const clientError = (status, message) => Object.assign(new Error(message), { clientError: status });
 
 function json(res, code, obj) {
   const body = JSON.stringify(obj);
@@ -193,6 +196,12 @@ const server = http.createServer(async (req, res) => {
         play.status = 'paid';
         play.timings.paidConfirmed = play.timings.paidConfirmed || Date.now();
         if (match) {
+          if (match[0] !== play.songId) {
+            // licensing integrity: a fingerprint of a DIFFERENT song must not license this play (defect D2 fix)
+            play.verifyResult = { method: 'audio-scan', ok: false, matchedSong: match[0], detail: `fingerprint matches ${match[0]}, not requested song ${play.songId} — play NOT licensed` };
+            plays.set(play.id, play);
+            return json(res, 409, { error: `fingerprint mismatch: scan matches ${match[0]}, play is for ${play.songId}`, play });
+          }
           play.status = 'verified';
           play.verifyResult = { method: 'audio-scan (mock fingerprint)', ok: true, matchedSong: match[0], detail: 'fingerprint ตรงกับ catalog (PoC: ใช้ mock fingerprint — production ใช้ ACRCloud ~0.17฿/จับ)' };
           play.timings.verified = Date.now();
@@ -214,9 +223,30 @@ const server = http.createServer(async (req, res) => {
 
     return json(res, 404, { error: 'no route' });
   } catch (e) {
+    // #19: client faults answer 4xx, never 500 — oversized body → 413, malformed JSON → 400
+    if (e && e.clientError) return json(res, e.clientError, { error: String(e.message || e) });
+    if (e instanceof SyntaxError) return json(res, 400, { error: 'malformed JSON body' });
     return json(res, 500, { error: String(e.message || e) });
   }
 });
 
+// D4 guard: single instance per data directory — two servers sharing ${cwd}/data
+// would clobber each other's whole-file writes (defect D4, qa/manual/runs/run-2026-11-25.md).
+const LOCK_FILE = path.join(process.cwd(), 'data', '.server.lock');
 mkdirSync(path.join(process.cwd(), 'data'), { recursive: true });
+try {
+  const prior = Number(readFileSync(LOCK_FILE, 'utf8').trim());
+  if (prior && prior !== process.pid) {
+    let alive = true;
+    try { process.kill(prior, 0); } catch { alive = false; } // ESRCH → stale lock from a crashed server
+    if (alive) {
+      console.error(`ERROR: another PoC server (pid ${prior}) is already using this data directory (${path.join(process.cwd(), 'data')}). Refusing to start — stop it first or use a different working directory.`);
+      process.exit(1);
+    }
+    console.error(`Stale lock found (pid ${prior} not running) — taking over.`);
+  }
+} catch { /* no lock file yet */ }
+process.on('exit', () => { try { if (readFileSync(LOCK_FILE, 'utf8').trim() === String(process.pid)) unlinkSync(LOCK_FILE); } catch { /* already gone */ } });
+writeFileSync(LOCK_FILE, String(process.pid));
+
 server.listen(PORT, () => console.log(`PlayRight PoC → http://localhost:${PORT} · ${catalog.length} songs · ${Object.keys(fingerprints).length} fingerprints`));

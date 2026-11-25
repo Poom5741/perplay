@@ -13,6 +13,7 @@ async function api(path, opts) {
 
 const STATUS_TH = { qr_pending: 'รอชำระ', paid: 'ชำระแล้ว (รอ verify)', verified: 'ยืนยันเพลงแล้ว ✅', anchoring: '…กำลัง anchor บน chain', anchored: 'receipt บน chain ✅' };
 const badge = s => `<span class="status s-${s}">${STATUS_TH[s] || s}</span>`;
+const t = ms => ms ? new Date(ms).toLocaleTimeString('th-TH') : ''; // shared time formatter (was pageScreen-local → D1 ReferenceError in renderReceipt)
 
 function route() {
   const h = location.hash || '#/catalog';
@@ -21,9 +22,20 @@ function route() {
   if (h.startsWith('#/dashboard')) return pageDashboard();
   if (h.startsWith('#/setlist')) return pageSetlist();
   if (h.startsWith('#/health')) return pageHealth();
-  return pageCatalog();
+  if (h.startsWith('#/catalog') || h === '#/' || h === '#' || h === '') return pageCatalog();
+  return showNotFound(); // TC-12: unknown deep links no longer fall back to stale catalog content
 }
 window.addEventListener('hashchange', route);
+
+// TC-12 fix: clear not-found state instead of leaving the previous page's DOM
+function showNotFound(what) {
+  app.innerHTML = `<div class="panel" style="max-width:480px;margin:40px auto;text-align:center">
+    <div style="font-size:2rem">🔎</div>
+    <h1 style="font-size:1.1rem;margin:10px 0">ไม่พบหน้าที่ต้องการ${what ? ` (${what})` : ''}</h1>
+    <p class="muted">Not found — ลิงก์อาจผิด หรือรายการนี้ถูกลบ/ไม่มีอยู่แล้ว</p>
+    <a href="#/catalog" style="display:inline-block;margin-top:10px">← กลับไปหน้าเพลง (catalog)</a>
+  </div>`;
+}
 
 // ---------- 1. Song catalog ----------
 async function pageCatalog() {
@@ -56,7 +68,9 @@ async function requestPlay(songId) {
 
 // ---------- 2. PromptPay QR ----------
 async function pagePay(id) {
-  const { play, promptPay, qrDataURL } = await api(`/plays/${id}`);
+  let play, promptPay, qrDataURL;
+  try { ({ play, promptPay, qrDataURL } = await api(`/plays/${id}`)); }
+  catch (e) { return showNotFound(`play #${id}`); } // TC-12: 404 → not-found state, not stale content
   document.title = `PlayRight — QR ชำระ ${play.title}`;
   app.innerHTML = `<h1>ชำระค่าลิขสิทธิ์เพลง <span class="muted">#${play.seq} · ${play.ref}</span></h1>
   <div class="panel qrbox" style="max-width:420px;margin:0 auto">
@@ -103,8 +117,9 @@ function addScanButton(id) {
 
 // ---------- 3. จอฉายหลังวง ----------
 async function pageScreen(id) {
-  const { play } = await api(`/plays/${id}`);
-  const t = (ms) => ms ? new Date(ms).toLocaleTimeString('th-TH') : '';
+  let play;
+  try { ({ play } = await api(`/plays/${id}`)); }
+  catch (e) { return showNotFound(`play #${id}`); } // TC-12: 404 → not-found state, not stale content
   app.innerHTML = `<div class="screen">
     <div class="muted">จอฉายหลังวง · ${play.venue} · รายการ #${play.seq}</div>
     <div class="now">🎵 กำลังเล่น: ${play.title}</div>

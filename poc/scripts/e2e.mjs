@@ -4,16 +4,18 @@ import { spawn } from 'node:child_process';
 import { readFileSync, rmSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
-const BASE = 'http://localhost:3001';
+const PORT = process.env.E2E_PORT || '3001'; // override with E2E_PORT to avoid clobbering a dev server on 3001
+const BASE = `http://localhost:${PORT}`;
+const T_START = Date.now();
 const results = [];
 const ok = (name, pass, detail) => { results.push({ name, pass, detail }); console.log(`${pass ? '✅' : '❌'} ${name}${detail ? ' — ' + detail : ''}`); };
 
-// spawn server on 3001 with fresh data (free the port first — stray servers kill runs)
+// spawn server on the chosen port with fresh data (free the port first — stray servers kill runs)
 import { execSync } from 'node:child_process';
-try { execSync('fuser -k 3001/tcp 2>/dev/null || true'); } catch {}
+try { execSync(`fuser -k ${PORT}/tcp 2>/dev/null || true`); } catch {}
 await new Promise(r => setTimeout(r, 1000));
 rmSync(path.join(process.cwd(), 'data'), { recursive: true, force: true });
-const server = spawn('node', ['server.mjs'], { env: { ...process.env, PORT: '3001' }, stdio: ['ignore', 'pipe', 'pipe'] });
+const server = spawn('node', ['server.mjs'], { env: { ...process.env, PORT }, stdio: ['ignore', 'pipe', 'pipe'] });
 let serverOut = '';
 server.stdout.on('data', d => serverOut += d);
 server.stderr.on('data', d => serverOut += d);
@@ -104,8 +106,18 @@ try {
   ok('D5 avg e2e tracked', L.avgE2ESeconds != null && L.avgE2ESeconds <= 30, `${L.avgE2ESeconds}s avg (max ${L.maxE2ESeconds}s) · hypothesis=${L.hypothesis.e2eUnder30s}`);
 
   const fails = results.filter(r => !r.pass);
+  const durationSec = +((Date.now() - T_START) / 1000).toFixed(1);
   console.log(`\n==== ${results.length - fails.length}/${results.length} PASS ====`);
-  console.log(JSON.stringify({ pass: fails.length === 0, txs: [aFinal.explorerUrl, bFinal.explorerUrl], e2e: { setlist: aFinal.e2eSeconds, acr: bFinal.e2eSeconds } }, null, 2));
+  console.log(`Total suite duration: ${durationSec}s (hypothesis #1 target: ≤30s per play; suite covers 2 full plays + negatives)`);
+  console.log(JSON.stringify({
+    pass: fails.length === 0,
+    chainEnabled: h.chain.configured,
+    suiteDurationSec: durationSec,
+    targetSecPerPlay: 30,
+    e2e: { setlist: aFinal.e2eSeconds, acr: bFinal.e2eSeconds },
+    checks: results,
+    txs: [aFinal.explorerUrl, bFinal.explorerUrl],
+  }, null, 2));
   process.exit(fails.length ? 1 : 0);
 } finally {
   server.kill('SIGTERM');

@@ -1,0 +1,72 @@
+# QA CI — unit + integration + e2e (chain-disabled baseline)
+# Closes QA-track gap #14 (F5 CI pipeline). See .github/CI-NOTES.md for caveats.
+#
+# Notes:
+# - Node 22 pinned to match the locally verified version (v22.23.3).
+# - Glob-form `node --test ...*.test.mjs` everywhere: the directory form fails
+#   on Node v22 (MODULE_NOT_FOUND) — see poc/tests/unit/README.md.
+# - The e2e step uses poc/scripts/e2e-report.mjs and judges the parsed JSON
+#   result (13/19 expected while no funded PRIVATE_KEY exists), NOT exit codes:
+#   e2e.mjs always exits 0 and e2e-report.mjs exits 1 on the expected baseline.
+# - No new npm dependencies; no poc/ code changes in this workflow.
+
+name: qa
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install poc dependencies
+        run: npm install --no-audit --no-fund
+        working-directory: poc
+
+      # ---------- 1) unit tests ----------
+      - name: Unit tests (poc/lib modules)
+        run: node --test poc/tests/unit/*.test.mjs
+
+      # ---------- 2) integration tests ----------
+      # Self-starts its server on port 3210; isolated from poc/data/.
+      - name: Integration tests (/api/* routes)
+        run: node --test 'poc/tests/integration/*.test.mjs'
+
+      # ---------- 3) e2e, chain-disabled ----------
+      # e2e.mjs's own exit code is always 0 (unreliable) and e2e-report.mjs
+      # exits 1 on the expected 13/19 baseline (j.pass=false), so we capture
+      # the log and assert the baseline: exactly 13/19 passed and exactly
+      # 6 FAIL lines (the known chain checks). See .github/CI-NOTES.md.
+      #
+      # Known flake (also seen locally, recorded in QA reviews): the spawned
+      # e2e server occasionally fails to come up (ECONNREFUSED on :3001) —
+      # roughly 2 of 4 runs observed locally. The step retries up to 3 times
+      # and only fails if every attempt misses the baseline.
+      - name: e2e suite (chain-disabled baseline 13/19, up to 3 attempts)
+        run: |
+          cd poc
+          for attempt in 1 2 3; do
+            echo "=== e2e attempt $attempt ==="
+            node scripts/e2e-report.mjs > /tmp/e2e.log 2>&1 || true
+            cat /tmp/e2e.log
+            passed=$(grep -o '[0-9]*/[0-9]* checks passed' /tmp/e2e.log | head -1 | cut -d/ -f1)
+            fails=$(grep -c '^FAIL' /tmp/e2e.log || true)
+            echo "parsed from JSON report: passed=$passed expected_fails=$fails"
+            if [ "$passed" = "13" ] && [ "$fails" = "6" ]; then
+              echo "baseline met (13/19 with 6 expected chain fails)"
+              exit 0
+            fi
+            echo "::warning::attempt $attempt missed baseline (passed=$passed fails=$fails) — known server-spawn flake, retrying"
+            sleep 2
+          done
+          echo "::error::e2e did not reach the chain-disabled baseline (13/19, 6 expected fails) after 3 attempts"
+          exit 1
