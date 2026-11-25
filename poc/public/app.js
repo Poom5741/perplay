@@ -138,7 +138,13 @@ async function pageScreen(id) {
 function renderReceipt(p) {
   const el = document.getElementById('receipt'); if (!el) return;
   let html = `${p.artist} · ${p.label} · verify: ${p.verifyResult?.method || p.verifyMode} · ขอเวลา ${t(p.timings.requested)}`;
-  if (p.explorerUrl) html += `<br><span class="muted">receipt on-chain:</span> <a class="txlink" target="_blank" href="${p.explorerUrl}">${p.txHash.slice(0, 10)}…${p.txHash.slice(-8)}</a> <span class="muted">(Base Sepolia)</span>`;
+  if (p.anchors && p.anchors.length > 1) {
+    html += `<br><span class="muted">receipt on-chain (multi-chain):</span> ` +
+      p.anchors.map(a => a.ok
+        ? `<a class="txlink" target="_blank" href="${a.explorerUrl}">${a.txHash.slice(0, 10)}…${a.txHash.slice(-8)}</a> <span class="muted">(${a.chain})</span>`
+        : `<span class="muted">(${a.chain}: pending funding)</span>`
+      ).join(' · ');
+  } else if (p.explorerUrl) html += `<br><span class="muted">receipt on-chain:</span> <a class="txlink" target="_blank" href="${p.explorerUrl}">${p.txHash.slice(0, 10)}…${p.txHash.slice(-8)}</a> <span class="muted">(Base Sepolia)</span>`;
   else if (p.anchorError) html += `<br><span class="warn">anchor รอ wallet เงินใน testnet: ${p.anchorError.slice(0, 80)}… <a href="#" onclick="fetch('/api/plays/${p.id}/retry-anchor',{method:'POST'}).then(()=>0);return false">retry</a></span>`;
   if (p.e2eSeconds != null) html += `<br><span class="muted">end-to-end ทั้ง flow: <b style="color:var(--txt)">${p.e2eSeconds}s</b> ${p.e2eSeconds <= 30 ? '✅ ตามสมมติฐาน ≤30s' : '⚠️ เกิน 30s'}</span>`;
   el.innerHTML = html;

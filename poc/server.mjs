@@ -46,8 +46,8 @@ async function anchorIfReady(play) {
   play.status = 'anchoring';
   plays.set(play.id, play);
   try {
-    const { txHash, explorerUrl } = await anchorReceipt(play);
-    play.txHash = txHash; play.explorerUrl = explorerUrl;
+    const { txHash, explorerUrl, anchors } = await anchorReceipt(play);
+    play.txHash = txHash; play.explorerUrl = explorerUrl; play.anchors = anchors;
     play.status = 'anchored';
     play.timings.anchored = Date.now();
     play.e2eSeconds = +((play.timings.anchored - play.timings.requested) / 1000).toFixed(1);
