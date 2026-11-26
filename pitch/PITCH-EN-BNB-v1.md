@@ -21,7 +21,7 @@ TouchTunes has proven the exact same model in US bars for 25 years: customers pa
 1. Scan the QR on the table → pick a song from a 100-track catalog.
 2. Real PromptPay QR (EMVCo standard payload) for 20–50 THB; payment confirmation.
 3. Venue screen flips to **"Now playing: … — licensed ✅"** — proof the venue can show anyone.
-4. Tap the receipt link: a real transaction on **Base Sepolia AND opBNB Testnet** — the canonical play event (song, amount, splits, verification) is hash-anchored on both chains, immutable.
+4. Tap the receipt link: a real transaction on **BSC Testnet (chainId 97)** — the canonical play event (song, amount, splits, verification) is hash-anchored on-chain, immutable.
 5. End-to-end time from song request to on-chain proof: **1–3 seconds** (target ≤30s).
 
 ## Minute 3–4 · Where the money goes + how we verify
@@ -31,7 +31,7 @@ TouchTunes has proven the exact same model in US bars for 25 years: customers pa
 
 ## Minute 4–5 · Why we win this track
 
-- **Integration:** receipts anchored to **two chains** (Base + BNB Chain opBNB) in one flow; mainnet tx shape identical, <$0.01 per receipt.
+- **Integration:** receipts anchored to **BSC Testnet (chain 97)** — built on the hackathon's home chain; mainnet (BNB Smart Chain) tx shape identical, <$0.01 per receipt at current gas (measured 2026-11-26).
 - **Open source:** the entire repo is public — and it was built with **two AI brains**: a repo-resident agent committing every product decision (see the agent-authored decisions log in Git history) and a cloud memory brain (LivingBrain) that recalls why each choice was made, with sources.
 - **Innovation:** per-play licensing with on-chain proof has no incumbent in Southeast Asia; the black-box royalty problem is exactly what blockchain kills.
 - **Business:** 15,000+ licensed venues; starting catalog = the country's biggest label (warm family relationship, confirmed interest in seeing the PoC). 50 venues ≈ 250K THB/month at 96% per-play margin (unit economics in repo).
@@ -41,5 +41,5 @@ TouchTunes has proven the exact same model in US bars for 25 years: customers pa
 
 - *"Real payments?"* → Phase 2: PromptPay-in / stablecoin-out via the BOT-sandbox-proven WORPT structure; venue never touches crypto.
 - *"Scale?"* → 50 venues = ~0.25M THB/month, 96% margin per play. Fingerprint + anchoring costs are negligible per play.
-- *"Why two chains?"* → Base for today's demo rails; BNB Chain for Thailand's ecosystem and the hackathon's home — the dual-anchor proves the receipt format is chain-agnostic.
+- *"Why BNB Chain?"* → receipts anchor on BSC Testnet — the chain this hackathon is built on; the receipt format is chain-agnostic (the same payload was previously anchored on Base Sepolia), so production follows the settlement flow, not a chain lock-in.
 - *"Accuracy risk?"* → We bill on setlist confirmation, not raw fingerprint scores; fingerprinting is corroboration in DJ mode, production uses ACRCloud.
