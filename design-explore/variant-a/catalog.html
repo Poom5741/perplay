@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#181B2C">
+<title>เซ็ตลิสต์คืนนี้ (Tonight's setlist) | PlayRight demo</title>
+<meta name="description" content="เลือกเพลงจากเซ็ตลิสต์ของสถานที่ จ่าย ฿20–50 ผ่าน mTHB (demo) แล้วระบบแบ่ง 70/10/20 และออกใบเสร็จบน BSC Testnet ทันที">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#181B2C; --bg2:#1E2234; --bg3:#242A41;
+  --line:#2B314C; --line2:#3A4160;
+  --text:#D7DBEA; --muted:#A9AFCC; --faint:#8B92B2;
+  --amber:#F2B23E; --amber2:#FFD98A;
+  --ice:#7FD1E0;
+  --sans:"Space Grotesk","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700}
+a{color:var(--amber)}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--ice);outline-offset:3px;border-radius:2px}
+::selection{background:var(--amber);color:#181B2C}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+.skip{position:absolute;left:-999px;top:14px;z-index:50;background:var(--amber);color:#181B2C;font-weight:600;padding:10px 18px;border-radius:8px}
+.skip:focus{left:14px;text-decoration:none}
+.site-head{display:flex;align-items:center;gap:10px 20px;flex-wrap:wrap;padding:18px 0;border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:20px;letter-spacing:-.01em;color:var(--text);text-decoration:none}
+.brand:hover{color:var(--amber);text-decoration:none}
+.net-tag{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:4px 12px}
+.net-dot{width:7px;height:7px;border-radius:50%;background:var(--ice)}
+.site-nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+.site-nav a{color:var(--muted);padding:7px 12px;border-radius:8px;font-size:14.5px;text-decoration:none}
+.site-nav a:hover{color:var(--text);background:var(--bg2);text-decoration:none}
+.site-nav a[aria-current="page"]{color:var(--amber);background:var(--bg2)}
+main{padding-bottom:20px}
+h1{letter-spacing:-.02em;line-height:1.08;margin:0}
+h1 .th{display:block;font-size:.42em;font-weight:500;color:var(--muted);margin-top:10px;letter-spacing:0}
+.lead{color:var(--muted);max-width:62ch}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 11px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.chip-ice{border-color:rgba(127,209,224,.5);color:var(--ice)}
+.tok{font-size:10.5px;padding:1px 6px;border-radius:4px;border:1px solid rgba(242,178,62,.45);color:var(--amber);white-space:nowrap}
+.hash{font-family:var(--mono);font-size:13px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.cat-head{padding:52px 0 0}
+.cat-head h1{font-size:clamp(34px,5vw,52px)}
+.queue{margin-top:26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:rgba(127,209,224,.08);border:1px solid rgba(127,209,224,.35);border-radius:12px;padding:16px 20px}
+.q-check{flex:none;width:30px;height:30px;border-radius:8px;background:var(--ice);color:#122530;display:grid;place-items:center;font-weight:700}
+.queue strong{display:block;font-size:15.5px}
+.queue p{margin:3px 0 0;color:var(--muted);font-size:14px}
+.queue .chip{margin-left:auto}
+.mode{border:0;padding:0;margin:34px 0 4px}
+.mode legend{padding:0;color:var(--muted);font-size:13.5px;margin-bottom:12px}
+.mode-opts{display:flex;gap:10px;flex-wrap:wrap}
+.mode label{position:relative;cursor:pointer}
+.mode input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer}
+.mode span{display:inline-block;padding:9px 18px;border:1px solid var(--line2);border-radius:999px;color:var(--muted);font-size:14.5px}
+.mode input:checked+span{background:var(--amber);border-color:var(--amber);color:#181B2C;font-weight:600}
+.mode input:focus-visible+span{outline:2px solid var(--ice);outline-offset:2px}
+.list-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:30px}
+.list-head h2{font-size:clamp(20px,2.6vw,26px);margin:0}
+.count{color:var(--faint);font-size:14px;font-weight:400;margin-left:10px}
+.setlist{list-style:none;margin:14px 0 0;padding:0}
+.setlist li{display:grid;grid-template-columns:2.6rem 1fr auto auto;gap:8px 18px;align-items:center;padding:14px 8px;border-top:1px solid var(--line)}
+.setlist li:last-child{border-bottom:1px solid var(--line)}
+.setlist li:hover{background:var(--bg2)}
+.no{font-family:var(--mono);color:var(--faint);font-size:14px}
+.t{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.t strong{font-size:17px;font-weight:600}
+.artist{color:var(--muted);font-size:14px}
+.tag{font-size:11.5px;border:1px solid var(--line2);border-radius:5px;padding:1px 8px;color:var(--muted);white-space:nowrap}
+.v{font-family:var(--mono);font-size:11.5px;border:1px dashed var(--line2);border-radius:5px;padding:1px 8px;color:var(--faint);white-space:nowrap}
+[data-mode="dj"] .v-set{display:none}
+[data-mode="set"] .v-fp{display:none}
+.price{font-weight:700;font-size:19px;color:var(--amber);font-variant-numeric:tabular-nums;text-align:right}
+.req{border:1px solid var(--line2);padding:8px 18px;border-radius:8px;font-weight:600;font-size:14.5px;color:var(--text);text-decoration:none;white-space:nowrap}
+.req:hover{border-color:var(--amber);color:var(--amber);text-decoration:none}
+.list-note{color:var(--muted);font-size:13.5px;margin-top:18px;max-width:70ch}
+.site-foot{border-top:1px solid var(--line);padding:26px 0;margin-top:44px}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:12px 28px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.fb-brand{font-weight:700;color:var(--text);font-size:15px}
+.fb-links{display:flex;gap:18px;flex-wrap:wrap}
+.fb-links a{color:var(--muted)}
+.fb-links a:hover{color:var(--amber)}
+@media(max-width:560px){.setlist li{grid-template-columns:2rem 1fr auto}.req{grid-column:2/4;justify-self:end}.queue .chip{margin-left:0}}
+</style>
+</head>
+<body data-mode="set">
+<a class="skip" href="#main">Skip to content / ข้ามไปเนื้อหา</a>
+<header class="wrap site-head">
+  <a class="brand" href="landing.html">PlayRight</a>
+  <span class="net-tag"><span class="net-dot" aria-hidden="true"></span>Demo on BSC Testnet</span>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="catalog.html" aria-current="page">Setlist</a>
+    <a href="play.html">Receipt</a>
+    <a href="dashboard.html">Venue console</a>
+  </nav>
+</header>
+
+<main id="main" class="wrap">
+
+  <section class="cat-head">
+    <h1>เซ็ตลิสต์คืนนี้<span class="th" lang="en">Tonight's setlist at Karma Sound Club, Bangkok</span></h1>
+    <p class="lead" style="margin-top:14px" lang="th">เลือกเพลงจากลิสต์ จ่าย ฿20–50 ผ่าน mTHB <span class="tok">demo token</span> ทุกคำขอถูกตรวจจากเซ็ตลิสต์หรือ fingerprint แล้วแบ่ง 70/10/20 พร้อมใบเสร็จบนเชนทันที</p>
+
+    <aside class="queue" aria-label="$PLAY priority queue status">
+      <span class="q-check" aria-hidden="true">✓</span>
+      <div>
+        <strong>คิวลำดับพิเศษทำงานอยู่ (priority queue)</strong>
+        <p>กระเป๋า <span class="hash">0x8aF3…2c1d</span> ถือ $PLAY <span class="tok">demo token</span> 512M เกินเกณฑ์ 500M คำขอของคุณขึ้นคิวก่อน</p>
+      </div>
+      <span class="chip chip-ice">eligible ✓</span>
+    </aside>
+
+    <fieldset class="mode">
+      <legend>โหมดการแสดง (show mode)</legend>
+      <div class="mode-opts">
+        <label><input type="radio" name="mode" value="set" checked><span>วงดนตรีสด (setlist)</span></label>
+        <label><input type="radio" name="mode" value="dj"><span>DJ (fingerprint)</span></label>
+      </div>
+    </fieldset>
+  </section>
+
+  <section aria-labelledby="list-h" style="padding-top:8px">
+    <div class="list-head">
+      <h2 id="list-h">รายการเพลง<span class="count">10 tracks</span></h2>
+      <span class="chip">ราคา ฿20–50 ต่อเพลย์</span>
+    </div>
+    <ol class="setlist">
+      <li>
+        <span class="no">01</span>
+        <div class="t"><strong lang="th">ฝนก่อนฝนจาก</strong><span class="artist">Pun Mock</span><span class="tag">GMM-Mock A</span><span class="v v-set">Slot 01</span><span class="v v-fp">FP 4a12</span></div>
+        <span class="price">฿30</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">02</span>
+        <div class="t"><strong lang="th">เสียงเดียวในห้องเปล่า</strong><span class="artist">Bell Mock</span><span class="tag">GMM-Mock B</span><span class="v v-set">Slot 02</span><span class="v v-fp">FP 9c07</span></div>
+        <span class="price">฿25</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">03</span>
+        <div class="t"><strong lang="th">ไฟท้ายถนน</strong><span class="artist">The Siam Mocks</span><span class="tag">GMM-Mock A</span><span class="v v-set">Slot 03</span><span class="v v-fp">FP 1e55</span></div>
+        <span class="price">฿35</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">04</span>
+        <div class="t"><strong lang="th">ยังไม่ต้องบอกลา</strong><span class="artist">Namtan Mock</span><span class="tag">GMM-Mock C</span><span class="v v-set">Slot 04</span><span class="v v-fp">FP 7f3e</span></div>
+        <span class="price">฿20</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">05</span>
+        <div class="t"><strong lang="th">เมืองที่ไม่หลับ</strong><span class="artist">Mockwave</span><span class="tag">GMM-Mock B</span><span class="v v-set">Slot 05</span><span class="v v-fp">FP b28d</span></div>
+        <span class="price">฿40</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">06</span>
+        <div class="t"><strong lang="th">รอเธอถึงเช้า</strong><span class="artist">Fah Sarika</span><span class="tag">GMM-Mock A</span><span class="v v-set">Slot 06</span><span class="v v-fp">FP 03c9</span></div>
+        <span class="price">฿25</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">07</span>
+        <div class="t"><strong lang="th">จังหวะที่หายไป</strong><span class="artist">Chaliang Mock</span><span class="tag">GMM-Mock C</span><span class="v v-set">Slot 07</span><span class="v v-fp">FP 5d41</span></div>
+        <span class="price">฿50</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">08</span>
+        <div class="t"><strong lang="th">เพลงของเวที</strong><span class="artist">Praewa Mock</span><span class="tag">GMM-Mock B</span><span class="v v-set">Slot 08</span><span class="v v-fp">FP e6a2</span></div>
+        <span class="price">฿30</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">09</span>
+        <div class="t"><strong lang="th">สายหมอกเหนือแม่กลอง</strong><span class="artist">Mock Montha</span><span class="tag">GMM-Mock A</span><span class="v v-set">Slot 09</span><span class="v v-fp">FP 8b76</span></div>
+        <span class="price">฿45</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+      <li>
+        <span class="no">10</span>
+        <div class="t"><strong lang="th">ค่ำนี้มีเธอ</strong><span class="artist">Paper Tides Mock</span><span class="tag">GMM-Mock C</span><span class="v v-set">Slot 10</span><span class="v v-fp">FP 2f80</span></div>
+        <span class="price">฿20</span>
+        <a class="req" href="play.html">ขอเพลง</a>
+      </li>
+    </ol>
+    <p class="list-note" lang="th">ราคาเป็น mTHB <span class="tok">demo token</span> อัตรา 1:1 กับ THB ในเดโมนี้ ทุกคำขอชำระ split 70/10/20 ทันที และออกใบเสร็จที่อ่านย้อนหลังได้</p>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <span class="fb-brand">PlayRight</span>
+    <span>Demo on BSC Testnet, chain 97</span>
+    <nav class="fb-links" aria-label="Contracts">
+      <a class="hash" href="https://testnet.bscscan.com/address/0x31FE806363Bd0FCD22efa0C774D9706E9668b442" title="MockTHB 0x31FE806363Bd0FCD22efa0C774D9706E9668b442">MockTHB</a>
+      <a class="hash" href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc" title="VenueStake 0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">VenueStake</a>
+      <a class="hash" href="https://testnet.bscscan.com/address/0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8" title="$PLAY 0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8">$PLAY</a>
+      <a href="https://testnet.bscscan.com">explorer</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  var modeInputs = document.querySelectorAll('input[name="mode"]');
+  for (var i = 0; i < modeInputs.length; i++) {
+    modeInputs[i].addEventListener('change', function (e) {
+      document.body.dataset.mode = e.target.value;
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight: คิวเพลงคืนนี้ (catalog)</title>
+<meta name="description" content="แคตตาล็อกเพลงที่ขอเปิดได้ของสถานที่ที่วางหลักประกันแล้ว ราคาต่อรอบ 20-50 บาท จ่ายด้วย Mock THB (เดโม) บน BSC Testnet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8F6;
+  --slip:#FEFEFB;
+  --ink:#23282A;
+  --ink-2:#575D57;
+  --rule:#C9CCC2;
+  --rule-soft:#E3E5DD;
+  --purple:#5C2D91;
+  --purple-deep:#462073;
+  --green:#1E7B4F;
+  --green-soft:#EAF1EB;
+  --sans:"IBM Plex Sans","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65}
+a{color:var(--purple)}
+a:hover{color:var(--purple-deep)}
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px;border-radius:2px}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+.green{color:var(--green)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;line-height:1.6;padding:1px 7px;border:1px dashed var(--rule);border-radius:3px;color:var(--ink-2);white-space:nowrap}
+.tag.money{border-color:var(--green);color:var(--green)}
+.tag.demo{border-style:solid}
+.tag.label{border-style:solid;color:var(--ink)}
+.wrap{max-width:1024px;margin-inline:auto;padding-inline:clamp(16px,4.5vw,44px)}
+.skip{position:absolute;left:-9999px;top:10px;z-index:10;background:var(--slip);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;text-decoration:none}
+.skip:focus{left:10px}
+
+.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 26px;padding-block:20px 8px}
+.brand{margin:0;font-weight:700;font-size:1.06rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.brand:hover{color:var(--purple-deep)}
+.brand-sub{display:block;font-family:var(--mono);font-weight:400;font-size:.7rem;letter-spacing:.05em;color:var(--ink-2)}
+.top nav{display:flex;flex-wrap:wrap;gap:2px 20px;margin-inline-start:auto}
+.top nav a{text-decoration:none;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
+.top nav a:hover{border-bottom-color:var(--rule)}
+.top nav a[aria-current="page"]{color:var(--purple);border-bottom-color:var(--purple)}
+@media (max-width:719px){.top nav{margin-inline-start:0;width:100%}}
+
+h1{margin:34px 0 8px;font-size:clamp(1.8rem,5vw,2.5rem);font-weight:600;letter-spacing:-.015em;line-height:1.2}
+.venue-line{margin:0 0 6px;font-size:.95rem;color:var(--ink-2)}
+.venue-line .mono{color:var(--ink)}
+.head-intro{max-width:62ch;margin:6px 0 0;color:var(--ink-2)}
+
+.priority{margin-top:26px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;background:var(--slip);border:1px solid var(--green);border-radius:6px;padding:14px 20px;max-width:720px}
+.priority .pq-head{font-weight:600;color:var(--green)}
+.priority .pq-detail{font-family:var(--mono);font-size:.82rem;color:var(--ink-2)}
+
+.modebar{margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.modebar > span{font-size:.92rem;color:var(--ink-2)}
+.mode-opt{display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:1px solid var(--rule);border-radius:6px;padding:10px 18px;background:var(--slip)}
+.mode-opt input{accent-color:var(--purple);width:15px;height:15px;cursor:pointer}
+.mode-opt:has(input:checked){border-color:var(--purple);box-shadow:inset 0 0 0 1px var(--purple)}
+.mode-opt:hover{border-color:var(--purple)}
+.mode-cap{margin:12px 0 0;font-family:var(--mono);font-size:.74rem;letter-spacing:.02em;color:var(--ink-2)}
+
+.list-head{margin-top:26px}
+.slip{position:relative;background:var(--slip);padding:6px 26px 22px;margin-block:8px 14px;border-radius:0 0 3px 3px}
+.slip::after{content:"";position:absolute;left:0;right:0;top:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 0L7 8L14 0Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 22px;padding-block:13px;border-top:1px dashed var(--rule-soft)}
+.row:first-child{border-top:0}
+.row-title{grid-column:1;font-weight:500;overflow-wrap:anywhere}
+.row-title .artist{display:block;font-size:.82rem;font-weight:400;color:var(--ink-2)}
+.row-title .t-en{font-family:var(--mono);font-size:.7rem;color:var(--ink-2);font-weight:400}
+.row-side{grid-column:2;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;white-space:nowrap}
+.price{font-family:var(--mono);font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums}
+.tagrow{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.row-foot{grid-column:1 / -1;display:flex;align-items:center;gap:10px;padding-top:6px}
+.row-foot .go{font-family:var(--mono);font-size:.76rem;text-decoration:none;cursor:pointer}
+.row-foot .go:hover{text-decoration:underline}
+.slip-total{display:flex;align-items:baseline;gap:12px;padding-top:14px;font-family:var(--mono);font-size:.88rem;border-top:1px dashed var(--rule)}
+.slip-total .k{letter-spacing:.04em}
+.slip-total .dots{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-3px)}
+.slip-total .v{font-weight:600;white-space:nowrap}
+
+.after{margin-top:44px;max-width:64ch;color:var(--ink-2)}
+.footer{margin-top:44px;border-top:1px solid var(--rule);padding-block:22px 50px;font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;color:var(--ink-2);max-width:none}
+.fine{margin:0}
+@media (max-width:560px){
+  .row{grid-template-columns:minmax(0,1fr) auto}
+  .tagrow{gap:4px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+<div class="wrap">
+<header class="top">
+  <p class="brand"><a class="brand" href="landing.html">PlayRight<span class="brand-sub">per-play music licensing</span></a></p>
+  <nav aria-label="หน้าเดโม">
+    <a href="catalog.html" aria-current="page">แคตตาล็อก</a>
+    <a href="play.html">รอบที่ชำระแล้ว</a>
+    <a href="dashboard.html">แดชบอร์ดสถานที่</a>
+  </nav>
+  <span class="tag demo">Demo on BSC Testnet</span>
+</header>
+
+<main id="main">
+  <h1>คิวเพลงคืนนี้</h1>
+  <p class="venue-line">สถานที่: <strong class="mono">The Brass Elephant, RCA</strong> วางหลักประกันแล้ว <span class="mono num">1,200</span> mTHB <span class="tag money">mTHB demo</span> <span class="green">✓</span></p>
+  <p class="head-intro">เลือกเพลงจากคิวด้านล่าง ราคาต่อรอบระบุไว้ชัดเจนตั้งแต่หน้าจอสแกน ไม่มียอดสะสมค้างจ่าย</p>
+
+  <aside class="priority" aria-label="สิทธิ์คิวล่วงหน้า $PLAY">
+    <span class="pq-head">$PLAY priority queue: <span class="green">eligible</span></span>
+    <span class="pq-detail num">balance 612,400,000 $PLAY ≥ 500,000,000</span>
+    <span class="tag money">$PLAY demo token</span>
+  </aside>
+
+  <div class="modebar">
+    <span id="modeLabel">โหมดการยืนยัน:</span>
+    <label class="mode-opt"><input type="radio" name="mode" value="band" checked> วงดนตรีสด (setlist)</label>
+    <label class="mode-opt"><input type="radio" name="mode" value="dj"> DJ (fingerprint)</label>
+  </div>
+  <p class="mode-cap" id="modeCap">โหมดวงสด: รายชื่อเพลงถูกล็อกกับ setlist ที่ลงทะเบียนไว้ก่อนโชว์เริ่ม</p>
+
+  <section class="list-head" aria-label="รายการเพลง">
+    <h2 style="font-size:1.15rem;font-weight:600;margin:0 0 6px">รายการเพลง <span class="tag label">GMM-Mock A/B/C (demo labels)</span></h2>
+    <div class="slip">
+      <div class="row">
+        <div class="row-title"><span lang="th">ฝนตกที่เชียงใหม่</span> <span class="artist">วงสายฝน <span class="t-en">Rain In Chiangmai</span></span></div>
+        <div class="row-side">
+          <span class="price num">฿30.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock A</span></span>
+        </div>
+        <div class="row-foot"><a class="go" href="play.html">ขอเปิดรอบนี้ (ตัวอย่างที่ชำระแล้ว)</a></div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">เส้นทางสายสอง</span> <span class="artist">ปาลิตา หงษ์ทอง</span></div>
+        <div class="row-side">
+          <span class="price num">฿25.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock B</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">รอเธอถึงเที่ยงคืน</span> <span class="artist">แสงเดือน</span></div>
+        <div class="row-side">
+          <span class="price num">฿40.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock A</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">เมืองไม่หลับ</span> <span class="artist">คณะโรงมาเกจ</span></div>
+        <div class="row-side">
+          <span class="price num">฿35.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock A</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">สายน้ำไม่รอใคร</span> <span class="artist">ปิ่น อารียา</span></div>
+        <div class="row-side">
+          <span class="price num">฿20.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock C</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">เต้นในสายฝน</span> <span class="artist">โพลาดาร์</span></div>
+        <div class="row-side">
+          <span class="price num">฿35.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock B</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">กลับบ้านเถอะนะ</span> <span class="artist">สมชาย ใจดี</span></div>
+        <div class="row-side">
+          <span class="price num">฿50.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock A</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">หัวใจนักดนตรี</span> <span class="artist">วงหอแตร</span></div>
+        <div class="row-side">
+          <span class="price num">฿20.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock C</span></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-title"><span lang="th">ปลายทางคือดาว</span> <span class="artist">นิลา แสงสุรีย์</span></div>
+        <div class="row-side">
+          <span class="price num">฿45.00</span>
+          <span class="tagrow"><span class="tag label">GMM-Mock B</span></span>
+        </div>
+      </div>
+      <div class="slip-total"><span class="k">รวมทั้งคิว (9 รอบ)</span><span class="dots"></span><span class="v num">฿300.00</span></div>
+      <div class="slip-total" style="border-top:0;padding-top:4px"><span class="k">เฉลี่ยต่อรอบ</span><span class="dots"></span><span class="v num">฿33.30</span></div>
+    </div>
+  </section>
+
+  <p class="after">ทุกคำขอจ่ายที่โต๊ะผ่านกระดานพร้อมเพย์ของสถานที่ แล้วตั้งเป็น Mock THB (เดโม) ก่อนแบ่ง 70/10/20 ออนเชน ดูรอบที่ชำระแล้วได้ที่ <a href="play.html">หน้ารอบเพลงที่ชำระแล้ว</a> หรือดูภาพรวมทั้งคืนที่ <a href="dashboard.html">แดชบอร์ดสถานที่</a></p>
+</main>
+
+<footer class="footer">
+  <p class="fine">เดโมบน BSC Testnet (chain 97) Mock THB และ $PLAY เป็นโทเคนสำหรับเดโม ไม่ใช่เงินจริง รายชื่อเพลงและลาเบลทั้งหมดเป็นข้อมูลตัวอย่าง</p>
+</footer>
+</div>
+<script>
+(function(){
+  var cap = document.getElementById('modeCap');
+  var texts = {
+    band: 'โหมดวงสด: รายชื่อเพลงถูกล็อกกับ setlist ที่ลงทะเบียนไว้ก่อนโชว์เริ่ม',
+    dj: 'โหมด DJ: ทุกสปอตผ่านการจับคู่ fingerprint กับคลังลิขสิทธิ์ก่อนชำระ'
+  };
+  var inputs = document.querySelectorAll('input[name="mode"]');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('change', function(){ cap.textContent = texts[this.value]; });
+  }
+})();
+</script>
+</body>
+</html>

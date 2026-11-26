@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight: สรุปยอดคืนนี้ (dashboard)</title>
+<meta name="description" content="แดชบอร์ดสถานที่: ยอดเปิดคืนนี้ 12 รอบ รวม 340 บาท แบ่ง 70/10/20 บนเชน พร้อมสถานะหลักประกันและผู้เฝ้าระวังความเสี่ยงการชำระ (เดโม)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8F6;
+  --slip:#FEFEFB;
+  --ink:#23282A;
+  --ink-2:#575D57;
+  --rule:#C9CCC2;
+  --rule-soft:#E3E5DD;
+  --purple:#5C2D91;
+  --purple-deep:#462073;
+  --green:#1E7B4F;
+  --green-soft:#EAF1EB;
+  --sans:"IBM Plex Sans","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65}
+a{color:var(--purple)}
+a:hover{color:var(--purple-deep)}
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px;border-radius:2px}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+.green{color:var(--green)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;line-height:1.6;padding:1px 7px;border:1px dashed var(--rule);border-radius:3px;color:var(--ink-2);white-space:nowrap}
+.tag.money{border-color:var(--green);color:var(--green)}
+.tag.demo{border-style:solid}
+.wrap{max-width:1024px;margin-inline:auto;padding-inline:clamp(16px,4.5vw,44px)}
+.skip{position:absolute;left:-9999px;top:10px;z-index:10;background:var(--slip);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;text-decoration:none}
+.skip:focus{left:10px}
+
+.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 26px;padding-block:20px 8px}
+.brand{margin:0;font-weight:700;font-size:1.06rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.brand:hover{color:var(--purple-deep)}
+.brand-sub{display:block;font-family:var(--mono);font-weight:400;font-size:.7rem;letter-spacing:.05em;color:var(--ink-2)}
+.top nav{display:flex;flex-wrap:wrap;gap:2px 20px;margin-inline-start:auto}
+.top nav a{text-decoration:none;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
+.top nav a:hover{border-bottom-color:var(--rule)}
+.top nav a[aria-current="page"]{color:var(--purple);border-bottom-color:var(--purple)}
+@media (max-width:719px){.top nav{margin-inline-start:0;width:100%}}
+
+h1{margin:34px 0 8px;font-size:clamp(1.8rem,5vw,2.5rem);font-weight:600;letter-spacing:-.015em;line-height:1.2}
+.lede{margin:0 0 10px;max-width:62ch;color:var(--ink-2)}
+
+.till{position:relative;background:var(--slip);padding:0;margin-block:26px 14px}
+.till::after{content:"";position:absolute;left:0;right:0;top:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 0L7 8L14 0Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+.till-cells{display:grid;grid-template-columns:repeat(3,1fr)}
+.till-cell{padding:22px 24px 18px;border-left:1px dashed var(--rule-soft)}
+.till-cell:first-child{border-left:0}
+.till-lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--ink-2)}
+.till-val{display:block;margin-top:8px;font-family:var(--mono);font-weight:600;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1;font-variant-numeric:tabular-nums}
+.till-val .unit{font-size:.85rem;font-weight:400;color:var(--ink-2)}
+.till-sub{display:block;margin-top:8px;font-size:.72rem;color:var(--ink-2)}
+.till-note{padding:10px 24px 14px;border-top:1px dashed var(--rule-soft);font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;color:var(--ink-2)}
+@media (max-width:560px){.till-cells{grid-template-columns:1fr}.till-cell{border-left:0;border-top:1px dashed var(--rule-soft)}.till-cell:first-child{border-top:0}}
+
+.split-sec{margin-top:48px}
+.split-bar{display:flex;max-width:720px;height:38px;border:1px solid var(--rule);border-radius:5px;overflow:hidden}
+.split-bar .seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.72rem;color:#fff;min-width:0;white-space:nowrap}
+.seg-70{flex:7;background:var(--purple)}
+.seg-10{flex:1;background:var(--green)}
+.seg-20{flex:2;background:var(--ink)}
+.split-legend{list-style:none;display:flex;flex-wrap:wrap;gap:10px 34px;margin:14px 0 0;padding:0;font-family:var(--mono);font-size:.8rem}
+.split-legend .sw{display:inline-block;width:11px;height:11px;margin-right:8px;vertical-align:-1px}
+.sw-70{background:var(--purple)}.sw-10{background:var(--green)}.sw-20{background:var(--ink)}
+@media (max-width:640px){.split-bar .seg .lbl{display:none}}
+
+.duo{display:grid;gap:26px;margin-top:48px}
+@media(min-width:880px){.duo{grid-template-columns:1fr 1fr}}
+.panel{background:var(--slip);border:1px solid var(--rule);border-radius:0 6px 6px 0;padding:22px 26px}
+.panel-bond{border-left:3px solid var(--green)}
+.panel-oracle{border-left:3px solid var(--purple)}
+.panel h2{font-size:1.1rem;font-weight:600;margin:0 0 4px}
+.panel .sub{margin:0 0 14px;font-size:.82rem;color:var(--ink-2)}
+.plines{list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:.82rem}
+.plines li{display:flex;align-items:baseline;gap:10px;padding-block:8px;border-top:1px dotted var(--rule-soft)}
+.plines li:first-child{border-top:0}
+.plines .k{letter-spacing:.03em;min-width:0}
+.plines .dots{flex:1 1 14px;border-bottom:1px dotted var(--rule);min-width:14px;transform:translateY(-3px)}
+.plines .v{white-space:nowrap;text-align:right}
+.claim{margin:0 0 14px;font-size:.95rem;font-weight:500}
+.oracle-read{display:flex;flex-wrap:wrap;gap:12px 36px;align-items:baseline;margin:0 0 6px;font-family:var(--mono)}
+.read-p{font-size:2rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.read-lbl{display:block;font-size:.66rem;font-weight:400;letter-spacing:.06em;color:var(--ink-2);margin-top:3px}
+.dec{display:inline-block;background:var(--purple);color:#fff;font-weight:600;font-size:.85rem;padding:6px 14px;border-radius:4px;letter-spacing:.08em}
+.guard-rule{margin:8px 0 0;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;color:var(--ink-2)}
+.evidence{list-style:none;margin:14px 0;padding:0;font-family:var(--mono);font-size:.72rem;color:var(--ink-2)}
+.evidence li{padding-block:4px}
+
+.recent{margin-top:48px}
+.slip-table-wrap{position:relative;background:var(--slip);padding:0;margin-block:10px 14px}
+.slip-table-wrap::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 8L7 0L14 8Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+.slip-table-wrap::after{content:"";position:absolute;left:0;right:0;top:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 0L7 8L14 0Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+table.slip-lines{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.84rem}
+.slip-lines th{text-align:left;font-weight:500;font-size:.68rem;letter-spacing:.06em;color:var(--ink-2);padding:14px 16px 8px;border-bottom:1px dashed var(--rule)}
+.slip-lines td{padding:11px 16px;border-bottom:1px dashed var(--rule-soft);vertical-align:baseline}
+.slip-lines tr:last-child td{border-bottom:0}
+.slip-lines .r{text-align:right;white-space:nowrap}
+.slip-lines .song{font-family:var(--sans);font-weight:500}
+.slip-lines .h{color:var(--ink-2)}
+@media (max-width:640px){.col-tx{display:none}}
+
+.next{margin-top:34px;max-width:64ch;color:var(--ink-2)}
+.footer{margin-top:44px;border-top:1px solid var(--rule);padding-block:22px 50px}
+.fine{margin:0;font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;color:var(--ink-2);max-width:92ch}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+<div class="wrap">
+<header class="top">
+  <p class="brand"><a class="brand" href="landing.html">PlayRight<span class="brand-sub">per-play music licensing</span></a></p>
+  <nav aria-label="หน้าเดโม">
+    <a href="catalog.html">แคตตาล็อก</a>
+    <a href="play.html">รอบที่ชำระแล้ว</a>
+    <a href="dashboard.html" aria-current="page">แดชบอร์ดสถานที่</a>
+  </nav>
+  <span class="tag demo">Demo on BSC Testnet</span>
+</header>
+
+<main id="main">
+  <h1>สรุปยอดคืนนี้</h1>
+  <p class="lede">ตัวเลขทั้งหน้ามาจากรอบเพลงจริงที่ตั้งรับแล้วบนเชนในคืนเดโม ยอดเงินเป็น Mock THB (โทเคนเดโม)</p>
+
+  <section aria-label="ยอดรวมคืนนี้" class="till">
+    <div class="till-cells">
+      <div class="till-cell">
+        <span class="till-lbl">PLAYS TONIGHT</span>
+        <span class="till-val num">12</span>
+        <span class="till-sub">ทุกรอบผ่านการยืนยัน fingerprint/setlist</span>
+      </div>
+      <div class="till-cell">
+        <span class="till-lbl">SETTLED TOTAL</span>
+        <span class="till-val num green">฿340.00</span>
+        <span class="till-sub">เฉลี่ย ฿28.33 ต่อรอบ</span>
+      </div>
+      <div class="till-cell">
+        <span class="till-lbl">AVG E2E</span>
+        <span class="till-val num">1.4<span class="unit">s</span></span>
+        <span class="till-sub">เป้าหมาย ≤30s ต่อรอบ</span>
+      </div>
+    </div>
+    <p class="till-note">AMOUNTS IN MOCK THB (DEMO TOKEN), CHAIN BSC TESTNET 97</p>
+  </section>
+
+  <section class="split-sec" aria-label="การแบ่งเงินสะสมคืนนี้">
+    <h2 style="font-size:1.15rem;font-weight:600;margin:0 0 14px">แบ่งเงินสะสม 70/10/20</h2>
+    <div class="split-bar" role="img" aria-label="แท่งแบ่งเงิน: ลาเบล 70 เปอร์เซ็นต์ 238 บาท สถานที่ 10 เปอร์เซ็นต์ 34 บาท แพลตฟอร์ม 20 เปอร์เซ็นต์ 68 บาท">
+      <span class="seg seg-70" style="flex-grow:7"><span class="lbl">70%</span></span>
+      <span class="seg seg-10" style="flex-grow:1"><span class="lbl">10%</span></span>
+      <span class="seg seg-20" style="flex-grow:2"><span class="lbl">20%</span></span>
+    </div>
+    <ul class="split-legend">
+      <li><span class="sw sw-70" aria-hidden="true"></span>Label 70% <span class="num">฿238.00</span></li>
+      <li><span class="sw sw-10" aria-hidden="true"></span>Venue 10% <span class="num">฿34.00</span></li>
+      <li><span class="sw sw-20" aria-hidden="true"></span>Platform 20% <span class="num">฿68.00</span></li>
+    </ul>
+  </section>
+
+  <div class="duo">
+    <section class="panel panel-bond" aria-label="สถานะหลักประกันสถานที่">
+      <h2>หลักประกันสถานที่</h2>
+      <p class="sub">VenueStake บน BSC Testnet, <a href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">0x9b7c63…d4EeBc</a></p>
+      <ul class="plines">
+        <li><span class="k">STAKED</span><span class="dots"></span><span class="v">1,200 mTHB <span class="tag money">mTHB demo</span></span></li>
+        <li><span class="k">ISMEMBER</span><span class="dots"></span><span class="v green">✓ TRUE</span></li>
+        <li><span class="k">SLASH EVENTS (30D)</span><span class="dots"></span><span class="v num">0</span></li>
+        <li><span class="k">SLASH AUTHORITY</span><span class="dots"></span><span class="v">admin (demo) <span class="tag demo">multisig in production</span></span></li>
+      </ul>
+    </section>
+
+    <section class="panel panel-oracle" aria-label="ผู้เฝ้าระวังความเสี่ยงการชำระ">
+      <h2>ผู้เฝ้าระวัง Cournot</h2>
+      <p class="sub">ประเมินความเสี่ยงก่อนตั้งรับทุกชุด บอกว่าเดินหน้าหรือหยุด</p>
+      <p class="claim">"Tonight's batch settles inside the Cournot guard threshold."</p>
+      <div class="oracle-read">
+        <div><span class="read-p num">0.55%</span><span class="read-lbl">settlement risk</span></div>
+        <div><span class="dec">PROCEED</span><span class="read-lbl">guard decision</span></div>
+      </div>
+      <p class="guard-rule">RULE: decision flips to HOLD above 50%</p>
+      <ul class="evidence">
+        <li>1. Bond active: 1,200 mTHB staked, 0 slash events in 30 days</li>
+        <li>2. Cadence nominal: avg e2e 1.4s across 12 plays tonight</li>
+      </ul>
+      <span class="tag demo">oracle read is simulated (demo)</span>
+    </section>
+  </div>
+
+  <section class="recent" aria-label="รอบเพลงล่าสุด">
+    <h2 style="font-size:1.15rem;font-weight:600;margin:0 0 6px">รอบล่าสุด</h2>
+    <div class="slip-table-wrap">
+      <table class="slip-lines">
+        <thead>
+          <tr><th scope="col">เวลา</th><th scope="col">เพลง</th><th scope="col" class="r">ยอด</th><th scope="col" class="r col-tx">tx</th><th scope="col" class="r">สถานะ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">22:47</td><td class="song">ฝนตกที่เชียงใหม่</td><td class="r num">฿30.00</td><td class="r h col-tx">0x4f2a…9c1e</td><td class="r green">✓ ชำระแล้ว</td></tr>
+          <tr><td class="num">22:39</td><td class="song">เมืองไม่หลับ</td><td class="r num">฿35.00</td><td class="r h col-tx">0xa2c1…77b4</td><td class="r green">✓ ชำระแล้ว</td></tr>
+          <tr><td class="num">22:31</td><td class="song">รอเธอถึงเที่ยงคืน</td><td class="r num">฿40.00</td><td class="r h col-tx">0xd94e…20c3</td><td class="r green">✓ ชำระแล้ว</td></tr>
+          <tr><td class="num">22:20</td><td class="song">สายน้ำไม่รอใคร</td><td class="r num">฿20.00</td><td class="r h col-tx">0x66b0…5e19</td><td class="r green">✓ ชำระแล้ว</td></tr>
+          <tr><td class="num">22:12</td><td class="song">เต้นในสายฝน</td><td class="r num">฿35.00</td><td class="r h col-tx">0xe17f…3a08</td><td class="r green">✓ ชำระแล้ว</td></tr>
+          <tr><td class="num">22:03</td><td class="song">เส้นทางสายสอง</td><td class="r num">฿25.00</td><td class="r h col-tx">0x9b53…c7d1</td><td class="r green">✓ ชำระแล้ว</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;color:var(--ink-2)">6 จาก 12 รอบของคืนนี้ แสดง tx hash แบบย่อ (ตัวอย่างเดโม)</p>
+  </section>
+
+  <p class="next">เห็นภาพรอบเดียวฉบับเต็มได้ที่ <a href="play.html">รอบเพลงที่ชำระแล้ว</a> หรือเลือกเพลงต่อที่ <a href="catalog.html">แคตตาล็อก</a></p>
+</main>
+
+<footer class="footer">
+  <p class="fine">เดโมบน BSC Testnet (chain 97) Mock THB และ $PLAY เป็นโทเคนสำหรับเดโม ไม่ใช่เงินจริง ตัวเลขบนหน้านี้มาจากข้อมูลเดโมของคืนนี้</p>
+</footer>
+</div>
+</body>
+</html>

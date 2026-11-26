@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight: รอบเพลงที่ชำระแล้ว</title>
+<meta name="description" content="รอบเพลงหนึ่งรอบในสถานะชำระแล้ว: QR พร้อมเพย์ 30 บาท แบ่งเงิน 21/3/6 mTHB บนเชน พร้อมใบเสร็จผูกบน BSC Testnet (เดโม)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8F6;
+  --slip:#FEFEFB;
+  --ink:#23282A;
+  --ink-2:#575D57;
+  --rule:#C9CCC2;
+  --rule-soft:#E3E5DD;
+  --purple:#5C2D91;
+  --purple-deep:#462073;
+  --green:#1E7B4F;
+  --green-soft:#EAF1EB;
+  --sans:"IBM Plex Sans","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65}
+a{color:var(--purple)}
+a:hover{color:var(--purple-deep)}
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px;border-radius:2px}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+.green{color:var(--green)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;line-height:1.6;padding:1px 7px;border:1px dashed var(--rule);border-radius:3px;color:var(--ink-2);white-space:nowrap}
+.tag.money{border-color:var(--green);color:var(--green)}
+.tag.demo{border-style:solid}
+.wrap{max-width:1024px;margin-inline:auto;padding-inline:clamp(16px,4.5vw,44px)}
+.skip{position:absolute;left:-9999px;top:10px;z-index:10;background:var(--slip);border:1px solid var(--rule);border-radius:4px;padding:8px 14px;text-decoration:none}
+.skip:focus{left:10px}
+
+.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 26px;padding-block:20px 8px}
+.brand{margin:0;font-weight:700;font-size:1.06rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.brand:hover{color:var(--purple-deep)}
+.brand-sub{display:block;font-family:var(--mono);font-weight:400;font-size:.7rem;letter-spacing:.05em;color:var(--ink-2)}
+.top nav{display:flex;flex-wrap:wrap;gap:2px 20px;margin-inline-start:auto}
+.top nav a{text-decoration:none;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
+.top nav a:hover{border-bottom-color:var(--rule)}
+.top nav a[aria-current="page"]{color:var(--purple);border-bottom-color:var(--purple)}
+@media (max-width:719px){.top nav{margin-inline-start:0;width:100%}}
+
+h1{margin:34px 0 8px;font-size:clamp(1.8rem,5vw,2.5rem);font-weight:600;letter-spacing:-.015em;line-height:1.2}
+.lede{margin:0 0 8px;max-width:62ch;color:var(--ink-2)}
+
+.play-grid{display:grid;gap:48px;margin-top:38px;align-items:start}
+@media(min-width:940px){.play-grid{grid-template-columns:minmax(330px,430px) minmax(0,1fr)}}
+
+/* pay side: bank tile */
+.bank{background:var(--purple);border:1px solid var(--purple-deep);border-radius:10px;color:#fff;padding:26px 28px;max-width:430px}
+.bank-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.bank-head .b-name{font-weight:600;font-size:1rem}
+.bank-head .b-net{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:#D9C9EE}
+.qr-tile{margin:20px auto 6px;width:232px;background:#fff;border-radius:8px;padding:18px;display:block}
+.qr-cap{margin:10px 0 0;text-align:center;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;color:#D9C9EE}
+.pay-amt{margin:18px 0 0;text-align:center}
+.pay-amt .amt{font-family:var(--mono);font-weight:600;font-size:2.4rem;line-height:1;font-variant-numeric:tabular-nums}
+.pay-amt .cur{display:block;margin-top:6px;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:#D9C9EE}
+.pay-meta{margin:22px 0 0;width:100%;border-collapse:collapse;font-size:.82rem}
+.pay-meta th{text-align:left;font-weight:400;color:#D9C9EE;padding:6px 14px 6px 0;white-space:nowrap;vertical-align:top}
+.pay-meta td{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;padding:6px 0}
+.pay-note{margin:14px 0 0;font-size:.76rem;color:#E4D9F2}
+
+/* settle side: receipt slip */
+.settle{position:relative;margin:0}
+.slip{position:relative;background:var(--slip);padding:24px 26px;margin-block:8px 14px}
+.slip::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 8L7 0L14 8Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+.slip::after{content:"";position:absolute;left:0;right:0;top:100%;height:8px;background-repeat:repeat-x;background-size:14px 8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath d='M0 0L7 8L14 0Z' fill='%23FEFEFB'/%3E%3C/svg%3E")}
+.rc-head{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-weight:600;font-size:.86rem;letter-spacing:.06em}
+.rc-meta{margin:6px 0 0;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:var(--ink-2)}
+.srule{border:0;border-top:1px dashed var(--rule);margin:14px 0}
+.li{display:flex;align-items:baseline;gap:10px;font-family:var(--mono);font-size:.88rem;padding-block:5px}
+.li .k{letter-spacing:.04em;min-width:0}
+.li .dots{flex:1 1 14px;border-bottom:1px dotted var(--rule);min-width:14px;transform:translateY(-3px)}
+.li .v{white-space:nowrap;font-weight:500}
+.li .h{color:var(--ink-2);font-weight:400}
+.li.total{font-size:.98rem;font-weight:600;padding-block:8px}
+.tx-note{margin:2px 0 0;font-family:var(--mono);font-size:.66rem;color:var(--ink-2)}
+.stamp{position:absolute;top:86px;right:26px;transform:rotate(-3deg);border:2px solid var(--green);color:var(--green);font-family:var(--mono);font-weight:600;font-size:.9rem;letter-spacing:.22em;padding:6px 14px;border-radius:3px;opacity:.9}
+.barcode{height:30px;margin-block:18px 6px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 5px,var(--ink) 5px 6px,transparent 6px 8px,var(--ink) 8px 11px,transparent 11px 13px,var(--ink) 13px 14px,transparent 14px 18px)}
+.rc-anchor{margin:0;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;color:var(--ink-2)}
+.settle-cap{margin-top:26px;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-2)}
+
+.next{margin-top:30px;max-width:64ch;color:var(--ink-2)}
+.footer{margin-top:44px;border-top:1px solid var(--rule);padding-block:22px 50px}
+.fine{margin:0;font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;color:var(--ink-2);max-width:92ch}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+<div class="wrap">
+<header class="top">
+  <p class="brand"><a class="brand" href="landing.html">PlayRight<span class="brand-sub">per-play music licensing</span></a></p>
+  <nav aria-label="หน้าเดโม">
+    <a href="catalog.html">แคตตาล็อก</a>
+    <a href="play.html" aria-current="page">รอบที่ชำระแล้ว</a>
+    <a href="dashboard.html">แดชบอร์ดสถานที่</a>
+  </nav>
+  <span class="tag demo">Demo on BSC Testnet</span>
+</header>
+
+<main id="main">
+  <h1>รอบเพลงที่ชำระแล้ว</h1>
+  <p class="lede">หน้านี้คือรอบเดียวในสถานะสมบูรณ์: จ่ายแล้ว ยืนยันแล้ว แบ่งเงินแล้ว และผูกใบเสร็จบนเชนเรียบร้อย</p>
+
+  <div class="play-grid">
+    <section class="bank" aria-label="การชำระเงินฝั่งแฟนเพลง">
+      <div class="bank-head">
+        <span class="b-name">พร้อมเพย์ (PromptPay)</span>
+        <span class="b-net">VENUE TILE 0x9b7c63…d4EeBc</span>
+      </div>
+      <svg class="qr-tile" width="232" height="232" viewBox="0 0 29 29" role="img" aria-label="ภาพ QR ตัวอย่างสำหรับจัดวางดีไซน์ ไม่สามารถสแกนได้จริง">
+        <rect width="29" height="29" fill="#FFFFFF"/>
+        <g fill="#23282A">
+          <rect x="0" y="0" width="7" height="7"/><rect x="22" y="0" width="7" height="7"/><rect x="0" y="22" width="7" height="7"/>
+          <rect x="20" y="20" width="5" height="5"/>
+          <rect x="8" y="6" width="1" height="1"/><rect x="10" y="6" width="1" height="1"/><rect x="12" y="6" width="1" height="1"/><rect x="14" y="6" width="1" height="1"/><rect x="16" y="6" width="1" height="1"/><rect x="18" y="6" width="1" height="1"/><rect x="20" y="6" width="1" height="1"/>
+          <rect x="6" y="8" width="1" height="1"/><rect x="6" y="10" width="1" height="1"/><rect x="6" y="12" width="1" height="1"/><rect x="6" y="14" width="1" height="1"/><rect x="6" y="16" width="1" height="1"/><rect x="6" y="18" width="1" height="1"/><rect x="6" y="20" width="1" height="1"/>
+          <rect x="9" y="9" width="2" height="2"/><rect x="13" y="9" width="1" height="2"/><rect x="16" y="9" width="2" height="1"/><rect x="19" y="10" width="1" height="1"/>
+          <rect x="9" y="13" width="1" height="1"/><rect x="12" y="12" width="2" height="2"/><rect x="16" y="13" width="1" height="1"/><rect x="19" y="13" width="2" height="1"/>
+          <rect x="9" y="16" width="2" height="1"/><rect x="13" y="16" width="1" height="2"/><rect x="16" y="17" width="2" height="1"/>
+          <rect x="9" y="19" width="1" height="1"/><rect x="12" y="20" width="2" height="1"/><rect x="17" y="20" width="1" height="1"/>
+          <rect x="20" y="26" width="1" height="1"/><rect x="22" y="24" width="1" height="1"/><rect x="24" y="22" width="1" height="1"/><rect x="26" y="26" width="1" height="1"/>
+        </g>
+        <g fill="#FFFFFF">
+          <rect x="1" y="1" width="5" height="5"/><rect x="23" y="1" width="5" height="5"/><rect x="1" y="23" width="5" height="5"/><rect x="21" y="21" width="3" height="3"/>
+        </g>
+        <g fill="#23282A">
+          <rect x="2" y="2" width="3" height="3"/><rect x="24" y="2" width="3" height="3"/><rect x="2" y="24" width="3" height="3"/><rect x="22" y="22" width="1" height="1"/>
+        </g>
+      </svg>
+      <p class="qr-cap">DECORATIVE PLACEHOLDER, NOT A SCANNABLE CODE</p>
+      <p class="pay-amt"><span class="amt num">฿30.00</span><span class="cur">PAY IN MOCK THB (DEMO TOKEN)</span></p>
+      <table class="pay-meta">
+        <tbody>
+          <tr><th scope="row">โต๊ะ</th><td class="num">07</td></tr>
+          <tr><th scope="row">เวลาที่ขอ</th><td class="num">22:47</td></tr>
+          <tr><th scope="row">เพลง</th><td>ฝนตกที่เชียงใหม่</td></tr>
+          <tr><th scope="row">ลาเบล</th><td>GMM-Mock A</td></tr>
+        </tbody>
+      </table>
+      <p class="pay-note">จำนวนเงินถูกล็อกตั้งแต่หน้าสแกน ยอดสูงสุดต่อรอบคือ ฿30 ตามกติกาโปรโตคอล</p>
+    </section>
+
+    <figure class="settle" aria-label="ใบเสร็จการชำระรอบนี้">
+      <div class="slip">
+        <div class="stamp">SETTLED</div>
+        <div class="rc-head"><span>PLAYRIGHT RECEIPT</span><span>SLIP NO. 0097</span></div>
+        <p class="rc-meta">ONE PLAY: ฝนตกที่เชียงใหม่ (GMM-Mock A)</p>
+        <p class="rc-meta">TABLE 07, 22:47, THE BRASS ELEPHANT, RCA</p>
+        <hr class="srule">
+        <div class="li"><span class="k">SONG REQUEST</span><span class="dots"></span><span class="v">฿30.00</span></div>
+        <div class="li"><span class="k">FINGERPRINT MATCH</span><span class="dots"></span><span class="v green">0.94 PASS</span></div>
+        <div class="li"><span class="k">SETLIST POSITION</span><span class="dots"></span><span class="v">12/18</span></div>
+        <hr class="srule">
+        <p class="rc-meta">SPLIT TRANSFERS (Mock THB)</p>
+        <div class="li"><span class="k">LABEL 70%</span><span class="dots"></span><span class="v">21.00</span></div>
+        <p class="tx-note">0x4f2a91c8d0b3…9c1e <span class="tag demo">mock tx</span></p>
+        <div class="li"><span class="k">VENUE 10%</span><span class="dots"></span><span class="v">3.00</span></div>
+        <p class="tx-note">0xb83d0f22a7ce…02f7 <span class="tag demo">mock tx</span></p>
+        <div class="li"><span class="k">PLATFORM 20%</span><span class="dots"></span><span class="v">6.00</span></div>
+        <p class="tx-note">0x1a9e77b04c5d…44d3 <span class="tag demo">mock tx</span></p>
+        <hr class="srule">
+        <div class="li total"><span class="k">SETTLED TOTAL</span><span class="dots"></span><span class="v green">30.00 mTHB</span></div>
+        <div class="li"><span class="k">ANCHOR RECEIPT TX</span><span class="dots"></span><span class="v">0x7c5fe411…e8a2</span></div>
+        <div class="li"><span class="k">CHAIN</span><span class="dots"></span><span class="v">BSC TESTNET 97</span></div>
+        <div class="li"><span class="k">E2E REQUEST/PROOF</span><span class="dots"></span><span class="v green">1.5s (target ≤30s)</span></div>
+        <div class="barcode" aria-hidden="true"></div>
+        <p class="rc-anchor">STATUS: SETTLED ON-CHAIN ✓</p>
+      </div>
+      <figcaption class="settle-cap">เสร็จสมบูรณ์เร็วกว่าเป้าหมายประมาณ 20 เท่า รูปแบบ tx hash ในหน้านี้เป็นตัวอย่างสำหรับเดโม</figcaption>
+    </figure>
+  </div>
+
+  <p class="next">ดูยอดรวมทั้งคืนได้ที่ <a href="dashboard.html">แดชบอร์ดสถานที่</a> หรือกลับไปเลือกเพลงต่อที่ <a href="catalog.html">แคตตาล็อก</a></p>
+</main>
+
+<footer class="footer">
+  <p class="fine">เดโมบน BSC Testnet (chain 97) Mock THB เป็นโทเคนสำหรับเดโม ไม่ใช่เงินจริง QR ในหน้านี้เป็นภาพตกแต่งสำหรับจัดวาง ไม่ได้เข้ารหัสข้อมูลจริง</p>
+</footer>
+</div>
+</body>
+</html>

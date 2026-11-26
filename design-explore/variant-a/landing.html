@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#181B2C">
+<title>PlayRight: Every play pays. Per-play music licensing for Thai venues</title>
+<meta name="description" content="Fans pay up to ฿30 per song request. The 70/10/20 split settles on BSC Testnet in seconds and every play leaves an immutable receipt. Demo build for BNB Hack Bangkok.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --bg:#181B2C; --bg2:#1E2234; --bg3:#242A41;
+  --line:#2B314C; --line2:#3A4160;
+  --text:#D7DBEA; --muted:#A9AFCC; --faint:#8B92B2;
+  --amber:#F2B23E; --amber2:#FFD98A;
+  --ice:#7FD1E0;
+  --sans:"Space Grotesk","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700}
+a{color:var(--amber)}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--ice);outline-offset:3px;border-radius:2px}
+::selection{background:var(--amber);color:#181B2C}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+.skip{position:absolute;left:-999px;top:14px;z-index:50;background:var(--amber);color:#181B2C;font-weight:600;padding:10px 18px;border-radius:8px}
+.skip:focus{left:14px;text-decoration:none}
+.site-head{display:flex;align-items:center;gap:10px 20px;flex-wrap:wrap;padding:18px 0;border-bottom:1px solid var(--line)}
+.brand{font-weight:700;font-size:20px;letter-spacing:-.01em;color:var(--text);text-decoration:none}
+.brand:hover{color:var(--amber);text-decoration:none}
+.net-tag{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);border:1px solid var(--line2);border-radius:999px;padding:4px 12px}
+.net-dot{width:7px;height:7px;border-radius:50%;background:var(--ice)}
+.site-nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+.site-nav a{color:var(--muted);padding:7px 12px;border-radius:8px;font-size:14.5px;text-decoration:none}
+.site-nav a:hover{color:var(--text);background:var(--bg2);text-decoration:none}
+.site-nav a[aria-current="page"]{color:var(--amber);background:var(--bg2)}
+main{padding-bottom:20px}
+section{padding:60px 0}
+.sec-rule{border-top:1px solid var(--line)}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.15;letter-spacing:-.02em;margin:0}
+h2 .th,h1 .th{display:block;font-size:.55em;font-weight:500;color:var(--muted);margin-top:8px;letter-spacing:0}
+.lead{color:var(--muted);max-width:62ch}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 11px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.chip-ice{border-color:rgba(127,209,224,.5);color:var(--ice)}
+.chip-amber{border-color:rgba(242,178,62,.55);color:var(--amber)}
+.tok{font-size:10.5px;padding:1px 6px;border-radius:4px;border:1px solid rgba(242,178,62,.45);color:var(--amber);white-space:nowrap}
+.hash{font-family:var(--mono);font-size:13px}
+.btn{display:inline-flex;align-items:center;gap:10px;font-weight:600;border-radius:9px;padding:13px 22px;font-size:16px;border:1px solid transparent;text-decoration:none;cursor:pointer}
+.btn-primary{background:var(--amber);color:#181B2C}
+.btn-primary:hover{background:var(--amber2);text-decoration:none}
+.btn-ghost{border-color:var(--line2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);text-decoration:none}
+.meter{display:grid;grid-template-columns:70fr 10fr 20fr;gap:5px}
+.seg{position:relative;height:var(--mh,68px);border-radius:4px;background-image:linear-gradient(180deg,var(--c1),var(--c2)),repeating-linear-gradient(90deg,transparent 0 7px,rgba(24,27,44,.4) 7px 9px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 0 rgba(24,27,44,.35)}
+.seg-label{--c1:#FFD98A;--c2:#E09A32}
+.seg-venue{--c1:#E8AC52;--c2:#C07E1D}
+.seg-platform{--c1:#B98A34;--c2:#8A5E1A}
+.seg .num{position:absolute;left:12px;top:50%;translate:0 -50%;font-weight:700;color:#181B2C;letter-spacing:-.02em;font-size:clamp(16px,2.4vw,26px);font-variant-numeric:tabular-nums}
+.sweep .seg{animation:sweep .8s cubic-bezier(.3,.6,.15,1) both}
+.sweep .seg:nth-child(2){animation-delay:.65s}
+.sweep .seg:nth-child(3){animation-delay:1.05s}
+.sweep .seg:nth-child(4){animation-delay:1.3s}
+@keyframes sweep{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.meter-legend{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:14px;font-size:13.5px;color:var(--muted)}
+.meter-legend .k{display:inline-flex;align-items:center;gap:8px}
+.meter-legend .sw{width:10px;height:10px;border-radius:3px;background:var(--swc,var(--amber))}
+.meter-legend strong{color:var(--text);font-variant-numeric:tabular-nums}
+.site-foot{border-top:1px solid var(--line);padding:44px 0 56px;margin-top:20px}
+.fh{font-size:15px;font-weight:600;margin:0 0 12px}
+.addr{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere;color:var(--muted)}
+.addr:hover{color:var(--amber)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.hero{padding:84px 0 60px}
+.hero-kicker{color:var(--amber);font-size:15px;font-weight:500;margin:0}
+.hero h1{font-size:clamp(46px,8vw,88px);line-height:1.02;letter-spacing:-.025em;margin:12px 0 0}
+.hero h1 .th{font-size:clamp(17px,2.6vw,28px);margin-top:16px}
+.hero-meter{margin-top:38px;border-radius:6px;box-shadow:0 22px 70px -34px rgba(242,178,62,.4)}
+.cta-row{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+.proof-strip{list-style:none;margin:26px 0 0;padding:0;display:flex;gap:12px;overflow-x:auto;padding-bottom:10px}
+.proof-strip li{flex:none;min-width:232px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:3px 14px;align-items:baseline}
+.pt{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+.pv{font-weight:500;font-size:14.5px}
+.pa{font-weight:700;font-size:19px;color:var(--amber);font-variant-numeric:tabular-nums}
+.proof-strip .hash{grid-column:1/-1;color:var(--amber)}
+.pe{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.proof-note{color:var(--faint);font-size:12.5px;margin:8px 2px 0}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.stat-num .n{display:block;font-size:clamp(46px,6.5vw,74px);font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--amber);font-variant-numeric:tabular-nums}
+.stat-num.alt .n{color:var(--text)}
+.stat-num .n .unit{font-size:.38em;font-weight:600;margin-left:10px;color:var(--muted);letter-spacing:.01em}
+.stat-num p{color:var(--muted);max-width:34ch;margin:14px 0 0}
+.steps{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.steps li{border-top:2px solid var(--line2);padding-top:16px}
+.sn{font-size:30px;font-weight:700;color:var(--amber);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.steps h3{font-size:17.5px;margin:10px 0 6px;letter-spacing:-.01em}
+.steps p{color:var(--muted);font-size:14.5px;margin:0;line-height:1.55}
+.bond-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:start;margin-top:8px}
+.bond-grid .measure p{margin:0 0 16px}
+.bond-card{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+.bc-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+.bc-row .v2{color:var(--text);font-weight:600}
+.one-seg{grid-template-columns:1fr}
+.bond-meter{--mh:18px;margin:18px 0 10px}
+.bond-cap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.bond-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.oracle-card{margin-top:30px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:30px;display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:center}
+.oc-claim{font-size:clamp(19px,2.4vw,24px);line-height:1.35;margin:0;max-width:40ch}
+.oc-verdict{display:flex;flex-direction:column;gap:10px;align-items:flex-start;border-left:1px solid var(--line2);padding-left:30px}
+.oc-p{font-size:clamp(46px,6vw,64px);font-weight:700;color:var(--amber);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.oc-decide{background:var(--amber);color:#181B2C;font-weight:700;padding:6px 18px;border-radius:6px;font-size:15px}
+.oc-note{color:var(--muted);font-size:13px}
+.cta-final .cta-inner{display:flex;flex-wrap:wrap;align-items:center;gap:20px 40px;justify-content:space-between}
+.cta-final p{color:var(--muted);margin:8px 0 0;max-width:52ch}
+.foot-grid{display:grid;gap:36px 64px;grid-template-columns:1.4fr 1fr}
+.contracts{margin:0}
+.contracts>div{margin-top:12px}
+.contracts dt{color:var(--text);font-size:13.5px;font-weight:500}
+.contracts dd{margin:4px 0 0}
+.foot-note{color:var(--muted);font-size:13.5px;margin-top:18px}
+.tracks{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.tracks strong{display:block;font-size:14.5px}
+.tracks span{color:var(--muted);font-size:13.5px}
+.foot-base{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:13.5px}
+@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}.bond-grid{grid-template-columns:1fr}.oracle-card{grid-template-columns:1fr}.oc-verdict{border-left:0;border-top:1px solid var(--line2);padding:22px 0 0}.foot-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.steps{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr;gap:32px}.hero{padding:56px 0 44px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="wrap site-head">
+  <a class="brand" href="landing.html">PlayRight</a>
+  <span class="net-tag"><span class="net-dot" aria-hidden="true"></span>Demo on BSC Testnet</span>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="catalog.html">Setlist</a>
+    <a href="play.html">Receipt</a>
+    <a href="dashboard.html">Venue console</a>
+  </nav>
+</header>
+
+<main id="main" class="wrap">
+
+  <section class="hero" aria-labelledby="hero-h">
+    <p class="hero-kicker">Per-play music licensing for Thai venues</p>
+    <h1 id="hero-h">Every play pays.<span class="th" lang="th">ทุกจังหวะคือรายได้</span></h1>
+    <div class="hero-meter">
+      <div class="meter sweep" role="img" aria-label="Per-play royalty split: label 70 percent, venue 10 percent, platform 20 percent">
+        <span class="seg seg-label"><span class="num">70</span></span>
+        <span class="seg seg-venue"><span class="num">10</span></span>
+        <span class="seg seg-platform"><span class="num">20</span></span>
+      </div>
+      <div class="meter-legend">
+        <span class="k"><i class="sw" aria-hidden="true" style="--swc:#F2B23E"></i>Label <strong>70%</strong> (21.00 mTHB <span class="tok">demo token</span>)</span>
+        <span class="k"><i class="sw" aria-hidden="true" style="--swc:#E8AC52"></i>Venue <strong>10%</strong> (3.00 mTHB)</span>
+        <span class="k"><i class="sw" aria-hidden="true" style="--swc:#B98A34"></i>Platform <strong>20%</strong> (6.00 mTHB)</span>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:28px">A fan scans the QR on the table and pays up to ฿30 for a song. The venue's setlist, or the DJ's audio fingerprint, confirms the play actually happened. The 70/10/20 split settles on-chain in seconds and the receipt is anchored to BSC Testnet. No monthly lump sums, no untracked plays.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="catalog.html">Open the venue demo</a>
+      <a class="btn btn-ghost" href="play.html">See a settled receipt</a>
+    </div>
+  </section>
+
+  <section class="sec-rule" aria-labelledby="proof-h">
+    <h2 id="proof-h">Settling on chain right now<span class="th" lang="th">เพลย์ล่าสุดที่ตั้งบนเชนแล้ว</span></h2>
+    <ul class="proof-strip">
+      <li><span class="pt">22:14</span><span class="pv">Karma Sound Club</span><span class="pa">฿40</span><a class="hash" href="https://testnet.bscscan.com/tx/0x7be1a0d43c92e8f51ab67c04d93e21f8a05c74e19b32d6f0a847c5e1b9d302af">0x7be1…02af</a><span class="pe">settled in 1.3 s</span></li>
+      <li><span class="pt">22:05</span><span class="pv">Studio 8 Bangrak</span><span class="pa">฿25</span><a class="hash" href="https://testnet.bscscan.com/tx/0x4f2a9c81b7d05e33a1f8c2e94b6d7015e8a3c9f24b1d6e08f7a2c3d4e5b90c81">0x4f2a…0c81</a><span class="pe">settled in 1.5 s</span></li>
+      <li><span class="pt">21:58</span><span class="pv">The Rungsit Room</span><span class="pa">฿50</span><a class="hash" href="https://testnet.bscscan.com/tx/0xd9b7e5042a8c31f6b90d74e28a51c307f6b19d82e4a07c53b18f60d9a2c4e7b8">0xd9b7…e7b8</a><span class="pe">settled in 1.6 s</span></li>
+      <li><span class="pt">21:47</span><span class="pv">MOde Anh</span><span class="pa">฿20</span><a class="hash" href="https://testnet.bscscan.com/tx/0x8c1e3f2b6a90d745e12c08f3a69b41d7c508e29f13a6b84d0e57c92fa1b34d60">0x8c1e…4d60</a><span class="pe">settled in 1.2 s</span></li>
+      <li><span class="pt">21:39</span><span class="pv">Karma Sound Club</span><span class="pa">฿35</span><a class="hash" href="https://testnet.bscscan.com/tx/0xa3f05e7c92d148b6e0a73f51c8d9024be67a15f3d08c927e4b51a03f9d6c85e1">0xa3f0…85e1</a><span class="pe">settled in 1.4 s</span></li>
+    </ul>
+    <p class="proof-note" lang="th">ตัวอย่างเพลย์จากเดโม (demo plays)</p>
+  </section>
+
+  <section class="sec-rule" aria-label="The uncollected gap">
+    <div class="stat-grid">
+      <div class="stat-num">
+        <span class="n">≈240M<span class="unit">THB</span></span>
+        <p>of music licensing revenue goes uncollected every month</p>
+      </div>
+      <div class="stat-num alt">
+        <span class="n">5,000+</span>
+        <p>Thai venues playing licensed music with no per-play trail</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-rule" aria-labelledby="how-h">
+    <h2 id="how-h">How a play settles<span class="th" lang="th">การเล่นหนึ่งครั้งชำระอย่างไร</span></h2>
+    <ol class="steps">
+      <li>
+        <span class="sn">01</span>
+        <h3>Scan at the table</h3>
+        <p>The fan scans the QR on the table card. The request carries the track, the venue, and the price: ฿20 to ฿50 per play.</p>
+      </li>
+      <li>
+        <span class="sn">02</span>
+        <h3>Pay in mTHB <span class="tok">demo token</span></h3>
+        <p>The payment moves from the fan's wallet into the play escrow. Mock THB stands in for the BOT-licensed THB stable targeted at the Bank of Thailand March-2027 framework.</p>
+      </li>
+      <li>
+        <span class="sn">03</span>
+        <h3>Verify the play happened</h3>
+        <p>Live band nights match the venue's setlist. DJ nights match an audio fingerprint. Either way, the venue confirms the song actually played.</p>
+      </li>
+      <li>
+        <span class="sn">04</span>
+        <h3>Split and anchor</h3>
+        <p>70% label, 10% venue, 20% platform settle on BSC Testnet (chain 97), and the receipt is anchored as an immutable on-chain record.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="sec-rule" aria-labelledby="bond-h">
+    <h2 id="bond-h">Venues post a bond before they can sell<span class="th" lang="th">สถานที่ต้องวางพันธบัตรก่อนขายเพลย์</span></h2>
+    <div class="bond-grid">
+      <div class="measure">
+        <p>Before a venue can sell a single play, it stakes <strong>1,200 mTHB</strong> <span class="tok">demo token</span> in the VenueStake contract. Unbonded venues are refused at the protocol level, so the gate is the contract, not a promise.</p>
+        <p>When a fake play is proven, the stake is <strong>slashed to the protocol treasury</strong>. The money funds the protocol, not the reporter. In this demo the slash authority is the admin account; production runs it behind a multisig.</p>
+      </div>
+      <div class="bond-card">
+        <div class="bc-row"><span>VenueStake</span><a class="hash" href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">0x9b7c…EeBc</a></div>
+        <div class="bc-row"><span>isMember</span><span class="v2">✓ true</span></div>
+        <div class="meter sweep one-seg bond-meter" role="img" aria-label="Bond fully staked: 1,200 of 1,200 mTHB">
+          <span class="seg seg-label"></span>
+        </div>
+        <div class="bond-cap"><span>1,200 / 1,200 mTHB staked</span><span class="chip chip-ice">bonded, plays enabled ✓</span></div>
+        <div class="bond-chips">
+          <span class="chip">slash authority: admin (demo)</span>
+          <span class="chip">multisig in production</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-rule" aria-labelledby="oracle-h">
+    <h2 id="oracle-h">A guard watches settlement risk<span class="th" lang="th">ออราเคิลเฝ้าดูความเสี่ยงการชำระ</span></h2>
+    <div class="oracle-card">
+      <div>
+        <p class="oc-claim">“Can this venue's bond cover its pending settlement batch at the current Cournot equilibrium?”</p>
+      </div>
+      <div class="oc-verdict">
+        <span class="oc-p">0.55<small style="font-size:.45em">%</small></span>
+        <span class="oc-decide">PROCEED</span>
+        <span class="oc-note">HOLD above 50%. Probability from the demo oracle.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-rule cta-final" aria-labelledby="cta-h">
+    <div class="cta-inner">
+      <div>
+        <h2 id="cta-h">Tonight at Karma Sound Club<span class="th" lang="th">คืนนี้ที่คาร์มา ซาวด์ คลับ</span></h2>
+        <p>Ten songs are queued. Every request you make runs the meter above and settles in about 1.5 seconds.</p>
+      </div>
+      <a class="btn btn-primary" href="catalog.html">Open the venue demo</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div>
+      <h3 class="fh">Contracts, BSC Testnet (chain 97)</h3>
+      <dl class="contracts">
+        <div>
+          <dt>MockTHB <span class="tok">demo token</span></dt>
+          <dd><a class="addr" href="https://testnet.bscscan.com/address/0x31FE806363Bd0FCD22efa0C774D9706E9668b442">0x31FE806363Bd0FCD22efa0C774D9706E9668b442</a></dd>
+        </div>
+        <div>
+          <dt>VenueStake</dt>
+          <dd><a class="addr" href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc</a></dd>
+        </div>
+        <div>
+          <dt>$PLAY <span class="tok">demo token</span></dt>
+          <dd><a class="addr" href="https://testnet.bscscan.com/address/0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8">0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8</a></dd>
+        </div>
+      </dl>
+      <p class="foot-note">Explorer: <a href="https://testnet.bscscan.com">testnet.bscscan.com</a>. Request-to-proof target ≤30 s; the demo measured 1.5 s.</p>
+    </div>
+    <div>
+      <h3 class="fh">Tracks</h3>
+      <ul class="tracks">
+        <li><strong>Developer Track</strong><span>Contract suite and receipt anchoring</span></li>
+        <li><strong>Startup Track</strong><span>Venue economics, bond and slash design</span></li>
+        <li><strong>Four.meme OpenFour</strong><span>$PLAY launched on a bonding curve, BSC testnet</span></li>
+        <li><strong>Cournot guard</strong><span>Settlement-risk oracle feeding PROCEED / HOLD</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>PlayRight: every play pays. <span lang="th">ทุกจังหวะคือรายได้</span></span>
+    <span>Demo on BSC Testnet, chain 97</span>
+  </div>
+</footer>
+</body>
+</html>
