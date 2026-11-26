@@ -1,83 +1,87 @@
 # PerPlay — HackQuest submission package (ready to paste)
 
-Written 2026-11-27 02:1x Asia/Bangkok. **Updated 2026-11-27 03:0x — v2.1 master rebuilt.**
-**Updated 2026-11-27 03:2x — track strategy set, Cournot requirement DONE (see §0).**
+Written 2026-11-27 02:1x Asia/Bangkok. **Updated 2026-11-27 03:0x — v2.1 master rebuilt.**  
+**Updated 2026-11-27 03:2x — track strategy set, Cournot requirement DONE (see §0).**  
 Deadline: **submissions close 09:00 Nov 27**, Demo Night 15:00 (Park Hyatt Bangkok).
 
-> ⏱️ **Countdown from 03:20: ~5h40m to submission close.** Full rules, gap analysis and
+> ⏱️ **Countdown from 03:20: ~5h40m to submission close.** Full rules, gap analysis and  
 > the time-boxed plan: **[`BNB-BANGKOK-PREP.md`](BNB-BANGKOK-PREP.md)**.
+>
+> 📋 **"Deployment Details" field → ready-to-paste addresses:**  
+> **[`DEPLOYMENT-DETAILS.md`](DEPLOYMENT-DETAILS.md)** — MockTHB, VenueStake, $PLAY, OpenFour  
+> Registry/Core/Tools, deploy txs, BscScan links. All verified on-chain (chain 97).
 
 ---
 
 ## 0. Track strategy — enter these
 
-**Developer Track + Four.meme/OpenFour + Cournot.** Add **CoinMarketCap × Atlas** only if
+**Developer Track + Four.meme/OpenFour + Cournot.** Add **CoinMarketCap × Atlas** only if  
 a CMC Pro API key is already in hand.
 
-| Track | Status | Why |
-|---|---|---|
-| **Developer Track** (10k USD) | 🟢 Ready now | Built on BSC Testnet 97, live demo, public repo, 2:52 video (< 3 min cap), RWA + on-chain AI agent |
-| **Four.meme / OpenFour** (10k USD) | 🟢 Strong fit | Real developer-owned fork, `bondingV1` preset, bonding-curve launch + buys, **both txs confirmed on-chain** |
-| **Cournot** (2k USDT) | 🟢 **Requirement complete** ✅ | Live oracle call drives a settlement decision; README section written; proof log refreshed — see below |
-| **CoinMarketCap × Atlas** (10k USD) | 🟡 Only with a Pro key | Rubric is the most detailed of all tracks; needs a live CMC Pro call |
-| **Flap** (10k USD) | 🔴 **Skip** | Flap's Launcher Factory must be **audited and Portal-enabled by Flap's team** — not buildable tonight |
-| **ChatAndBuild** | ❌ Skip | Needs Living Brain memory layer + 3–5 min demo; prizes are in-kind (flights/mentorship) |
+| Track                               | Status                        | Why                                                                                                         |
+| ----------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Developer Track** (10k USD)       | 🟢 Ready now                  | Built on BSC Testnet 97, live demo, public repo, 2:52 video (< 3 min cap), RWA + on-chain AI agent          |
+| **Four.meme / OpenFour** (10k USD)  | 🟢 Strong fit                 | Real developer-owned fork, `bondingV1` preset, bonding-curve launch + buys, **both txs confirmed on-chain** |
+| **Cournot** (2k USDT)               | 🟢 **Requirement complete** ✅ | Live oracle call drives a settlement decision; README section written; proof log refreshed — see below      |
+| **CoinMarketCap × Atlas** (10k USD) | 🟡 Only with a Pro key        | Rubric is the most detailed of all tracks; needs a live CMC Pro call                                        |
+| **Flap** (10k USD)                  | 🔴 **Skip**                   | Flap's Launcher Factory must be **audited and Portal-enabled by Flap's team** — not buildable tonight       |
+| **ChatAndBuild**                    | ❌ Skip                        | Needs Living Brain memory layer + 3–5 min demo; prizes are in-kind (flights/mentorship)                     |
 
-**Also consider the separate Startup Track** (Luma `https://luma.com/5topfryz`, Startup Track
-ticket selected). PerPlay has a real revenue model — this is a better fit than a sponsor
-prize and offers YZi Labs EASY Residency upside. It is a **separate application**; it does
+**Also consider the separate Startup Track** (Luma `https://luma.com/5topfryz`, Startup Track  
+ticket selected). PerPlay has a real revenue model — this is a better fit than a sponsor  
+prize and offers YZi Labs EASY Residency upside. It is a **separate application**; it does  
 not replace the Developer Track entry.
 
 ### ✅ Cournot requirement — now complete
 
 Cournot's rubric is **pass/fail on three requirements**, plus a README section. Status:
 
-| Requirement | Status |
-|---|---|
-| ≥1 successful live call with reproducible proof | ✅ `poc/cournot-last-call.json` — HTTP 200, `probability 0.0049`, 11 evidence rows, `billing: free_quota` |
-| Probability displayed and driving a real decision | ✅ `poc/lib/cournot.mjs` — `probability > 0.5 ? 'HOLD' : 'PROCEED'`; `UNAVAILABLE` on failure, never fabricated |
-| Exact claim + supporting evidence shown | ✅ claim, probability, decision, `basis[]` (Kalshi/Binance/Coinglass/Deribit/forecast) and matched markets all rendered in the guard panel |
-| **"Add a Cournot Integration section to your README"** | ✅ **Written and pushed** — `README.md` → `## Cournot Integration` |
+| Requirement                                            | Status                                                                                                                                    |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| ≥1 successful live call with reproducible proof        | ✅ `poc/cournot-last-call.json` — HTTP 200, `probability 0.0049`, 11 evidence rows, `billing: free_quota`                                  |
+| Probability displayed and driving a real decision      | ✅ `poc/lib/cournot.mjs` — `probability > 0.5 ? 'HOLD' : 'PROCEED'`; `UNAVAILABLE` on failure, never fabricated                            |
+| Exact claim + supporting evidence shown                | ✅ claim, probability, decision, `basis[]` (Kalshi/Binance/Coinglass/Deribit/forecast) and matched markets all rendered in the guard panel |
+| **"Add a Cournot Integration section to your README"** | ✅ **Written and pushed** — `README.md` → `## Cournot Integration`                                                                         |
 
-**Verified live on the public repo:** `https://raw.githubusercontent.com/Poom5741/perplay/main/README.md`
-contains the section, and the proof log resolves with the fresh call.
+**Verified live on the public repo:** `https://raw.githubusercontent.com/Poom5741/perplay/main/README.md`  
+contains the section, and the proof log resolves with the fresh call.  
 Commit `76a3ad4`, pushed to `main`.
 
-⚠️ **Cournot quota is per-IP: 3 free calls.** Current IP `171.96.154.1` has **1 remaining**.
+⚠️ **Cournot quota is per-IP: 3 free calls.** Current IP `171.96.154.1` has **1 remaining**.  
 Bring a **phone hotspot with a fresh IP** to Demo Night to get 3 more.
 
 ---
 
 ## 1. Video upload (the only blocking human step)
 
-File to upload: `study/perplay/video/out/perplay-demo-v2.mp4` — 1920×1080, 30 fps,
+File to upload: `study/perplay/video/out/perplay-demo-v2.mp4` — 1920×1080, 30 fps,  
 H.264 + AAC, **2:52**, 62.2 MB.
 
-> v2.1 note: the master grew from 2:08 to 2:52 because two new beats were added
-> for the venue-owner argument (the 16,000 THB/year bill and the before/after)
+> v2.1 note: the master grew from 2:08 to 2:52 because two new beats were added  
+> for the venue-owner argument (the 16,000 THB/year bill and the before/after)  
 > and one for the $PLAY stake mechanic. Still inside the 2–3 min criterion.
 
 Suggested hosting, in order of preference:
 
-| Option | How | Why |
-|---|---|---|
-| YouTube (unlisted) | studio.youtube.com → Upload → visibility "Unlisted" | Most reliable for judges; auto-plays in a browser; captions can be uploaded as `perplay-demo-v2.srt` |
-| Google Drive | drive.google.com → upload → Share → "Anyone with the link" | No account-settings friction; note Drive may preview at low quality |
-| Loom | loom.com → upload file | Fine, but re-encodes and may drop the caption burn-in |
+| Option             | How                                                        | Why                                                                                                  |
+| ------------------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| YouTube (unlisted) | studio.youtube.com → Upload → visibility "Unlisted"        | Most reliable for judges; auto-plays in a browser; captions can be uploaded as `perplay-demo-v2.srt` |
+| Google Drive       | drive.google.com → upload → Share → "Anyone with the link" | No account-settings friction; note Drive may preview at low quality                                  |
+| Loom               | loom.com → upload file                                     | Fine, but re-encodes and may drop the caption burn-in                                                |
 
-Upload the `.srt` as the YouTube caption track too — it makes the film readable
+Upload the `.srt` as the YouTube caption track too — it makes the film readable  
 muted in the HackQuest feed.
 
-Copy the title, description, tags and chapters from
+Copy the title, description, tags and chapters from  
 `video/out/perplay-demo-v2.upload.md`.
 
 ### 1a. Four.meme / OpenFour — per-track submission text
 
-The track asks for: *"a working prototype, a GitHub repository, a 2–3 minute demo, and a
-short description of the user problem, the intended audience, and what makes the project
+The track asks for: *"a working prototype, a GitHub repository, a 2–3 minute demo, and a  
+short description of the user problem, the intended audience, and what makes the project  
 different."* Your 2:52 master covers the demo.
 
-**Route:** OpenFour **Boost** — you are extending an existing launchpad (a differentiated
+**Route:** OpenFour **Boost** — you are extending an existing launchpad (a differentiated  
 OpenFour fork), not inventing a new launch mechanism.
 
 ```
@@ -110,12 +114,12 @@ yield out as royalty credits that cover a venue's blanket licence — is designe
 shipped, and is labelled as such on screen and in the demo.
 ```
 
-**Demo:** the same 2:52 master (`perplay-demo-v2.mp4`) — it lands in the 2–3 min band and
+**Demo:** the same 2:52 master (`perplay-demo-v2.mp4`) — it lands in the 2–3 min band and  
 shows the OpenFour fork, the $PLAY launch and the designed staking loop.
 
 ### 1b. CoinMarketCap × Atlas — one-page write-up (only if you have a Pro key)
 
-Required: *"problem and audience, the endpoints or feeds used and why, the BNB Chain
+Required: *"problem and audience, the endpoints or feeds used and why, the BNB Chain  
 contract addresses and/or data used, and what you would build next."*
 
 ```
@@ -146,41 +150,49 @@ already ship, but priced off the royalty stream rather than a macro claim.
 ## 2. HackQuest form fields
 
 **Project name**
+
 ```
 PerPlay — one play, one on-chain license
 ```
 
 **Repository**
+
 ```
 https://github.com/Poom5741/perplay
 ```
 
 **Video link**
+
 ```
 <PASTE THE UPLOADED LINK HERE>
 ```
 
 **Live demo (bonus, judges will click this)**
+
 ```
 https://perplay-demo.poom-a1d.workers.dev
 ```
 
 **Track / category**
+
 ```
 BNB Chain track — Integration
 ```
 
 **One-line summary**
+
 ```
 PerPlay turns music licensing into a per-play transaction: a fan scans a QR at the venue table, pays ฿30 via real PromptPay, the play is verified against tonight's setlist, and the 70/10/20 split settles as three real transactions on BNB Smart Chain with the receipt hash anchored on-chain.
 ```
 
 **Problem / pain point**
+
 ```
 A small Bangkok bar pays a flat 16,000 THB/year blanket fee for music licensing — the same bill on a sold-out Saturday as on an empty Tuesday, and no log of which song actually played, so the venue earns nothing from it and the artist gets nothing per play. Across the industry the same model holds: labels cannot see what played, and artists get nothing per play. The country's biggest label (GMM Grammy) asked for per-play licensing years ago; the project died because pre-COVID tech could not settle a 20–50 THB micro-payment per play or prove which song actually sounded.
 ```
 
 **What we built (integration track)**
+
 ```
 A working per-play licensing flow on BNB Smart Chain:
 - Real EMVCo PromptPay QR payload (TLV + CRC16-CCITT) — scannable by Thai banking apps
@@ -192,11 +204,14 @@ A working per-play licensing flow on BNB Smart Chain:
 ```
 
 **How the integration works (Integration prize criterion)**
+
 ```
 BNB Smart Chain is the settlement layer. The API writes a real data transaction on BSC Testnet 97 containing the canonical play event (song id, amount, split amounts, verification result); its hash becomes the receipt id that the venue screen, the artist dashboard and the explorer all resolve to. The same receipt payload was previously anchored on Base Sepolia, so the receipt format is chain-agnostic — production follows the settlement flow rather than locking into one chain. Measured: 29,560 gas used per receipt (40,000 gas limit), i.e. < $0.01 per receipt on mainnet at current gas (0.05 gwei) — verified on receipt `0x931eb75c…`, block 144974404.
 ```
 
+
 **What is real vs. simulated (say this out loud — judges will ask)**
+
 ```
 REAL: EMVCo PromptPay payload, setlist verification, the three on-chain split transfers in MockTHB, receipt anchoring on BSC Testnet, the VenueStake bond contract, the $PLAY launch through the OpenFour fork, and every UI screen you see.
 SIMULATED: bank capture (the "I have paid" button — real acquiring needs a Payment Facilitator / BOT sandbox) and the THB stablecoin itself (MockTHB is a clearly labelled demo token).
@@ -205,21 +220,25 @@ DESIGNED (not shipped): the $PLAY pair-and-stake mechanic shown at 2:07 — pair
 ```
 
 **Usability / design**
+
 ```
 No app, no account, no wallet. A customer at the table scans one QR and pays ฿30 in their own banking app. The venue screen flips to "licensed, paid, anchoring on-chain" before the chorus, so proof of license is visible to the room — not buried in a dashboard. A judge can hold verifiable on-chain evidence on their own phone within 30 seconds. The owner's economics are shown as a before/after: 16,000 THB/year fixed, versus 2,640 THB/month to the venue at 40 requests a night, on top of what it already earns.
 ```
 
 **Open source**
+
 ```
 The whole repo is public, and it was built with two AI brains: a repo-resident agent committing every product decision (visible in the agent-authored decisions log in the git history) and a cloud memory brain that recalls why each choice was made, with sources. The demo video itself was produced by a reproducible Node + ffmpeg pipeline that lives in the repo.
 ```
 
 **Sustainable business**
+
 ```
 15,000+ licensed entertainment venues in Thailand, starting from the country's biggest label. 50 venues ≈ 250K THB/month at 96% per-play margin; unit economics and the token economy are documented in pitch/token-economy-one-pager.md. The venue's blanket fee becomes a revenue share (10% of every play), turning a cost centre into income.
 ```
 
 **Judging criteria quick map**
+
 ```
 Integration      → receipts anchored on BNB Smart Chain Testnet 97; OpenFour fork launch; Cournot oracle guard interface
 Design & Usability → QR-at-the-table flow, venue "licensed" screen, no app/account/wallet
@@ -232,8 +251,8 @@ Business         → 15,000+ venues, 50-venue unit economics, 96% per-play margi
 
 ## 3. PR #34 body update
 
-PR #34 (https://github.com/Poom5741/perplay/pull/34) is **already merged**, so
-the body can be edited in place. Add at the top, or append to the existing
+PR #34 (<https://github.com/Poom5741/perplay/pull/34>) is **already merged**, so  
+the body can be edited in place. Add at the top, or append to the existing  
 description:
 
 ```markdown
@@ -262,38 +281,37 @@ BNB testnet RPC, receipt status 0x1).
 
 ## 4. Still-open items (not blocking the submission)
 
-1. ~~**Cournot oracle call — rehearse on a fresh IP.**~~ **✅ RESOLVED 03:16.** The IP had
-   rotated — a live call from this machine returned HTTP 200, `probability 0.0049`,
-   `remaining: 2`. A second call through the repo's own `poc/lib/cournot.mjs` refreshed
-   the proof log (`used: 2, remaining: 1`). The README's Cournot Integration section is
-   written and pushed. **Still do:** bring a **phone hotspot with a fresh IP** to Demo
+1. ~~**Cournot oracle call — rehearse on a fresh IP.**~~ **✅ RESOLVED 03:16.** The IP had  
+   rotated — a live call from this machine returned HTTP 200, `probability 0.0049`,  
+   `remaining: 2`. A second call through the repo's own `poc/lib/cournot.mjs` refreshed  
+   the proof log (`used: 2, remaining: 1`). The README's Cournot Integration section is  
+   written and pushed. **Still do:** bring a **phone hotspot with a fresh IP** to Demo  
    Night — quota is 3 calls per IP and you want 3 more for the live demo.
-2. **Ask Poom for a CoinMarketCap Pro API key.** Without one the CMC×Atlas track is out.
+2. **Ask Poom for a CoinMarketCap Pro API key.** Without one the CMC×Atlas track is out.  
    With one it is the best remaining 10k — the one-page write-up is already drafted in §1b.
-3. **Check the Startup Track application** (`https://luma.com/5topfryz`, Startup Track
+3. **Check the Startup Track application** (`https://luma.com/5topfryz`, Startup Track  
    ticket selected). Separate from the Developer Track, and PerPlay is a strong fit for it.
-4. **Confirm the Luma approval email arrived.** HackQuest approval and Luma approval are
+4. **Confirm the Luma approval email arrived.** HackQuest approval and Luma approval are  
    separate gates. If it hasn't, email the Telegram group now.
-5. **VC annex placeholder.** `pitch/token-economy-one-pager.md` still has a "pre-seed
+5. **VC annex placeholder.** `pitch/token-economy-one-pager.md` still has a "pre-seed  
    — first 50 venues" TBD. Needs Poom's real numbers.
 6. **Vertical 9:16 cutdown** for social (optional; the 16:9 master is the submittable one).
-7. **BscScan beat** (optional). testnet.bscscan.com Cloudflare-blocks the agent
-   browser, and macOS screen-recording permission is missing. The film already
-   proves on-chain status via the receipt page (tx hash + "anchored on-chain ✓"),
-   so this is polish. If wanted: open the two tx pages in your own Chrome and
+7. **BscScan beat** (optional). testnet.bscscan.com Cloudflare-blocks the agent  
+   browser, and macOS screen-recording permission is missing. The film already  
+   proves on-chain status via the receipt page (tx hash + "anchored on-chain ✓"),  
+   so this is polish. If wanted: open the two tx pages in your own Chrome and  
    screenshot them, add two beats to `video/v2/build.mjs` EDL, re-run the build.
-8. **Remaining Higgsfield credits: 0.25.** Two Seedance 2.0 clips (9 credits total)
+8. **Remaining Higgsfield credits: 0.25.** Two Seedance 2.0 clips (9 credits total)  
    were spent on the B-roll opening. Top-ups are not available on this workspace.
-9. **Number consistency — two figures, two contexts.** `16,000 THB/year` is the
-   venue's actual MCT blanket-licence bill; `~48,000 THB/month` in
-   `pitch/token-economy-one-pager.md` is label-side licensing revenue and the
-   basis of the 240M THB TAM. The film uses 16,000 for the venue's bill and
-   2,640/month (the model) for the per-play comparison. Do not quote them as
+9. **Number consistency — two figures, two contexts.** `16,000 THB/year` is the  
+   venue's actual MCT blanket-licence bill; `~48,000 THB/month` in  
+   `pitch/token-economy-one-pager.md` is label-side licensing revenue and the  
+   basis of the 240M THB TAM. The film uses 16,000 for the venue's bill and  
+   2,640/month (the model) for the per-play comparison. Do not quote them as  
    interchangeable.
-10. **Flap track — do not enter.** Flap's Launcher Factory must inherit
-    `LauncherFactoryBase` and be **audited and enabled on the Portal by Flap's team**
-    before it counts. Not buildable or submittable in the remaining window. Email the
+10. **Flap track — do not enter.** Flap's Launcher Factory must inherit  
+    `LauncherFactoryBase` and be **audited and enabled on the Portal by Flap's team**  
+    before it counts. Not buildable or submittable in the remaining window. Email the  
     Flap team on Telegram if you want to explore it for the next cycle.
-11. **Team size limit and Developer Track judging weights are unpublished.** Ask in the
+11. **Team size limit and Developer Track judging weights are unpublished.** Ask in the  
     Telegram group. Don't assume a cap either way.
-
