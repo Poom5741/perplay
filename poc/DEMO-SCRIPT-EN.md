@@ -24,7 +24,8 @@
 
 7. Dashboard → **Settlement-risk guard** panel — "before we convert settled royalties, a live Cournot oracle call prices settlement stress — if depeg probability were above 50%, conversion pauses; today it says 0.55% → PROCEED. Claim, probability and evidence are shown verbatim."
 8. Say the bond story: "the venue in this demo staked **1,200 mTHB in the VenueStake contract** — unbonded venues get HTTP 402 from the play endpoint; fake plays get the stake slashed to the protocol treasury by the review process (slash authority: admin in the demo, multisig + oracle evidence in production)."
-9. Two verify modes: **live band** = pre-registered setlist · **DJ/line-in** = fingerprint from real audio (production: ACRCloud ~$0.17/detection).
+9. **Live slash (optional, rehearsed only):** run `node scripts/slash-demo.mjs` — admin slashes **250 mTHB** (evidence string attached, treasury move on BscScan) → stake falls to 950 < required 1,000 → the dashboard bond panel flips to **not bonded** and the next play request returns 402. Re-stake after the beat if continuing the demo.
+10. Two verify modes: **live band** = pre-registered setlist · **DJ/line-in** = fingerprint from real audio (production: ACRCloud ~$0.17/detection).
 
 ## Minute 4–5 · Close on the build story
 
