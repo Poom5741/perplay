@@ -22,7 +22,7 @@ Thai venues pay blanket licenses (~48,000 THB/month for a typical venue) whether
 | Layer | Asset | Who holds it | What it does |
 |---|---|---|---|
 | **Settlement** | **mTHB** — demo: clearly-labeled mock THB on BSC testnet; production: a BOT-licensed THB stablecoin under the Bank of Thailand's framework (final rules due March 2027) | Fans pay in it; **rights holders receive 70% in it** | Rights holders **never hold volatile assets** — royalties arrive in THB, the unit their licenses are denominated in |
-| **Coordination** | **$PLAY** (launches via OpenFour) | Venues **stake to join** (skin-in-the-game + seeds $PLAY↔THB exit liquidity); fans optionally hold ≥ threshold for a priority-queue perk; platform stakes and earns the 20% fee | Aligns every participant; speculation supplies the liquidity that royalties settle against |
+| **Coordination** | **$PLAY** (launches via OpenFour) | Venues **bond to join** (skin-in-the-game; demo bond is posted in mTHB so collateral is settlement-denominated, with a $PLAY bond as the post-hackathon default); fans optionally hold ≥ threshold for a priority-queue perk; platform stakes and earns the 20% fee | Aligns every participant; speculation supplies the liquidity that royalties settle against |
 
 - **Fraud has a price:** a venue's stake is collateral for honest reporting — false play records put the stake at risk (admin-gated slashing in the demo).
 - **Oracle guard:** a live Cournot oracle call returns the depeg probability for the THB settlement asset; when depeg risk crosses a threshold, royalty conversion pauses — the claim, probability, and evidence sources are displayed in-app. Settlement never silently breaks.
@@ -33,9 +33,11 @@ Thai venues pay blanket licenses (~48,000 THB/month for a typical venue) whether
 | Stakeholder | Holds | Gets | Why they join |
 |---|---|---|---|
 | **Rights holders** (labels, artists) | Nothing volatile — THB only | 70% of every verified play, with play-level proof | Revenue they can audit; zero crypto exposure |
-| **Venues** | A $PLAY stake (bond) | 10% of plays at their venue; pay-for-what-plays instead of blanket fees | Fairer costs + fraud-proof licensing relationship |
+| **Venues** | A venue bond (mTHB in the demo; $PLAY post-hackathon) | 10% of plays at their venue; pay-for-what-plays instead of blanket fees | Fairer costs + fraud-proof licensing relationship |
 | **Customers** (fans) | THB to pay; $PLAY optional | A play that provably supports the artist; priority-queue perk if holding $PLAY | 1-tap, ≤1 THB, no wallet friction required |
 | **Platform** | A $PLAY stake | 20% protocol fee | Runs verification + settlement rails |
+
+*(Demo implementation note: the venue bond contract `VenueStake` is deployed with mTHB as its collateral — settlement-denominated, so a slash is measured in the same unit royalties are paid in. Swapping the bond to $PLAY is a one-line constructor change after the hackathon.)*
 
 ## Why now — regulator-aligned by design
 
