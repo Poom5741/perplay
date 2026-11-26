@@ -1,15 +1,19 @@
 // PlayRight PoC server — per-play music licensing demo
-// Flow: catalog → PromptPay QR → จอฉาย → verify (setlist / audio-scan) → receipt on Base Sepolia → split ledger 70/10/20
+// Flow: catalog → PromptPay QR → จอฉาย → verify (setlist / audio-scan) → receipt on BSC Testnet (chain 97) → split ledger 70/10/20
 import http from 'node:http';
 import { randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import QRCode from 'qrcode';
+import { createPublicClient, http as httpTransport } from 'viem';
+import { bscTestnet } from 'viem/chains';
 import { buildCatalog, ensureFingerprints, sha256Buf } from './lib/catalog.mjs';
 import { promptPayPayload, crc16 } from './lib/promptpay.mjs';
 import { initChain, chainStatus, anchorReceipt } from './lib/chain.mjs';
 import { Store } from './lib/store.mjs';
+import { settlePlay, perk, settlementEnabled } from './lib/settlement.mjs';
+import { guard, guardEnabled } from './lib/cournot.mjs';
 
 const PORT = process.env.PORT || 3000;
 try { process.loadEnvFile(); } catch { /* no .env — fine */ }
@@ -23,6 +27,32 @@ const fingerprints = ensureFingerprints(existsSync(AUDIO_DIR) ? AUDIO_DIR : null
 
 const plays = new Store('plays');          // { [id]: play }
 const setlists = new Store('setlists');    // { [YYYY-MM-DD]: [songId] }
+
+// ---------- venue membership gate (checkpoint 2: VenueStake bond) ----------
+// Before issuing a play QR the server checks VenueStake.isMember(venueWallet) on
+// BSC Testnet — a venue that has not bonded gets no plays (docs/spec/venue-stake-bond.md).
+// Unconfigured (no VENUE_STAKE_ADDRESS) → gate open, one console note (pre-deploy PoC mode).
+const VENUE_STAKE = process.env.VENUE_STAKE_ADDRESS;
+const VENUE_WALLET = process.env.VENUE_WALLET_ADDRESS;
+const GATE_ABI = [{ name: 'isMember', type: 'function', stateMutability: 'view', inputs: [{ name: 'venue', type: 'address' }], outputs: [{ type: 'bool' }] }];
+const gateClient = createPublicClient({ chain: bscTestnet, transport: httpTransport(process.env.BSC_RPC_URL || 'https://bsc-testnet.publicnode.com') });
+const gateCache = { ok: null, at: 0 };
+async function venueIsMember() {
+  if (!VENUE_STAKE || !VENUE_WALLET) return { gated: false, member: null };
+  const now = Date.now();
+  if (gateCache.at && now - gateCache.at < 60_000) return { gated: true, member: gateCache.ok };
+  let member;
+  try {
+    member = await gateClient.readContract({ address: VENUE_STAKE, abi: GATE_ABI, functionName: 'isMember', args: [VENUE_WALLET] });
+  } catch (e) {
+    // RPC hiccup must not kill the demo: fail OPEN, log loudly, retry on next request
+    console.error('[gate] VenueStake read FAILED — failing open this request:', String(e.message || e).slice(0, 120));
+    return { gated: true, member: null, rpcError: true };
+  }
+  gateCache.ok = member; gateCache.at = now;
+  return { gated: true, member };
+}
+if (!VENUE_STAKE) console.log('[gate] VENUE_STAKE_ADDRESS not set — venue membership gate DISABLED (deploy contracts/ first)');
 
 const chain = initChain();
 console.log('[chain]', JSON.stringify(chain));
@@ -117,8 +147,14 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // ---------- coin-gated perk ($PLAY → priority queue) ----------
+    if (url.pathname === '/api/perk') return json(res, 200, await perk());
+
+    // ---------- settlement-risk guard (Cournot oracle, live) ----------
+    if (url.pathname === '/api/guard') return json(res, 200, await guard({ force: url.searchParams.get('refresh') === '1' }));
+
     // ---------- health / chain ----------
-    if (url.pathname === '/api/health') return json(res, 200, { ok: true, chain: await chainStatus(), venue: VENUE_NAME, songs: catalog.length, fingerprints: Object.keys(fingerprints).length });
+    if (url.pathname === '/api/health') return json(res, 200, { ok: true, chain: await chainStatus(), venue: VENUE_NAME, songs: catalog.length, fingerprints: Object.keys(fingerprints).length, venueGate: await venueIsMember() });
     if (url.pathname === '/api/catalog') return json(res, 200, { songs: catalog });
 
     // ---------- setlist ----------
@@ -140,6 +176,10 @@ const server = http.createServer(async (req, res) => {
       const body = JSON.parse((await readBody(req)).toString());
       const song = byId[body.songId];
       if (!song) return json(res, 404, { error: 'song not found' });
+      const gate = await venueIsMember();
+      if (gate.gated && !gate.member) {
+        return json(res, 402, { error: 'venue stake required — this venue has no bond in VenueStake (stake first; slash authority: admin, demo)', gate: 'VenueStake' });
+      }
       const mode = body.mode === 'acr' ? 'acr' : 'setlist';
       const play = newPlay(song, mode);
       const payload = promptPayPayload(process.env.PROMPTPAY_TARGET || '0800000000', song.priceTHB, play.ref);
@@ -167,6 +207,11 @@ const server = http.createServer(async (req, res) => {
         if (play.status !== 'qr_pending') return json(res, 409, { error: `bad state ${play.status}` });
         play.status = 'paid';
         play.timings.paidConfirmed = Date.now();
+        // checkpoint 3: on-chain settlement in Mock THB (demo token) — fan → 70 label / 10 venue / 20 platform
+        // fire-and-forget: state machine (paid→verified→anchored) never waits on it; result stamped on the play
+        settlePlay(play.amountTHB)
+          .then(s => { if (s) { const p = plays.get(play.id); if (p) { p.settlement = s; plays.set(play.id, p); } } })
+          .catch(e => { const p = plays.get(play.id); if (p) { p.settlementError = String(e.message || e).slice(0, 140); plays.set(play.id, p); } });
         // PoC: payment simulated (PromptPay payload real, confirm button = simulate)
         // verify: setlist mode auto-verifies if song is on tonight's setlist
         const today = new Date().toISOString().slice(0, 10);

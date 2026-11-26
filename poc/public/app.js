@@ -40,6 +40,7 @@ function showNotFound(what) {
 // ---------- 1. Song catalog ----------
 async function pageCatalog() {
   app.innerHTML = `<h1>🎤 เลือกเพลงที่จะขอ</h1>
+  <div id="perk"><p class="muted">กำลังเช็ค $PLAY…</p></div>
   <div class="modebar">
     <span class="muted">โหมด verify:</span>
     <button class="chip ${mode === 'setlist' ? 'on' : ''}" data-m="setlist">วงสด — เซ็ตลิสต์</button>
@@ -53,9 +54,16 @@ async function pageCatalog() {
     <div class="card" data-id="${s.id}">
       <div class="t">${s.title}</div>
       <div class="a">${s.artist} · ${s.label}</div>
-      <div class="p">${THB(s.priceTHB)} <span class="muted" style="font-size:.75rem">/ เพลง</span></div>
+      <div class="p">${THB(s.priceTHB)} <span class="muted" style="font-size:.75rem">/ เพลง · Mock THB (demo token)</span></div>
     </div>`).join('');
   app.querySelectorAll('.card').forEach(c => c.onclick = () => requestPlay(c.dataset.id));
+  // coin-gated perk (one perk only): fan holds ≥N $PLAY → priority-queue slot
+  api('/perk').then(k => {
+    const el = document.getElementById('perk'); if (!el || k.configured === false) return;
+    el.innerHTML = k.eligible
+      ? `<div class="panel" style="border-color:var(--ok);padding:10px 14px;margin-bottom:12px">🎟 <b>Priority queue unlocked</b> — $PLAY holder · balance ${(+k.balance / 1e18).toLocaleString()} $PLAY <span class="muted">(demo token · OpenFour launch)</span></div>`
+      : `<div class="panel" style="padding:10px 14px;margin-bottom:12px"><span class="muted">🎟 Priority queue: hold ≥ ${(+k.threshold / 1e18).toLocaleString()} $PLAY (demo token) — balance ${(k.balance ? (+k.balance / 1e18).toLocaleString() : 0)}</span></div>`;
+  }).catch(() => {});
 }
 
 async function requestPlay(songId) {
@@ -80,7 +88,7 @@ async function pagePay(id) {
     <img src="${qrDataURL}" alt="PromptPay QR" width="270">
     <div class="muted" style="font-size:.75rem;margin-top:6px">PromptPay dynamic QR (EMVCo payload + CRC ✅) · ref ${play.ref}</div>
     <button class="paybtn" id="paid">ยืนยันชำระแล้ว ${THB(play.amountTHB)}</button>
-    <div class="warn">PoC: QR เป็น payload PromptPay จริง (สแกนในแอปธนาคารเห็นร้าน+ยอด) แต่ PoC simulate การรับเงิน — ไม่เรียกเก็บเงินจริง</div>
+    <div class="warn">PoC: QR เป็น payload PromptPay จริง (สแกนในแอปธนาคารเห็นร้าน+ยอด) — ชำระผ่าน Mock THB (demo token) บน BSC Testnet · แยกจริง 70/10/20 on-chain</div>
     <a class="muted" href="#/screen/${id}" style="display:block;margin-top:10px">→ ดูหน้าจอฉายหลังวง</a>
   </div>`;
   document.getElementById('paid').onclick = async () => {
@@ -144,9 +152,12 @@ function renderReceipt(p) {
         ? `<a class="txlink" target="_blank" href="${a.explorerUrl}">${a.txHash.slice(0, 10)}…${a.txHash.slice(-8)}</a> <span class="muted">(${a.chain})</span>`
         : `<span class="muted">(${a.chain}: pending funding)</span>`
       ).join(' · ');
-  } else if (p.explorerUrl) html += `<br><span class="muted">receipt on-chain:</span> <a class="txlink" target="_blank" href="${p.explorerUrl}">${p.txHash.slice(0, 10)}…${p.txHash.slice(-8)}</a> <span class="muted">(Base Sepolia)</span>`;
+  } else if (p.explorerUrl) html += `<br><span class="muted">receipt on-chain:</span> <a class="txlink" target="_blank" href="${p.explorerUrl}">${p.txHash.slice(0, 10)}…${p.txHash.slice(-8)}</a> <span class="muted">(BSC Testnet)</span>`;
   else if (p.anchorError) html += `<br><span class="warn">anchor รอ wallet เงินใน testnet: ${p.anchorError.slice(0, 80)}… <a href="#" onclick="fetch('/api/plays/${p.id}/retry-anchor',{method:'POST'}).then(()=>0);return false">retry</a></span>`;
   if (p.e2eSeconds != null) html += `<br><span class="muted">end-to-end ทั้ง flow: <b style="color:var(--txt)">${p.e2eSeconds}s</b> ${p.e2eSeconds <= 30 ? '✅ ตามสมมติฐาน ≤30s' : '⚠️ เกิน 30s'}</span>`;
+  if (p.settlement) html += `<br><span class="muted">settled on-chain (${p.settlement.token}): ค่าย 70 / ร้าน 10 / แพลตฟอร์ม 20 ·</span> ` +
+    ['pullTx', 'labelTx', 'venueTx'].map(k => `<a class="txlink" target="_blank" href="${p.settlement.explorer}${p.settlement[k]}">${p.settlement[k].slice(0, 8)}…</a>`).join(' ');
+  else if (p.settlementError) html += `<br><span class="warn">settlement ยังไม่สำเร็จ: ${p.settlementError.slice(0, 90)}</span>`;
   el.innerHTML = html;
 }
 
@@ -178,14 +189,32 @@ async function pageDashboard() {
     <div class="panel"><h2>ค่าย — รับตาม catalog</h2><table>${partyRows}</table></div>
     <div class="panel"><h2>ร้าน — venue share</h2><table>${venueRows}</table></div>
   </div>
+  <div class="panel" id="guardpanel"><h2>🛡 Settlement-risk guard — royalty conversion <span class="muted" style="font-size:.75rem">Cournot Intelligence Oracle (live · demo)</span></h2><p class="muted">กำลังเรียก oracle…</p></div>
   <div class="panel"><h2>รายการล่าสุด</h2>
     <table><tr><th>#</th><th>เพลง</th><th>ยอด</th><th>สถานะ</th><th>e2e</th><th>receipt</th></tr>
     ${rows.map(p => `<tr><td>${p.seq}</td><td>${p.title} <span class="muted" style="font-size:.8rem">(${(songsById[p.songId] || {}).artist || ''})</span></td><td>${THB(p.amountTHB)}</td><td>${badge(p.status)}</td><td>${p.e2eSeconds != null ? p.e2eSeconds + 's' : '—'}</td><td>${p.explorerUrl ? `<a class="txlink" target="_blank" href="${p.explorerUrl}">tx ↗</a>` : '—'}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">ยังไม่มีรายการ — ไปหน้า 🎤 ขอเพลงเพื่อเริ่ม</td></tr>'}
     </table></div>`;
   api('/health').then(h => {
     const el = document.getElementById('chaininfo'); if (!el) return;
-    el.innerHTML = h.chain.funded ? `✅ Base Sepolia <span class="muted">block ${h.chain.blockNumber}</span>` : h.chain.error ? '⚠️ RPC error' : h.chain.configured ? `⚠️ wallet ${h.chain.address} ยังไม่มีเงิน testnet` : 'ยังไม่ configure wallet';
+    el.innerHTML = h.chain.funded ? `✅ BSC Testnet <span class="muted">block ${h.chain.blockNumber}</span>` : h.chain.error ? '⚠️ RPC error' : h.chain.configured ? `⚠️ wallet ${h.chain.address} ยังไม่มีเงิน testnet` : 'ยังไม่ configure wallet';
   });
+  // settlement-risk guard: live Cournot oracle probability drives the royalty-conversion decision
+  api('/guard').then(g => {
+    const el = document.getElementById('guardpanel'); if (!el || g.configured === false) return;
+    if (g.decision === 'UNAVAILABLE') {
+      el.innerHTML = `<h2>🛡 Settlement-risk guard <span class="muted" style="font-size:.75rem">fallback (demo)</span></h2>
+      <p class="warn">Oracle unavailable (${(g.error || g.httpStatus || 'no response')} — free call quota on this IP may be spent). Fallback per pre-agreed rule: conversion <b>PROCEED</b>, admin-gated. Proof of last live call: <code>cournot-last-call.json</code></p>`;
+      return;
+    }
+    const pctProb = g.probability != null ? `${(g.probability * 100).toFixed(2)}%` : '—';
+    const basis = Array.isArray(g.basis) ? g.basis.slice(0, 3).map(b => `<li>${b.source}: ${(b.summary || '').slice(0, 110)}… ${b.url ? `<a class="txlink" target="_blank" href="${b.url}">source ↗</a>` : ''}</li>`).join('') : '';
+    el.innerHTML = `<h2>🛡 Settlement-risk guard — royalty conversion <span class="muted" style="font-size:.75rem">Cournot Intelligence Oracle (live · demo)</span></h2>
+    <p><b>Claim checked:</b> ${g.claim}</p>
+    <p>Probability: <b>${pctProb}</b> (HOLD above ${(g.holdAbove * 100).toFixed(0)}%) → decision:
+      <b style="${g.decision === 'HOLD' ? 'color:var(--warn)' : 'color:var(--ok)'}">${g.decision === 'HOLD' ? '⏸ HOLD — pause royalty conversion' : '✅ PROCEED — convert settled royalties'}</b></p>
+    ${basis ? `<p class="muted" style="margin-bottom:4px">Evidence (oracle basis):</p><ul style="margin:0 0 6px 18px;font-size:.85rem">${basis}</ul>` : ''}
+    <p class="muted" style="font-size:.8rem">checked ${g.checkedAt} · quota ${g.quota ? `${g.quota.remaining}/${g.quota.total} free calls left on this IP` : '—'} · proof: cournot-last-call.json</p>`;
+  }).catch(() => {});
 }
 
 // ---------- 5. Setlist admin ----------

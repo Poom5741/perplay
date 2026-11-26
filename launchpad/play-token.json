@@ -1,0 +1,20 @@
+{
+  "network": "bsctestnet",
+  "chainId": 97,
+  "registry": "0x9C7b95dB86e47d5E49b69B587b52F3cfaCd95160",
+  "core": "0xEf8D0E4A1B2a122e27179F99BB027c4158Fd1408",
+  "tools": "0x7215A350426beF5E0B00A7ff95eca68195ba1644",
+  "preset": "bondingV1",
+  "token": "0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8",
+  "vault": "0xB316d57f92a6Af59405E048a817ddf8380C1edeE",
+  "creator": "0x91754d955D7E2174200Cd2521fc3C953Cb483A03",
+  "createTx": "0xb3ba7e4ab1212389c0a1f9d45eacb7d5e07f56e65dbb8fb3e69894cdc0cc0974",
+  "name": "PerPlay Protocol",
+  "symbol": "PLAY",
+  "raiseAmount": "0.1",
+  "launchedAt": "2026-11-26T06:35:44.770Z",
+  "platformBuyTx": "0x7bf8941d37b62ed626b3ef07d8e41125311363bca8861c69d9963fd8b3488b59",
+  "fanBuyTx": "0x70b29de0f05ece591070d11cdacc4a12b06e1d07703b250b7daf4d352f12e59b",
+  "fanAddress": "0x37A35aDD13DE8F0c95E462d5772A865aff78900b",
+  "fanBalance": "570991772363783465678811553"
+}

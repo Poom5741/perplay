@@ -1,0 +1,88 @@
+// Checkpoint 3 — on-chain settlement + coin-gated perk.
+//
+// Settlement (decision #33 Q2): the demoed payment flow settles in Mock THB (mTHB,
+// demo token) ON CHAIN. On confirm-paid the platform wallet pulls the play amount
+// from the fan wallet (transferFrom — fan approved once), then forwards 70% to the
+// label (royalty pool) and 10% to the venue; platform keeps 20%. Opt-in via
+// SETTLEMENT_ENABLED=true; the e2e suite sets E2E=1 so runs stay hermetic.
+//
+// NOTE: every env read is LAZY (inside functions). server.mjs calls
+// process.loadEnvFile() after its imports — module-level constants would capture
+// an empty env (ESM imports evaluate first). This bit once; do not re-lift.
+import { createPublicClient, createWalletClient, http } from 'viem';
+import { bscTestnet } from 'viem/chains';
+import { privateKeyToAccount } from 'viem/accounts';
+
+const RPC = () => process.env.BSC_RPC_URL || 'https://bsc-testnet.publicnode.com';
+const PERK_THRESHOLD = () => BigInt(process.env.PERK_THRESHOLD || '500000000') * 10n ** 18n; // 500M $PLAY
+
+export function settlementEnabled() {
+  return process.env.SETTLEMENT_ENABLED === 'true'
+    && !process.env.E2E
+    && Boolean(process.env.MTHB_ADDRESS && process.env.FAN_WALLET_ADDRESS && process.env.PRIVATE_KEY);
+}
+
+const publicClient = () => createPublicClient({ chain: bscTestnet, transport: http(RPC()) });
+const ERC20 = [
+  { name: 'transferFrom', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'from', type: 'address' }, { name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [] },
+  { name: 'transfer', type: 'function', stateMutability: 'nonpayable', inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }], outputs: [] },
+  { name: 'balanceOf', type: 'function', stateMutability: 'view', inputs: [{ name: 'owner', type: 'address' }], outputs: [{ type: 'uint256' }] },
+];
+
+let walletClient = null;
+function getWalletClient() {
+  if (!walletClient) {
+    const pk = process.env.PRIVATE_KEY || '';
+    const account = privateKeyToAccount(pk.startsWith('0x') ? pk : `0x${pk}`);
+    walletClient = createWalletClient({ account, chain: bscTestnet, transport: http(RPC()) });
+  }
+  return walletClient;
+}
+
+// THB is 2-decimal money; mTHB is 18 decimals — scale without floats.
+const toWei = (amountTHB) => BigInt(Math.round(amountTHB * 1e6)) * 10n ** 12n;
+
+// Pull full amount from fan → platform, then push 70% label / 10% venue (platform keeps 20%).
+export async function settlePlay(amountTHB) {
+  if (!settlementEnabled()) return null;
+  const amt = toWei(amountTHB);
+  const self = getWalletClient().account.address;
+  const pullTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transferFrom', args: [process.env.FAN_WALLET_ADDRESS, self, amt] });
+  const pullRc = await publicClient().waitForTransactionReceipt({ hash: pullTx });
+  if (pullRc.status !== 'success') throw new Error(`mTHB pull reverted (${pullTx})`);
+  const labelTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.LABEL_WALLET_ADDRESS || self, amt * 70n / 100n] });
+  const venueTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.VENUE_WALLET_ADDRESS, amt * 10n / 100n] });
+  return {
+    token: 'Mock THB (demo token)',
+    amountTHB,
+    splits: { label: '70%', venue: '10%', platform: '20%' },
+    pullTx, labelTx, venueTx,
+    explorer: 'https://testnet.bscscan.com/tx/',
+  };
+}
+
+// ---- coin-gated perk: $PLAY balance ≥ threshold → priority-queue slot ----
+const perkCache = { at: 0, val: null };
+export async function perk() {
+  const PLAY = process.env.PLAY_TOKEN_ADDRESS;
+  const FAN = process.env.FAN_WALLET_ADDRESS;
+  if (!PLAY || !FAN) return { configured: false };
+  const now = Date.now();
+  if (perkCache.at && now - perkCache.at < 60_000) return perkCache.val;
+  let balance;
+  try {
+    balance = await publicClient().readContract({ address: PLAY, abi: ERC20, functionName: 'balanceOf', args: [FAN] });
+  } catch {
+    return { configured: true, eligible: null, rpcError: true };
+  }
+  perkCache.val = {
+    configured: true,
+    perk: 'priority-queue',
+    eligible: balance >= PERK_THRESHOLD(),
+    balance: balance.toString(),
+    threshold: PERK_THRESHOLD().toString(),
+    token: '$PLAY (demo token)',
+  };
+  perkCache.at = now;
+  return perkCache.val;
+}
