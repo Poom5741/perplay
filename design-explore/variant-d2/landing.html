@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="PlayRight — per-play music licensing for Thai venues. Scan, pay up to 30 THB in Mock THB, split 70/10/20 on-chain. Demo on BSC Testnet.">
+<title>PlayRight — Every play pays. | PerPlay venue demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#221726;
+  --panel:#2C1B30;
+  --panel-deep:#1B1220;
+  --foot:#1D1322;
+  --cream:#F6F4EF;
+  --cream-dim:rgba(246,244,239,.78);
+  --cream-mute:rgba(246,244,239,.62);
+  --brass:#D9A441;
+  --brass-ink:#8F651F;
+  --purple:#A78BFA;
+  --purple-hi:#C4B5FD;
+  --green:#58B380;
+  --green-ink:#1E6B44;
+  --coral:#FF6A5C;
+  --hard:5px 6px 0 rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--plum);
+  color:var(--cream);
+  font:400 1rem/1.65 "IBM Plex Sans","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:clip;
+}
+::selection{background:var(--brass);color:var(--plum)}
+img,svg{display:block;max-width:100%}
+figure{margin:0}
+a{color:var(--purple)}
+a:hover{color:var(--purple-hi)}
+h1,h2,h3{font-family:Kanit,"IBM Plex Sans","Noto Sans Thai",sans-serif;font-weight:600;line-height:1.16;color:var(--cream)}
+p{max-width:66ch}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.en{font-size:.82em;font-weight:400;color:var(--cream-mute)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid var(--cream);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:12px;top:-56px;z-index:99;background:var(--brass);color:var(--plum);padding:10px 16px;border-radius:4px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+
+/* L1 console ruling */
+.rails{position:relative}
+.rails::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(246,244,239,.028) 0 1px,transparent 1px 76px),
+    repeating-linear-gradient(180deg,rgba(246,244,239,.02) 0 1px,transparent 1px 120px);}
+.rails>*{position:relative;z-index:1}
+
+/* L2 raised panels */
+.panel{position:relative;background:var(--panel);border:1.5px solid rgba(217,164,65,.5);border-radius:5px;box-shadow:var(--hard)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(246,244,239,.35);border-radius:999px;padding:3px 12px;font-size:.8rem;color:var(--cream-dim);background:rgba(246,244,239,.05);white-space:nowrap}
+.chip.demo{border-color:rgba(167,139,250,.55);color:var(--purple-hi);font-family:"IBM Plex Mono",monospace;font-size:.72rem}
+.chip.ok{border-color:rgba(88,179,128,.6);color:var(--green)}
+.chip.brass{border-color:rgba(217,164,65,.65);color:var(--brass)}
+
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--brass);color:var(--plum);border:1.5px solid var(--brass);border-radius:4px;padding:13px 22px;font:600 1rem "IBM Plex Sans","Noto Sans Thai",sans-serif;box-shadow:4px 5px 0 rgba(0,0,0,.4);text-decoration:none;cursor:pointer}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 7px 0 rgba(0,0,0,.4);color:var(--plum)}
+.btn:active{transform:none;box-shadow:3px 4px 0 rgba(0,0,0,.4)}
+.btn.ghost{background:transparent;color:var(--cream);border-color:rgba(246,244,239,.55);box-shadow:4px 5px 0 rgba(0,0,0,.35)}
+.btn.ghost:hover{color:var(--cream);border-color:var(--cream)}
+.btn.sm{padding:9px 16px;font-size:.9rem}
+
+/* header */
+.top{position:sticky;top:0;z-index:50;background:rgba(34,23,38,.97);border-bottom:1px solid rgba(217,164,65,.35)}
+.nav{display:flex;align-items:center;gap:14px 26px;padding:14px 0;flex-wrap:wrap}
+.brand{font-family:Kanit,sans-serif;font-weight:700;font-size:1.35rem;color:var(--cream);text-decoration:none;letter-spacing:.01em}
+.brand:hover{color:var(--cream)}
+.brand-sub{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.74rem;font-weight:400;color:var(--cream-mute);margin-top:-2px}
+.nav-links{display:flex;gap:20px;list-style:none;margin-left:auto;flex-wrap:wrap}
+.nav-links a{color:var(--purple);text-decoration:underline;text-decoration-color:rgba(167,139,250,.35);text-underline-offset:4px;font-weight:500}
+.nav-links a:hover{color:var(--purple-hi)}
+.nav-links a[aria-current="page"]{color:var(--brass);text-decoration-color:rgba(217,164,65,.5)}
+.nav-side{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+main{display:block}
+section{padding:88px 0}
+#main{scroll-margin-top:80px}
+
+/* LIVE tab crossing a section seam */
+.live{position:absolute;z-index:6;display:inline-flex;align-items:center;gap:9px;background:var(--panel);border:1.5px solid var(--coral);color:var(--coral);font:600 .8rem "IBM Plex Mono",monospace;letter-spacing:.07em;padding:7px 14px;border-radius:3px;box-shadow:4px 5px 0 rgba(0,0,0,.4);transform:rotate(-2deg)}
+.live .dot{width:8px;height:8px;border-radius:50%;background:var(--coral)}
+@media (prefers-reduced-motion:no-preference){
+  .live .dot{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+}
+
+/* receipt slip (L3 paper) */
+.slip{position:relative;background:var(--cream);color:var(--plum);border-radius:3px;box-shadow:7px 9px 0 rgba(0,0,0,.42);padding:20px 20px 16px;font-size:.9rem}
+.slip .pin{position:absolute;top:-8px;left:28px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#F4D08A 0 20%,#D9A441 58%,#8F651F 100%);box-shadow:0 2px 0 rgba(0,0,0,.45)}
+.slip-head{font-family:Kanit,sans-serif;font-weight:600;font-size:1rem;letter-spacing:.02em}
+.slip-sub{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:rgba(34,23,38,.68);margin-top:2px}
+.slip-song{font-size:.9rem;font-weight:600;margin-top:10px;color:var(--plum)}
+.slip dl{display:grid;grid-template-columns:1fr auto;gap:7px 16px;margin:12px 0;font-family:"IBM Plex Mono",monospace;font-size:.85rem}
+.slip dt{color:rgba(34,23,38,.75)}
+.slip dd{text-align:right;font-weight:600}
+.slip .rule{grid-column:1/-1;border-top:1px dashed rgba(34,23,38,.4);margin:2px 0}
+.slip .anchor-line{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--brass-ink);margin-top:10px;font-weight:600}
+.slip .ok-glyph{color:var(--green-ink)}
+
+/* fader instrument */
+.fader{display:flex;flex-direction:column;align-items:center;gap:12px;--trackH:300px;--travel:calc(var(--trackH) * var(--lvl) / 100)}
+.f-track{position:relative;width:46px;height:var(--trackH);background:var(--panel-deep);border:1px solid rgba(246,244,239,.14);border-radius:24px}
+.f-track::before{content:"";position:absolute;left:50%;top:8px;bottom:8px;width:2px;transform:translateX(-50%);background:rgba(246,244,239,.14)}
+.f-track::after{content:"";position:absolute;inset:0;border-radius:24px;background:repeating-linear-gradient(180deg,rgba(246,244,239,.14) 0 1px,transparent 1px 10%);pointer-events:none}
+.f-fill{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:6px;height:calc(var(--lvl)*1%);background:linear-gradient(180deg,rgba(217,164,65,.85),rgba(217,164,65,.2))}
+.f-cap{position:absolute;left:50%;top:calc(100% - (var(--lvl) * 1%) - 12px);transform:translateX(-50%);width:44px;height:24px;border-radius:4px;background:linear-gradient(180deg,#F0CE85,#D9A441 46%,#A1741F);border:1px solid #8F651F;box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.f-cap::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:2px;transform:translateY(-50%);background:rgba(34,23,38,.75)}
+.f-meta{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.f-num{font:600 1rem "IBM Plex Mono",monospace;color:var(--brass)}
+.f-num i{font-style:normal;font-size:.7em;color:rgba(217,164,65,.75)}
+.f-name{font-size:.78rem;color:var(--cream-dim)}
+.fader.f1{--d:0s}.fader.f2{--d:.15s}.fader.f3{--d:.3s}
+@media (prefers-reduced-motion:no-preference){
+  .glide .f-cap{animation:rise .95s cubic-bezier(.22,.75,.25,1) both;animation-delay:var(--d,0s)}
+  @keyframes rise{from{transform:translateX(-50%) translateY(var(--travel))}to{transform:translateX(-50%) translateY(0)}}
+}
+
+/* hero */
+.hero{padding:72px 0 96px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.04em;color:var(--cream-mute);max-width:none}
+.kicker b{color:var(--brass);font-weight:600}
+.hero h1{font-size:clamp(2.4rem,5.2vw,3.9rem);margin-top:14px;max-width:14ch}
+.th-sub{display:block;font-family:Kanit,"Noto Sans Thai",sans-serif;font-weight:500;font-size:clamp(1.15rem,2.4vw,1.5rem);color:var(--cream-dim);margin-top:10px}
+.lead{margin-top:18px;font-size:1.06rem;color:var(--cream-dim);max-width:54ch}
+.cta-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:28px}
+.stat-strip{display:flex;gap:36px;flex-wrap:wrap;margin-top:36px;padding-top:24px;border-top:1px solid rgba(246,244,239,.14)}
+.stat dt{font-size:.82rem;color:var(--cream-mute);max-width:26ch}
+.stat dd{font:600 2rem/1.15 "IBM Plex Mono",monospace;color:var(--brass);margin-top:4px}
+
+/* hero console: backplane (z1) < receipt (z2) < fader bank (z3) < pin (z4) */
+.hero-console{position:relative;min-height:560px}
+.console-back{position:absolute;top:0;right:0;left:56px;bottom:130px;z-index:1;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.console-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.ct{font:600 .78rem "IBM Plex Mono",monospace;color:var(--brass);letter-spacing:.05em}
+.console-head h2{font-size:1.15rem}
+.console-note{font-size:.78rem;color:var(--cream-mute)}
+.back-grid{margin-top:auto;display:flex;gap:4px;height:56px;align-items:flex-end}
+.back-grid i{flex:1;background:rgba(246,244,239,.07)}
+.slip-hero{position:absolute;left:0;bottom:0;width:min(274px,60%);z-index:2;transform:rotate(1.5deg)}
+.fader-bank{position:absolute;right:0;bottom:64px;width:min(322px,60%);z-index:3;padding:16px 18px 18px}
+.bank-tag{font:600 .72rem "IBM Plex Mono",monospace;letter-spacing:.09em;color:var(--brass);margin-bottom:12px}
+.bank-row{display:flex;justify-content:space-around;gap:8px}
+.live-hero{bottom:-18px;left:4%}
+
+/* signal path */
+.signal h2{font-size:clamp(1.6rem,3vw,2.2rem);max-width:26ch}
+.sec-echo{display:block;font-family:Kanit,"Noto Sans Thai",sans-serif;font-weight:500;font-size:1.05rem;color:var(--cream-mute);margin-top:6px}
+.path{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative;margin-top:44px}
+.path::before{content:"";position:absolute;left:2%;right:2%;top:96px;height:2px;background:linear-gradient(90deg,transparent,rgba(217,164,65,.5) 10%,rgba(217,164,65,.5) 90%,transparent)}
+.step{padding:20px 20px 18px;display:flex;flex-direction:column;gap:10px}
+.step:nth-child(2),.step:nth-child(4){transform:translateY(18px)}
+.step .ch{font:600 .78rem "IBM Plex Mono",monospace;color:var(--brass);letter-spacing:.05em}
+.step h3{font-size:1.06rem}
+.step h3 .en{display:block}
+.step p{font-size:.9rem;color:var(--cream-dim);max-width:none}
+.mini-qr{width:74px;height:74px;color:var(--cream-mute);border:1.5px solid rgba(246,244,239,.22);border-radius:4px;padding:7px;background:var(--panel-deep)}
+.qr-cap{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--cream-mute)}
+.wave{width:100%;max-width:150px}
+
+/* bond */
+.bond-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:start}
+.bond-panel{padding:30px 30px 26px}
+.bond-panel h2{font-size:clamp(1.5rem,2.8vw,2rem);max-width:24ch}
+.bond-panel p{margin-top:14px;color:var(--cream-dim)}
+.bond-list{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.bond-list li{display:flex;gap:10px;align-items:baseline;color:var(--cream-dim);font-size:.95rem}
+.bond-list .tick{color:var(--green);font-weight:700}
+.plate{display:inline-flex;align-items:center;gap:10px;border:1.5px solid rgba(88,179,128,.6);color:var(--green);padding:8px 14px;border-radius:4px;font:600 .85rem "IBM Plex Mono",monospace;margin-top:18px}
+.plate .sw{width:34px;height:18px;border-radius:9px;background:rgba(88,179,128,.25);position:relative}
+.plate .sw::after{content:"";position:absolute;right:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--green)}
+.refusal{padding:24px;position:relative}
+.refusal h3{font-size:1rem;margin-bottom:14px}
+.refusal .log{display:flex;flex-direction:column;gap:9px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--cream-dim)}
+.log .url{color:var(--cream-mute)}
+.log .good{color:var(--green);font-weight:600}
+.log .bad{color:var(--cream);font-weight:600}
+.refusal .stamp402{position:absolute;right:18px;bottom:16px;border:2px solid var(--brass);color:var(--brass);font:700 .8rem "IBM Plex Mono",monospace;letter-spacing:.1em;padding:6px 12px;border-radius:3px;transform:rotate(-4deg)}
+
+/* guard (aux return) */
+.aux{padding:28px 30px;display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:start}
+.aux-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.aux-head h2{font-size:clamp(1.4rem,2.6vw,1.8rem)}
+.claim{color:var(--cream-dim);margin-top:10px;max-width:52ch}
+.verdict-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.prob{font:600 2.4rem/1 "IBM Plex Mono",monospace;color:var(--cream)}
+.prob-lab{font-size:.85rem;color:var(--cream-mute);max-width:16ch}
+.vchip{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(88,179,128,.65);color:var(--green);font:700 .95rem "IBM Plex Mono",monospace;letter-spacing:.06em;padding:10px 16px;border-radius:4px;box-shadow:3px 4px 0 rgba(0,0,0,.35)}
+.g-wrap{padding-top:6px}
+.g-meter{position:relative;height:14px;background:var(--panel-deep);border:1px solid rgba(246,244,239,.14);border-radius:7px;margin-top:12px}
+.g-meter i{position:absolute;left:0;top:0;bottom:0;width:.55%;min-width:5px;background:var(--green);border-radius:7px 0 0 7px}
+.g-meter .hold{position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--cream-mute)}
+.g-scale{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--cream-mute);margin-top:6px}
+.evidence{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--cream-dim)}
+.evidence li{padding-left:18px;position:relative}
+.evidence li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:2px;background:var(--brass)}
+
+/* tokens */
+.token-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:stretch}
+.token{padding:26px 28px}
+.token h3{font-size:1.15rem}
+.token p{margin-top:10px;color:var(--cream-dim);font-size:.95rem}
+.token .chip{margin-top:16px}
+
+/* footer */
+.foot{margin-top:96px;border-top:1px solid rgba(217,164,65,.35);background:var(--foot);padding:46px 0 26px}
+.foot-grid{display:grid;grid-template-columns:1.1fr 1.5fr .7fr;gap:38px}
+.foot h3{font-size:1rem;color:var(--brass);margin-bottom:12px}
+.foot .addr{list-style:none;font-size:.8rem;line-height:1.9;color:var(--cream-dim);word-break:break-all}
+.foot .addr .nm{color:var(--cream);font-weight:600}
+.tracks{list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--cream-dim);font-size:.92rem}
+.fine{font-size:.8rem;color:var(--cream-mute);margin-top:14px;max-width:46ch}
+.foot-bottom{margin-top:34px;padding-top:16px;border-top:1px solid rgba(246,244,239,.12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--cream-mute)}
+
+@media (max-width:960px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-console{min-height:0;display:flex;flex-direction:column}
+  .console-back{position:static;order:1;padding:22px 22px 170px}
+  .slip-hero{position:relative;order:2;width:min(282px,88%);margin:-140px 0 0 6px}
+  .fader-bank{position:relative;order:3;width:min(344px,96%);margin:-72px 6px 0 auto}
+  .path{grid-template-columns:1fr;gap:18px}
+  .path::before{display:none}
+  .step:nth-child(2),.step:nth-child(4){transform:none}
+  .bond-grid{grid-template-columns:1fr}
+  .aux{grid-template-columns:1fr}
+  .token-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width:640px){
+  section{padding:64px 0}
+  .hero{padding:56px 0 84px}
+  .fader{--trackH:220px}
+  .brand-sub{display:none}
+  .nav-links{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content — ข้ามไปยังเนื้อหา</a>
+
+<header class="top">
+  <div class="wrap">
+    <nav class="nav" aria-label="Primary">
+      <div>
+        <a class="brand" href="landing.html">PlayRight</a>
+        <span class="brand-sub" lang="th">ทุกจังหวะคือรายได้</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="catalog.html">Catalog <span class="en">แคตตาล็อก</span></a></li>
+        <li><a href="play.html">Settlement slip <span class="en">สลิป</span></a></li>
+        <li><a href="dashboard.html">Console <span class="en">คอนโซล</span></a></li>
+      </ul>
+      <div class="nav-side">
+        <span class="chip demo">Demo on BSC Testnet</span>
+        <a class="btn sm" href="catalog.html">Open the venue demo</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero rails" aria-labelledby="hero-h">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="kicker">Per-play music licensing <b>—</b> Thai venues <span lang="th">ใบอนุญาตเพลารายจังหวะ</span></p>
+          <h1 id="hero-h">Every play pays.
+            <span class="th-sub" lang="th">ทุกจังหวะคือรายได้</span>
+          </h1>
+          <p class="lead">One QR at the table. A fan pays up to ฿30 in Mock THB, an audio fingerprint confirms the setlist, and the 70/10/20 split settles on-chain — the receipt anchors on BSC Testnet.</p>
+          <div class="cta-row">
+            <a class="btn" href="catalog.html">Open the venue demo</a>
+            <a class="btn ghost" href="play.html">See a settled slip</a>
+          </div>
+          <dl class="stat-strip">
+            <div class="stat">
+              <dt>Licensing revenue uncollected every month</dt>
+              <dd>≈ ฿240M</dd>
+            </div>
+            <div class="stat">
+              <dt>Venues playing music with no per-play meter</dt>
+              <dd>5,000+</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero-console" aria-label="Master bus fader bank at 70/10/20 with the settlement receipt pinned beneath it (illustrative demo)">
+          <div class="console-back panel rails">
+            <div class="console-head">
+              <span class="ct">BUS A</span>
+              <h2>Master bus</h2>
+              <span class="chip">last settled play</span>
+            </div>
+            <p class="console-note mono">70 / 10 / 20 — label / venue / platform</p>
+            <div class="back-grid" aria-hidden="true">
+              <i style="height:26%"></i><i style="height:48%"></i><i style="height:34%"></i><i style="height:62%"></i><i style="height:40%"></i><i style="height:55%"></i><i style="height:30%"></i><i style="height:44%"></i><i style="height:24%"></i><i style="height:52%"></i><i style="height:38%"></i><i style="height:58%"></i>
+            </div>
+          </div>
+
+          <figure class="slip slip-hero">
+            <span class="pin" aria-hidden="true"></span>
+            <figcaption>
+              <div class="slip-head">Perplay settlement slip</div>
+              <div class="slip-sub">SLIP 0042 — BSC Testnet (chain 97)</div>
+            </figcaption>
+            <p class="slip-song" lang="th">ฝนตกที่ถนนสีลม — วง มื้อค่ำ</p>
+            <dl>
+              <dt>SONG REQUEST</dt><dd>฿30.00</dd>
+              <dt>LABEL 70%</dt><dd>฿21.00</dd>
+              <dt>VENUE 10%</dt><dd>฿3.00</dd>
+              <dt>PLATFORM 20%</dt><dd>฿6.00</dd>
+              <div class="rule" aria-hidden="true"></div>
+            </dl>
+            <p class="anchor-line">BSC TESTNET ANCHOR <span class="ok-glyph">✓</span> — tx 0x7c4a…9e21</p>
+          </figure>
+
+          <div class="fader-bank panel glide">
+            <p class="bank-tag">SPLIT READOUT</p>
+            <div class="bank-row">
+              <div class="fader f1" style="--lvl:70">
+                <div class="f-track" aria-hidden="true"><span class="f-fill"></span><span class="f-cap"></span></div>
+                <div class="f-meta"><span class="f-num">70<i>%</i></span><span class="f-name">LABEL <span lang="th">ค่ายเพลง</span></span></div>
+              </div>
+              <div class="fader f2" style="--lvl:10">
+                <div class="f-track" aria-hidden="true"><span class="f-fill"></span><span class="f-cap"></span></div>
+                <div class="f-meta"><span class="f-num">10<i>%</i></span><span class="f-name">VENUE <span lang="th">สถานที่</span></span></div>
+              </div>
+              <div class="fader f3" style="--lvl:20">
+                <div class="f-track" aria-hidden="true"><span class="f-fill"></span><span class="f-cap"></span></div>
+                <div class="f-meta"><span class="f-num">20<i>%</i></span><span class="f-name">PLATFORM <span lang="th">แพลตฟอร์ม</span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="live live-hero"><span class="dot" aria-hidden="true"></span>LIVE — 3 rooms on air</span>
+  </section>
+
+  <!-- SIGNAL PATH -->
+  <section class="signal" aria-labelledby="signal-h">
+    <div class="wrap">
+      <h2 id="signal-h">How one play settles
+        <span class="sec-echo" lang="th">เส้นทางสัญญาณของหนึ่งจังหวะ — สแกน จ่าย ตรวจ แบ่ง</span>
+      </h2>
+      <ol class="path">
+        <li class="panel step">
+          <span class="ch">CH 01</span>
+          <h3>Scan at the table <span class="en" lang="th">สแกนคิวอาร์ที่โต๊ะ</span></h3>
+          <svg class="mini-qr" viewBox="0 0 29 29" role="img" aria-label="ตัวอย่างลายคิวอาร์ (ตกแต่ง สแกนไม่ได้)">
+            <g fill="currentColor">
+              <path d="M0 0h7v7H0zM1 1h5v5H1zM2 2h3v3H2z"/>
+              <path d="M22 0h7v7h-7zM23 1h5v5h-5zM24 2h3v3h-3z"/>
+              <path d="M0 22h7v7H0zM1 23h5v5H1zM2 24h3v3H2z"/>
+              <rect x="10" y="0" width="2" height="2"/><rect x="14" y="2" width="2" height="2"/><rect x="10" y="5" width="2" height="2"/>
+              <rect x="16" y="5" width="2" height="2"/><rect x="12" y="9" width="2" height="2"/><rect x="17" y="10" width="2" height="2"/>
+              <rect x="0" y="10" width="2" height="2"/><rect x="4" y="12" width="2" height="2"/><rect x="7" y="10" width="2" height="2"/>
+              <rect x="21" y="12" width="2" height="2"/><rect x="25" y="10" width="2" height="2"/><rect x="27" y="14" width="2" height="2"/>
+              <rect x="10" y="14" width="2" height="2"/><rect x="14" y="16" width="2" height="2"/><rect x="18" y="18" width="2" height="2"/>
+              <rect x="22" y="20" width="2" height="2"/><rect x="10" y="20" width="2" height="2"/><rect x="14" y="22" width="2" height="2"/>
+              <rect x="18" y="24" width="2" height="2"/><rect x="22" y="26" width="2" height="2"/><rect x="10" y="26" width="2" height="2"/>
+              <rect x="16" y="27" width="2" height="2"/><rect x="26" y="22" width="2" height="2"/><rect x="24" y="16" width="2" height="2"/>
+            </g>
+          </svg>
+          <p class="qr-cap">decorative block — non-scannable (demo)</p>
+          <p>Every table gets a venue QR bound to the room's license.</p>
+        </li>
+        <li class="panel step">
+          <span class="ch">CH 02</span>
+          <h3>Pay 30 THB, at most <span class="en" lang="th">จ่ายไม่เกิน 30 บาท</span></h3>
+          <p class="mono" style="font-size:1.3rem;font-weight:600;color:var(--brass)">≤ ฿30.00</p>
+          <span class="chip demo">MockTHB (demo token)</span>
+          <p>Mock THB is the demo settlement unit: 1 mTHB behaves like ฿1 on testnet.</p>
+        </li>
+        <li class="panel step">
+          <span class="ch">CH 03</span>
+          <h3>Verify the setlist <span class="en" lang="th">ตรวจลายพิมพ์เสียง</span></h3>
+          <svg class="wave" viewBox="0 0 120 36" role="img" aria-label="คลื่นเสียงตัวอย่างจากการตรวจลายพิมพ์เสียง">
+            <rect x="30" y="0" width="1.5" height="36" fill="#D9A441" opacity=".5"/>
+            <g fill="rgba(246,244,239,.4)">
+              <rect x="2" y="14" width="3" height="8"/><rect x="8" y="11" width="3" height="14"/><rect x="14" y="7" width="3" height="22"/>
+              <rect x="20" y="3" width="3" height="30"/><rect x="26" y="9" width="3" height="18"/><rect x="32" y="13" width="3" height="10"/>
+              <rect x="38" y="5" width="3" height="26"/><rect x="44" y="1" width="3" height="34"/><rect x="50" y="8" width="3" height="20"/>
+              <rect x="56" y="12" width="3" height="12"/><rect x="62" y="4" width="3" height="28"/><rect x="68" y="10" width="3" height="16"/>
+              <rect x="74" y="14" width="3" height="8"/><rect x="80" y="6" width="3" height="24"/><rect x="86" y="2" width="3" height="32"/>
+              <rect x="92" y="11" width="3" height="14"/><rect x="98" y="7" width="3" height="22"/><rect x="104" y="13" width="3" height="10"/>
+              <rect x="110" y="9" width="3" height="18"/><rect x="115" y="12" width="3" height="12"/>
+            </g>
+          </svg>
+          <p>An audio fingerprint matches the live performance to the licensed track before money moves.</p>
+        </li>
+        <li class="panel step">
+          <span class="ch">CH 04</span>
+          <h3>Split and anchor <span class="en" lang="th">แบ่งเงินและบันทึกบนเชน</span></h3>
+          <p class="mono" style="font-size:1.05rem;font-weight:600;color:var(--brass)">70 / 10 / 20</p>
+          <span class="chip ok">settled on-chain ✓</span>
+          <p>The receipt anchors on BSC Testnet, chain 97. End-to-end ≈1.5s in demo; target ≤30s.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- BOND -->
+  <section class="bond rails" aria-labelledby="bond-h">
+    <div class="wrap">
+      <div class="bond-grid">
+        <div class="panel bond-panel">
+          <h2 id="bond-h">The bond comes before the first play
+            <span class="sec-echo" lang="th">เงินประกันมาก่อนจังหวะแรก</span>
+          </h2>
+          <p>A venue stakes <strong class="mono">1,200 mTHB</strong> in VenueStake before it may sell a single play. Rooms without an active bond are refused at the protocol's door: HTTP <span class="mono">402</span> — payment required of the venue, never of the fan.</p>
+          <ul class="bond-list">
+            <li><span class="tick" aria-hidden="true">✓</span> Fake plays are slashed to the protocol treasury.</li>
+            <li><span class="tick" aria-hidden="true">✓</span> Unbonded rooms sell nothing; the fan never sees a broken promise.</li>
+          </ul>
+          <span class="plate"><span class="sw" aria-hidden="true"></span>BONDED — 1,200 mTHB staked</span>
+          <div style="margin-top:14px"><span class="chip demo">slash authority: admin (demo)</span></div>
+        </div>
+        <div class="panel refusal">
+          <h3>Refusal rail <span class="en" lang="th">รางปฏิเสธ</span></h3>
+          <div class="log">
+            <span><span class="url">POST /plays  room-07</span> <span class="good">200 ✓ bonded</span></span>
+            <span><span class="url">POST /plays  room-12</span> <span class="bad">402 ✗ unbonded</span></span>
+            <span><span class="url">slash: treasury</span> 0 today</span>
+          </div>
+          <span class="stamp402">402 REFUSED</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUARD -->
+  <section class="guard" aria-labelledby="guard-h">
+    <div class="wrap">
+      <div class="panel aux">
+        <div>
+          <div class="aux-head">
+            <span class="ct">AUX RTN</span>
+            <h2 id="guard-h">Settlement guard — Cournot</h2>
+            <span class="chip demo">demo</span>
+          </div>
+          <p class="claim">Claim under test: a 200-play queue batch settles inside the settlement window.</p>
+          <div class="verdict-row">
+            <span class="prob">0.55%</span>
+            <span class="prob-lab">measured settlement risk</span>
+            <span class="vchip">PROCEED ✓</span>
+          </div>
+          <div class="g-wrap">
+            <div class="g-meter" role="img" aria-label="ความเสี่ยง 0.55 เปอร์เซ็นต์ ต่ำกว่าเส้น HOLD ที่ 50 เปอร์เซ็นต์">
+              <i></i><span class="hold"></span>
+            </div>
+            <div class="g-scale"><span>0%</span><span>50% — guard calls HOLD above this</span><span>100%</span></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="sr">Evidence</h3>
+          <ul class="evidence">
+            <li>fingerprint match 99.2% across the last 24h of demo plays</li>
+            <li>venue bond status BONDED — zero slashes this week</li>
+          </ul>
+          <p class="fine" style="margin-top:16px">The guard shows its claim, its probability, and the evidence behind both — never a bare verdict.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENS -->
+  <section class="tokens" aria-labelledby="token-h">
+    <div class="wrap">
+      <h2 id="token-h" class="sr">Tokens in the demo</h2>
+      <div class="token-grid">
+        <div class="panel token">
+          <h3>$PLAY priority queue</h3>
+          <p>Fans holding <strong class="mono">500M $PLAY</strong> or more enter the priority queue — minted along OpenFour's bonding curve on BSC testnet.</p>
+          <span class="chip brass mono">$PLAY 0x23c5…6AF8</span>
+          <span class="chip demo">demo token</span>
+        </div>
+        <div class="panel token">
+          <h3>mTHB settlement</h3>
+          <p>mTHB is the settlement unit: a demo stand-in for a BOT-licensed THB stable. The Bank of Thailand framework is expected March 2027.</p>
+          <span class="chip brass mono">MockTHB 0x31FE…b442</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="landing.html">PlayRight</a>
+        <p class="fine">Every play pays. <span lang="th">ทุกจังหวะคือรายได้</span> — per-play licensing for Thai venues. Demo on BSC Testnet (chain 97); Mock THB and $PLAY are demo tokens.</p>
+      </div>
+      <div>
+        <h3>Contracts (BSC testnet)</h3>
+        <ul class="addr mono">
+          <li><span class="nm">MockTHB</span> 0x31FE806363Bd0FCD22efa0C774D9706E9668b442</li>
+          <li><span class="nm">VenueStake</span> 0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc</li>
+          <li><span class="nm">$PLAY</span> 0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8</li>
+          <li><span class="nm">explorer</span> <a href="https://testnet.bscscan.com">testnet.bscscan.com</a> — e2e 1.5s demo, target ≤30s</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Build tracks</h3>
+        <ul class="tracks">
+          <li>Developer</li>
+          <li>Startup</li>
+          <li>Four.meme / OpenFour</li>
+          <li>Cournot</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>PerPlay Protocol — BNB Hack Bangkok demo</span>
+      <nav aria-label="Demo pages">
+        <a href="catalog.html">Catalog</a> / <a href="play.html">Slip</a> / <a href="dashboard.html">Console</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

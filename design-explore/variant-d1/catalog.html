@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight — เลือกเพลง / Catalog (Variant D1)</title>
+<meta name="description" content="สั่งเพลงที่กำลังบรรเลงที่ร้าน — order a play at the venue. Demo on BSC Testnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --panel:#FCFBF7; --ink:#23262B;
+  --purple:#5C2D91; --brass:#A87B2D; --green:#1E7B4F; --signal:#E85D4A;
+  --plum:#221726; --cream:#F6F4EF;
+  --sans:"IBM Plex Sans","Noto Sans Thai",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Kanit","Noto Sans Thai","IBM Plex Sans",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--purple);text-decoration-thickness:1.5px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:2px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-48px;background:var(--purple);color:var(--cream);padding:8px 14px;font-weight:600;z-index:100;transition:top .15s}
+.skip:focus{top:12px}
+
+.site-head{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.head-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 24px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand b{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.site-nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.site-nav a{font-size:14.5px;font-weight:500;color:var(--ink);text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
+.site-nav a:hover{border-bottom-color:var(--brass)}
+.site-nav a[aria-current="page"]{border-bottom-color:var(--ink);font-weight:600}
+.demo-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:4px 11px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.demo-chip i{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;flex:none}
+
+.ruled{background-image:
+  repeating-linear-gradient(to bottom, rgba(35,38,43,.03) 0 1px, transparent 1px 28px),
+  repeating-linear-gradient(to right, rgba(35,38,43,.02) 0 1px, transparent 1px 28px)}
+.slip{background:var(--panel);border:1.5px solid var(--ink);border-radius:3px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:3px 10px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.chip.ok{color:var(--green)}
+.chip.ok i{width:8px;height:8px;background:var(--green);border-radius:50%;flex:none}
+.chip.live{color:var(--signal);border-color:var(--signal)}
+.chip.live i{width:8px;height:8px;background:var(--signal);border-radius:50%;flex:none;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:var(--cream);border:1.5px solid var(--ink);padding:11px 20px;font-weight:600;font-size:15.5px;text-decoration:none;border-radius:2px;box-shadow:3px 4px 0 rgba(35,38,43,.2);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 5px 0 rgba(35,38,43,.2)}
+.btn:active{transform:translate(2px,3px);box-shadow:1px 1px 0 rgba(35,38,43,.2)}
+.btn.small{padding:7px 14px;font-size:14px}
+.mono{font-family:var(--mono)}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.18;letter-spacing:-.01em}
+.sub-en{font-size:15px;color:rgba(35,38,43,.75);margin-top:4px}
+main{padding:52px 0 84px}
+
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.venue-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13.5px;color:rgba(35,38,43,.8);margin-top:18px}
+
+.grid{display:grid;grid-template-columns:1fr 300px;gap:34px;margin-top:30px;align-items:start}
+@media(max-width:920px){.grid{grid-template-columns:1fr}}
+
+/* order slip table */
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+caption{text-align:left;font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.65);padding:16px 20px 4px}
+th{font-family:var(--disp);font-weight:600;font-size:13.5px;text-align:left;padding:10px 12px;border-bottom:1.5px solid var(--ink)}
+td{padding:12px;border-bottom:1px dotted rgba(35,38,43,.45);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+td.num{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.song b{font-weight:600}
+.song small{display:block;font-size:12.5px;color:rgba(35,38,43,.65)}
+.mode-tag{display:inline-block;border:1.5px solid rgba(35,38,43,.5);font-family:var(--mono);font-size:10.5px;padding:1px 8px;border-radius:2px;color:rgba(35,38,43,.75)}
+.order{background:var(--purple);color:var(--cream);border:1.5px solid var(--ink);font-family:var(--sans);font-weight:600;font-size:13px;padding:5px 14px;border-radius:2px;box-shadow:2px 3px 0 rgba(35,38,43,.2);cursor:pointer;transition:transform .12s,box-shadow .12s}
+.order:hover{transform:translate(-1px,-1px);box-shadow:3px 4px 0 rgba(35,38,43,.2)}
+.order:active{transform:translate(1px,2px);box-shadow:1px 1px 0 rgba(35,38,43,.2)}
+.t-foot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 20px 18px;border-top:1.5px solid var(--ink)}
+.t-foot .sum{font-family:var(--mono);font-size:13px;color:rgba(35,38,43,.8)}
+@media(max-width:640px){
+  .col-mode,.th-mode{display:none}
+  th,td{padding:10px 8px}
+  table{font-size:13.5px}
+}
+
+/* console rail */
+.rail{position:relative;display:grid;gap:20px}
+.console{padding:20px}
+.c-head{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.75)}
+.c-head i{width:10px;height:10px;background:var(--brass);border:1.5px solid var(--ink);flex:none}
+.sw{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--ink);border-radius:2px;overflow:hidden;margin-top:14px}
+.sw button{appearance:none;border:0;background:var(--panel);color:var(--ink);font-family:var(--sans);font-weight:600;font-size:14px;padding:10px 8px;cursor:pointer}
+.sw button+button{border-left:1.5px solid var(--ink)}
+.sw button[aria-pressed="true"]{background:var(--purple);color:var(--cream)}
+.mode-desc{font-size:13.5px;color:rgba(35,38,43,.85);margin-top:12px;min-height:44px}
+.mini-meter{height:16px;border:1.5px solid var(--ink);background:repeating-linear-gradient(to right,rgba(35,38,43,.07) 0 1px,transparent 1px 9px);margin-top:8px}
+.mini-meter .fill{height:100%;background:repeating-linear-gradient(-45deg,var(--brass) 0 6px,#8f6423 6px 12px)}
+.rail-line{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;margin-top:16px}
+.rail-line .k{color:rgba(35,38,43,.75)}
+.rail-line .v{font-family:var(--mono);font-weight:600}
+.rail-line .v.money{color:var(--green);font-size:16px}
+.bond-mini{border-top:1px dotted rgba(35,38,43,.5);margin-top:16px;padding-top:14px;display:grid;gap:8px}
+.stamp{position:absolute;top:-30px;right:-20px;width:108px;height:108px;color:var(--green);transform:rotate(1.2deg);mix-blend-mode:multiply;opacity:.95;pointer-events:none;z-index:3}
+.stamp text{font-family:var(--mono);font-weight:600;letter-spacing:.2em;font-size:12.5px}
+
+/* dark perk band */
+.perk{background:var(--plum);color:var(--cream);border:1.5px solid var(--ink);box-shadow:5px 6px 0 rgba(35,38,43,.14);border-radius:3px;padding:24px 26px;display:flex;gap:22px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.perk b{font-family:var(--disp);font-weight:600;font-size:18px}
+.perk p{font-size:13.5px;color:rgba(246,244,239,.75);margin-top:4px;max-width:52ch}
+.perk .pk-mono{font-family:var(--mono);font-size:12px;color:var(--brass);margin-top:8px}
+.tag-demo{border:1.5px solid rgba(246,244,239,.5);font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:2px;color:rgba(246,244,239,.8)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="landing.html" aria-label="PlayRight home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="6" fill="#A87B2D" stroke="#23262B" stroke-width="1.5"/><rect x="3" y="14" width="16" height="6" fill="#F6F4EF" stroke="#23262B" stroke-width="1.5"/></svg>
+      <b>PlayRight</b>
+    </a>
+    <nav class="site-nav" aria-label="Pages">
+      <a href="landing.html">Pitch</a>
+      <a href="catalog.html" aria-current="page">Catalog</a>
+      <a href="play.html">Play</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <span class="demo-chip"><i aria-hidden="true"></i>Demo on BSC Testnet</span>
+  </div>
+</header>
+
+<main id="main" class="ruled">
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <h1>เลือกเพลงที่กำลังบรรเลง</h1>
+        <p class="sub-en" lang="en">Order a play — pick what the venue is playing right now.</p>
+        <div class="venue-meta">
+          <span class="chip"><i aria-hidden="true" style="width:8px;height:8px;background:#A87B2D;border:1.5px solid #23262B;border-radius:50%;flex:none"></i>The Note Bar (อ่อนนุช) — โต๊ะ 12</span>
+          <span class="chip ok"><i aria-hidden="true"></i>bond: bonded</span>
+          <span class="chip live" id="liveTag" hidden><i aria-hidden="true"></i>ไลฟ์วงกำลังเล่น (live)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- dark plum band: $PLAY perk -->
+    <div class="perk" style="margin-top:30px">
+      <div>
+        <b>ถือ $PLAY ครบ 500 ล้าน — เข้าคิวก่อน</b>
+        <p lang="en">Fans holding at least 500M $PLAY (PerPlay Protocol, OpenFour bonding curve) enter the play queue with priority.</p>
+        <p class="pk-mono">≥500M $PLAY = priority queue <span class="tag-demo" style="margin-left:8px">demo token</span></p>
+      </div>
+      <a class="btn small" href="landing.html">อ่านรายละเอียดโครงสร้างโทเคน</a>
+    </div>
+
+    <p class="legend"><span class="chip" style="font-size:11px">Mock THB — demo token</span> <span>ราคาต่อเพลง 20–50 บาท <span lang="en">(per-play pricing)</span></span></p>
+
+    <div class="grid">
+      <!-- order slip -->
+      <div class="slip">
+        <table>
+          <caption>รายการเพลงของค่ำนี้ — ตัวอย่างสาธิต (mock setlist)</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">เพลง</th>
+              <th scope="col" class="th-mode col-mode">โหมด</th>
+              <th scope="col" class="num">ราคา</th>
+              <th scope="col"><span class="visually-hidden">สั่งเพลง</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="mono">01</td><td class="song"><b>ฝนตกที่เชียงใหม่</b><small>วงใบไม้</small></td><td class="col-mode"><span class="mode-tag">live band</span></td><td class="num">฿35</td><td><button class="order" aria-label="สั่งเพลง ฝนตกที่เชียงใหม่ ราคา 35 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">02</td><td class="song"><b>รอยยิ้มกลางเมือง</b><small>สายลมแวง</small></td><td class="col-mode"><span class="mode-tag">DJ</span></td><td class="num">฿25</td><td><button class="order" aria-label="สั่งเพลง รอยยิ้มกลางเมือง ราคา 25 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">03</td><td class="song"><b>เพลงของพรุ่งนี้</b><small>อนาวิล</small></td><td class="col-mode"><span class="mode-tag">live band</span></td><td class="num">฿40</td><td><button class="order" aria-label="สั่งเพลง เพลงของพรุ่งนี้ ราคา 40 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">04</td><td class="song"><b>สายน้ำและดาว</b><small>ดาวรวย</small></td><td class="col-mode"><span class="mode-tag">DJ</span></td><td class="num">฿20</td><td><button class="order" aria-label="สั่งเพลง สายน้ำและดาว ราคา 20 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">05</td><td class="song"><b>เต้นในห้องเล็ก</b><small>คลับซีน</small></td><td class="col-mode"><span class="mode-tag">DJ</span></td><td class="num">฿30</td><td><button class="order" aria-label="สั่งเพลง เต้นในห้องเล็ก ราคา 30 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">06</td><td class="song"><b>ค่ำนี้มีเธอ</b><small>เดือนเมษา</small></td><td class="col-mode"><span class="mode-tag">live band</span></td><td class="num">฿45</td><td><button class="order" aria-label="สั่งเพลง ค่ำนี้มีเธอ ราคา 45 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">07</td><td class="song"><b>ลมหายใจก่อนรุ่งเช้า</b><small>ไนท์ชิฟต์</small></td><td class="col-mode"><span class="mode-tag">live band</span></td><td class="num">฿50</td><td><button class="order" aria-label="สั่งเพลง ลมหายใจก่อนรุ่งเช้า ราคา 50 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">08</td><td class="song"><b>ทางรถไฟสายเก่า</b><small>สถานีเก่า</small></td><td class="col-mode"><span class="mode-tag">DJ</span></td><td class="num">฿20</td><td><button class="order" aria-label="สั่งเพลง ทางรถไฟสายเก่า ราคา 20 บาท">สั่ง</button></td></tr>
+            <tr><td class="mono">09</td><td class="song"><b>แสงไฟสีม่วง</b><small>วงม่วง</small></td><td class="col-mode"><span class="mode-tag">DJ</span></td><td class="num">฿30</td><td><button class="order" aria-label="สั่งเพลง แสงไฟสีม่วง ราคา 30 บาท">สั่ง</button></td></tr>
+          </tbody>
+        </table>
+        <div class="t-foot">
+          <span class="sum">9 เพลงในค่ำนี้ — ราคารวมถ้าสั่งทุกเพลง <b class="mono">฿295</b></span>
+          <a class="btn small" href="play.html">ไปที่หน้าชำระเงิน</a>
+        </div>
+      </div>
+
+      <!-- console rail (control room, printed) -->
+      <aside class="rail" aria-label="แผงควบคุมของร้าน">
+        <div class="stamp" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/>
+            <circle cx="60" cy="60" r="41" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path id="arcB" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
+            <text><textPath href="#arcB" startOffset="50%" text-anchor="middle">BONDED</textPath></text>
+            <g transform="rotate(180 60 60)"><text><textPath href="#arcB" startOffset="50%" text-anchor="middle">VENUESTAKE</textPath></text></g>
+            <rect x="53" y="53" width="14" height="14" transform="rotate(45 60 60)" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="slip console">
+          <p class="c-head"><i aria-hidden="true"></i>console — venue mix</p>
+          <div class="sw" role="group" aria-label="เลือกโหมดการบรรเลง">
+            <button type="button" data-mode="live" aria-pressed="true">ไลฟ์วง</button>
+            <button type="button" data-mode="dj" aria-pressed="false">DJ</button>
+          </div>
+          <p class="mode-desc" id="modeDesc">ไลฟ์วง — เพลงล็อกกับเซ็ตลิสต์ของวง ผู้ฟังสั่งเพลงที่กำลังบรรเลงได้ทันที</p>
+          <div class="rail-line"><span class="k">คิวถัดไป (queue)</span><span class="v">3</span></div>
+          <div class="mini-meter" role="img" aria-label="ความลึกของคิว 30 เปอร์เซ็นต์"><div class="fill" style="width:30%"></div></div>
+          <div class="rail-line"><span class="k">ยอดค่ำนี้ (till)</span><span class="v money">฿340.00</span></div>
+          <div class="bond-mini">
+            <div class="rail-line" style="margin-top:0"><span class="k">พันธบัตร (bond)</span><span class="v" style="color:var(--green)">bonded</span></div>
+            <span class="chip" style="font-size:10.5px">slash authority: admin (demo)</span>
+          </div>
+        </div>
+        <p style="font-size:12.5px;color:rgba(35,38,43,.65)">ร้านที่ยังไม่ผูกพันธบัตรจะขายเพลงไม่ได้ — ระบบตอกลับด้วย 402 <span lang="en">(unbonded venues are refused)</span></p>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.sw button');
+  var desc=document.getElementById('modeDesc');
+  var live=document.getElementById('liveTag');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});
+      if(b.dataset.mode==='live'){
+        desc.textContent='ไลฟ์วง — เพลงล็อกกับเซ็ตลิสต์ของวง ผู้ฟังสั่งเพลงที่กำลังบรรเลงได้ทันที';
+        live.hidden=false;
+      }else{
+        desc.textContent='DJ — ผู้ฟังเสนอเพลงเข้าคิว ระบบจัดลำดับคิวตามยอดสั่งของแต่ละเพลง';
+        live.hidden=true;
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คอนโซลสถานที่ (Venue console, PlayRight demo)</title>
+<meta name="description" content="คอนโซลของสถานที่: ยอดเล่น ยอดชำระ มาสเตอร์บัส 70/10/20 เงินประกัน VenueStake และองครักษ์ Cournot (demo build)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --plum:#221726; --ink:#23262B; --cream:#F6F4EF;
+  --slip-p:#FCFBF7; --slip-m:#2C1B30;
+  --purple:#5C2D91; --purple-m:#C4A0E8;
+  --brass-m:#D9A441; --brass-p:#A87B2D; --brass-deep:#8A6520;
+  --green-p:#1E7B4F; --green-m:#58B380;
+  --ln-p:rgba(35,38,43,.06); --ln-m:rgba(246,244,239,.05);
+  --dim-p:rgba(35,38,43,.72); --dim-m:rgba(246,244,239,.78);
+  --sh-p:5px 6px 0 rgba(35,38,43,.14);
+  --sh-m:5px 6px 0 rgba(0,0,0,.35);
+  --disp:'Kanit','Noto Sans Thai',system-ui,sans-serif;
+  --sans:'IBM Plex Sans','Noto Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--plum);color:var(--cream);font:400 16.5px/1.65 var(--sans)}
+h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.2;margin:0}
+p{margin:.45em 0}
+ul,ol,figure{margin:0;padding:0}
+a{color:var(--purple-m)}
+:focus-visible{outline:2.5px solid var(--brass-m);outline-offset:2px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:10px;z-index:60;background:var(--purple-m);color:var(--plum);padding:.55em 1.1em;font-weight:600;border-radius:2px}
+.skip:focus{left:10px}
+.ruled-p{background-image:repeating-linear-gradient(180deg,transparent 0 30px,var(--ln-p) 30px 31px)}
+.ruled-m{background-image:repeating-linear-gradient(90deg,transparent 0 74px,var(--ln-m) 74px 75px)}
+.slip-p{background:var(--slip-p);border:1.5px solid var(--ink);border-radius:3px;box-shadow:var(--sh-p)}
+.slip-m{background:var(--slip-m);border:1.5px solid rgba(217,164,65,.42);border-radius:3px;box-shadow:var(--sh-m)}
+.chip{display:inline-block;font:500 .72rem/1.2 var(--mono);letter-spacing:.03em;padding:.4em .62em;border:1px solid currentColor;border-radius:2px;white-space:nowrap}
+.c-purple{color:var(--purple)} .c-brassd{color:var(--brass-deep)} .c-greenp{color:var(--green-p)}
+.c-pm{color:var(--purple-m)} .c-bm{color:var(--brass-m)} .c-gm{color:var(--green-m)}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px clamp(18px,4vw,44px);border-bottom:1.5px solid rgba(217,164,65,.35)}
+.brand{font:700 1.32rem/1 var(--disp);color:inherit;text-decoration:none;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:9px}
+.bmark{width:15px;height:15px;background:var(--brass-m);clip-path:polygon(0 0,100% 50%,0 100%)}
+.topnav{margin-left:auto;display:flex;gap:clamp(12px,2vw,26px)}
+.topnav a{color:inherit;text-decoration:none;font-weight:500;font-size:.95rem;padding:.2em 0;border-bottom:2px solid transparent}
+.topnav a:hover,.topnav a[aria-current="page"]{border-bottom-color:var(--brass-m)}
+.dim{color:var(--dim-p)} .dimc{color:var(--dim-m)}
+.foil{color:var(--brass-m)}
+@supports (-webkit-background-clip:text){
+  .foil{background:linear-gradient(180deg,#EFCF83,#C08A33);-webkit-background-clip:text;background-clip:text;color:transparent}
+}
+/* console frame */
+.console{position:relative;max-width:1180px;margin:28px auto 96px;padding:clamp(22px,4vw,46px);border:1.5px solid rgba(217,164,65,.3);border-radius:3px}
+.frame-tag{position:absolute;top:-14px;right:26px;background:var(--slip-m);border-color:rgba(217,164,65,.55);color:var(--brass-m);box-shadow:4px 4px 0 rgba(0,0,0,.35);z-index:4}
+.dash-head h1{font-size:clamp(1.9rem,4vw,2.6rem)}
+.dash-head h1 .en{display:block;font:500 .55em var(--sans);letter-spacing:0;color:var(--dim-m);margin-top:8px}
+.venue-line{color:var(--dim-m);margin-top:8px}
+/* meters strip */
+.meters{display:grid;grid-template-columns:repeat(3,1fr);margin:30px 0 34px;border:1.5px solid rgba(217,164,65,.42);background:var(--slip-m);box-shadow:var(--sh-m);border-radius:3px;overflow:hidden}
+.meter{padding:18px 22px}
+.meter + .meter{border-left:1px dotted rgba(246,244,239,.3)}
+.mlab{font-size:.82rem;color:var(--dim-m);margin:0}
+.mnum{font:600 clamp(1.8rem,3.5vw,2.5rem)/1.15 var(--mono);margin:6px 0 2px}
+.mnum .unit{font-size:.5em;font-weight:500;color:var(--dim-m)}
+.msub{font:400 .74rem var(--mono);color:var(--dim-m);margin:0}
+/* grid: bus, bond, guard, track sheet */
+.dash-grid{display:grid;grid-template-columns:300px minmax(0,1fr);grid-template-areas:"bus bond" "bus guard" "sheet sheet";gap:26px;align-items:start}
+.bus{grid-area:bus;padding:22px 18px 16px;position:relative}
+.bus-title{margin:0 0 14px;font:600 .74rem var(--mono);letter-spacing:.14em;color:var(--brass-m)}
+.bus-flex{display:flex;justify-content:space-around}
+.fgroup{display:flex;flex-direction:column;align-items:center;gap:9px}
+.fader{position:relative;width:40px;height:168px}
+.ftrack{position:absolute;inset:0 16px;border-left:1px solid rgba(246,244,239,.25);border-right:1px solid rgba(246,244,239,.25);background:repeating-linear-gradient(to top,rgba(246,244,239,.13) 0 1px,transparent 1px 14px)}
+.fcap{position:absolute;left:1px;right:1px;height:15px;bottom:calc(var(--v)*1% - 7px);background:linear-gradient(180deg,#EFCF83,#C08A33);border:1px solid #6f541c;border-radius:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 0 rgba(0,0,0,.45)}
+.fcap::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:2px;transform:translateY(-50%);background:rgba(64,46,10,.8)}
+.fval{font:600 1.05rem var(--mono);color:var(--brass-m);line-height:1}
+.flab{font:500 .62rem var(--mono);letter-spacing:.12em;color:var(--dim-m)}
+.bus-sum{margin:12px 0 0;font:500 .7rem var(--mono);letter-spacing:.06em;color:var(--dim-m);text-align:center;border-top:1px dashed rgba(246,244,239,.25);padding-top:10px}
+.bus-chip{position:absolute;left:-20px;bottom:-13px;background:var(--slip-p);color:var(--brass-deep);border-color:var(--brass-deep);box-shadow:4px 4px 0 rgba(0,0,0,.35)}
+.bond{grid-area:bond;padding:24px 26px}
+.guard{grid-area:guard;padding:24px 26px}
+.sheet{grid-area:sheet;padding:24px 26px 18px;position:relative}
+.bond h2,.guard h2,.sheet h2{font-size:1.15rem;margin-bottom:12px}
+.bondnum{font:600 1.9rem var(--mono);margin:0 0 10px}
+.bond-rows p{font-size:.9rem;color:var(--dim-m);margin:6px 0;max-width:56ch}
+.bond-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.en-g{font:500 .8rem var(--sans);color:var(--dim-m)}
+.claim{margin:0 0 12px;color:var(--dim-m);max-width:52ch}
+.prob{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.probnum{font:600 2.1rem var(--mono)}
+.chip-ok{color:var(--green-m);font-weight:600}
+.rule{font-size:.9rem;color:var(--dim-m);margin-top:6px;max-width:52ch}
+.evidence{list-style:none;margin-top:14px;border-top:1px dashed rgba(246,244,239,.28);padding-top:12px}
+.evidence li{font:400 .76rem var(--mono);color:var(--dim-m);margin:4px 0}
+/* track sheet */
+.sheet table{border-collapse:collapse;width:100%;font-size:.9rem}
+.sheet thead th{font:600 .72rem var(--mono);letter-spacing:.06em;text-align:left;padding:9px 10px;border-bottom:1.5px solid rgba(246,244,239,.5)}
+.sheet td{padding:10px;border-bottom:1px dotted rgba(246,244,239,.25);color:var(--dim-m);vertical-align:middle}
+.sheet tbody tr:last-child td{border-bottom:none}
+.sheet td.tt{color:var(--cream);font-weight:500}
+.sheet .mono{font-size:.84rem}
+.sheet a{color:var(--purple-m)}
+.srcchip{font:500 .68rem var(--mono);border:1px solid rgba(246,244,239,.4);padding:.25em .45em;border-radius:2px;color:var(--dim-m);white-space:nowrap}
+.okdot{color:var(--green-m);font-weight:600}
+.sheet-note{margin:12px 0 0;font:400 .74rem var(--mono);color:var(--dim-m)}
+/* the one paper report slip overlapping the console frame */
+.report{position:absolute;right:-30px;top:300px;width:272px;background:var(--slip-p);border:1.5px solid var(--ink);box-shadow:var(--sh-p);transform:rotate(-1.2deg);z-index:6;border-radius:2px}
+.perf-s{height:11px;background-repeat:repeat-x;background-size:12px 11px;background-image:radial-gradient(circle at 6px -3px,rgba(35,38,43,.2) 4px,transparent 4.6px)}
+.report-in{padding:14px 20px 18px}
+.report h2{font-size:1.2rem;color:var(--ink)}
+.rplace{font:500 .66rem var(--mono);letter-spacing:.08em;color:var(--dim-p);margin:2px 0 10px}
+.rrow{display:flex;align-items:baseline;gap:8px;margin:6px 0;font-size:.9rem}
+.rrow .dots{flex:1;border-bottom:2px dotted rgba(35,38,43,.4);transform:translateY(-4px)}
+.rrow b{font:600 .92rem var(--mono)}
+.report .stamp-s{margin-top:16px;display:inline-block;border:2px solid var(--brass-deep);color:var(--brass-deep);font:600 .62rem var(--mono);letter-spacing:.12em;padding:.7em .9em;transform:rotate(1.2deg);border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:1080px){
+  .report{position:relative;right:auto;top:auto;margin:26px auto 0;width:min(320px,92%)}
+}
+@media (max-width:880px){
+  .dash-grid{grid-template-columns:1fr;grid-template-areas:"bus" "bond" "guard" "sheet"}
+  .bus-flex{justify-content:center;gap:40px}
+}
+@media (max-width:620px){
+  .meters{grid-template-columns:1fr}
+  .meter + .meter{border-left:none;border-top:1px dotted rgba(246,244,239,.3)}
+  .col-src,.col-tx{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหา</a>
+<header class="top">
+  <a class="brand" href="landing.html"><span class="bmark" aria-hidden="true"></span>PlayRight</a>
+  <span class="chip c-pm">Demo on BSC Testnet</span>
+  <nav class="topnav" aria-label="เมนูหลัก">
+    <a href="catalog.html">แคตตาล็อก</a>
+    <a href="play.html">สลิก</a>
+    <a href="dashboard.html" aria-current="page">คอนโซล</a>
+  </nav>
+</header>
+<main id="main">
+<section class="console ruled-m" aria-labelledby="pageh">
+  <p class="chip frame-tag">Demo on BSC Testnet</p>
+
+  <div class="dash-head">
+    <h1 id="pageh" lang="th">คอนโซลของคืนนี้<span class="en">Tonight at The Humming Bar</span></h1>
+    <p class="venue-line" lang="th">ทองหล่อ, กรุงเทพฯ เงินประกันผูกไว้กับ VenueStake (ข้อมูลเดโมทั้งหมด)</p>
+  </div>
+
+  <div class="meters" aria-label="ยอดสรุปของคืนนี้">
+    <div class="meter">
+      <p class="mlab" lang="th">จำนวนเพลงที่ขอ</p>
+      <p class="mnum">12</p>
+      <p class="msub">plays, mock setlist</p>
+    </div>
+    <div class="meter">
+      <p class="mlab" lang="th">ยอดชำระ (mTHB)</p>
+      <p class="mnum foil">340.00</p>
+      <p class="msub">Mock THB, demo stablecoin</p>
+    </div>
+    <div class="meter">
+      <p class="mlab">e2e เฉลี่ย</p>
+      <p class="mnum">1.4<span class="unit">s</span></p>
+      <p class="msub">target ≤30s per play</p>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <aside class="bus slip-m ruled-m" aria-label="มาสเตอร์บัส">
+      <p class="bus-title">MASTER BUS</p>
+      <div class="bus-flex" role="img" aria-label="สัดส่วนแบ่งรายได้: ค่ายเพลง 70 เปอร์เซ็นต์ สถานที่ 10 เปอร์เซ็นต์ แพลตฟอร์ม 20 เปอร์เซ็นต์">
+        <div class="fgroup">
+          <div class="fader" style="--v:70" aria-hidden="true"><div class="ftrack"></div><div class="fcap"></div></div>
+          <b class="fval">70</b><span class="flab">LABEL</span>
+        </div>
+        <div class="fgroup">
+          <div class="fader" style="--v:10" aria-hidden="true"><div class="ftrack"></div><div class="fcap"></div></div>
+          <b class="fval">10</b><span class="flab">VENUE</span>
+        </div>
+        <div class="fgroup">
+          <div class="fader" style="--v:20" aria-hidden="true"><div class="ftrack"></div><div class="fcap"></div></div>
+          <b class="fval">20</b><span class="flab">PLATFORM</span>
+        </div>
+      </div>
+      <p class="bus-sum">TOTAL 100% OF 340.00 mTHB</p>
+      <p class="chip bus-chip">TONIGHT ฿340</p>
+    </aside>
+
+    <article class="bond slip-m" aria-labelledby="bondh">
+      <h2 id="bondh">VenueStake bond</h2>
+      <p class="bondnum foil">1,200 mTHB</p>
+      <div class="bond-rows">
+        <p lang="th">สถานที่วางเงินประกันก่อนขายเพลงได้ หากยังไม่ผูกประกัน ระบบปฏิเสธคำขอด้วย HTTP 402 และเพลงปลอมจะถูกตัดเข้ากองทุนโปรโตคอล</p>
+        <p class="mono">contract 0x9b7c…4EeBc</p>
+      </div>
+      <div class="bond-tags">
+        <span class="chip c-gm">bond status: staked</span>
+        <span class="chip c-bm">slash authority: admin (demo)</span>
+      </div>
+    </article>
+
+    <article class="guard slip-m" aria-labelledby="guardh">
+      <h2 id="guardh" lang="th">องครักษ์ความเสี่ยง <span class="en-g">Cournot guard</span></h2>
+      <p class="claim" lang="th">ความเสี่ยงที่รอบการชำระของคืนนี้จะล้มเหลว ยังต่ำกว่าเกณฑ์แปลงสถานะ 50 เปอร์เซ็นต์</p>
+      <p class="prob"><span class="probnum foil">0.55%</span><span class="chip chip-ok">PROCEED</span></p>
+      <ul class="evidence">
+        <li>evidence 01: bond coverage 12/12 venues</li>
+        <li>evidence 02: oracle feed cournot-guard v0.3 (demo)</li>
+      </ul>
+    </article>
+
+    <article class="sheet slip-m" aria-labelledby="sheeth">
+      <h2 id="sheeth" lang="th">แผ่นบันทึกเพลงล่าสุด</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">TIME</th>
+            <th scope="col">เพลง</th>
+            <th scope="col" class="col-src">รูปแบบ</th>
+            <th scope="col">ยอด (mTHB)</th>
+            <th scope="col" class="col-tx">TX</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">23:41</td>
+            <td class="tt" lang="th">ฝนตกที่สีลม, วงดินแดง</td>
+            <td class="col-src"><span class="srcchip">live band</span></td>
+            <td class="mono">30.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0x77c4…9e02</a></td>
+          </tr>
+          <tr>
+            <td class="mono">23:38</td>
+            <td class="tt" lang="th">แสงนีออนชลบุรี, DJ ปราย</td>
+            <td class="col-src"><span class="srcchip">DJ set</span></td>
+            <td class="mono">20.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0x51aa…3f11</a></td>
+          </tr>
+          <tr>
+            <td class="mono">23:33</td>
+            <td class="tt" lang="th">เพลงหมอลำซิ่งอีสานบ้านเรา, สี่เต่าเรสเซอร์</td>
+            <td class="col-src"><span class="srcchip">live band</span></td>
+            <td class="mono">40.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0xb2d0…8844</a></td>
+          </tr>
+          <tr>
+            <td class="mono">23:29</td>
+            <td class="tt" lang="th">ดาวเทียมเหนือกรุงเทพฯ, DJ ปราย</td>
+            <td class="col-src"><span class="srcchip">DJ set</span></td>
+            <td class="mono">20.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0x9e07…b6d1</a></td>
+          </tr>
+          <tr>
+            <td class="mono">23:24</td>
+            <td class="tt" lang="th">รำวงยามดึก, วงดินแดง</td>
+            <td class="col-src"><span class="srcchip">live band</span></td>
+            <td class="mono">25.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0x1f6b…a903</a></td>
+          </tr>
+          <tr>
+            <td class="mono">23:18</td>
+            <td class="tt" lang="th">เสียงแซ็กโซโฟนย่านราชดำเนิน, สี่เต่าเรสเซอร์</td>
+            <td class="col-src"><span class="srcchip">live band</span></td>
+            <td class="mono">50.00</td>
+            <td class="col-tx mono"><a href="https://testnet.bscscan.com" title="demo, opens the BSC Testnet explorer">0x4c92…d7f8</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="sheet-note">6 แถวล่าสุดจาก 12 คำขอของคืนนี้ ทุกรอบยืนยันเพลงจริงแล้ว <span class="okdot">✓</span> (ข้อมูลเดโม)</p>
+    </article>
+  </div>
+
+  <aside class="report" aria-label="รายงานสิ้นวัน (paper slip)">
+    <div class="perf-s" aria-hidden="true"></div>
+    <div class="report-in ruled-p">
+      <h2 lang="th">รายงานสิ้นวัน (Shift close)</h2>
+      <p class="rplace">THE HUMMING BAR, 23:59 CLOSE (demo)</p>
+      <p class="rrow"><span lang="th">ยอดชำระ</span><span class="dots" aria-hidden="true"></span><b>฿340.00</b></p>
+      <p class="rrow"><span lang="th">ค่ายเพลง</span><span class="dots" aria-hidden="true"></span><b>฿238.00</b></p>
+      <p class="rrow"><span lang="th">ส่วนสถานที่</span><span class="dots" aria-hidden="true"></span><b>฿34.00</b></p>
+      <p class="rrow"><span lang="th">แพลตฟอร์ม</span><span class="dots" aria-hidden="true"></span><b>฿68.00</b></p>
+      <span class="stamp-s">SIGNED, PLAYRIGHT</span>
+    </div>
+  </aside>
+</section>
+</main>
+</body>
+</html>

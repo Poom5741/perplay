@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="แร็คช่องสัญญาณเพลงของสถานที่ — เลือกเพลง กดเล่น แบ่ง 70/10/20 บนเชน (demo on BSC Testnet)">
+<title>แร็คช่องสัญญาณ — PlayRight venue demo | BSC Testnet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#221726;
+  --panel:#2C1B30;
+  --panel-deep:#1B1220;
+  --foot:#1D1322;
+  --cream:#F6F4EF;
+  --cream-dim:rgba(246,244,239,.78);
+  --cream-mute:rgba(246,244,239,.62);
+  --brass:#D9A441;
+  --brass-ink:#8F651F;
+  --purple:#A78BFA;
+  --purple-hi:#C4B5FD;
+  --green:#58B380;
+  --coral:#FF6A5C;
+  --hard:5px 6px 0 rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--plum);
+  color:var(--cream);
+  font:400 1rem/1.65 "IBM Plex Sans","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:clip;
+}
+::selection{background:var(--brass);color:var(--plum)}
+img,svg{display:block;max-width:100%}
+figure{margin:0}
+a{color:var(--purple)}
+a:hover{color:var(--purple-hi)}
+h1,h2,h3{font-family:Kanit,"IBM Plex Sans","Noto Sans Thai",sans-serif;font-weight:600;line-height:1.16;color:var(--cream)}
+p{max-width:66ch}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.en{font-size:.82em;font-weight:400;color:var(--cream-mute)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid var(--cream);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:12px;top:-56px;z-index:99;background:var(--brass);color:var(--plum);padding:10px 16px;border-radius:4px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px}
+
+.rails{position:relative}
+.rails::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,rgba(246,244,239,.028) 0 1px,transparent 1px 76px),
+    repeating-linear-gradient(180deg,rgba(246,244,239,.02) 0 1px,transparent 1px 120px);}
+.rails>*{position:relative;z-index:1}
+
+.panel{position:relative;background:var(--panel);border:1.5px solid rgba(217,164,65,.5);border-radius:5px;box-shadow:var(--hard)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(246,244,239,.35);border-radius:999px;padding:3px 12px;font-size:.8rem;color:var(--cream-dim);background:rgba(246,244,239,.05);white-space:nowrap}
+.chip.demo{border-color:rgba(167,139,250,.55);color:var(--purple-hi);font-family:"IBM Plex Mono",monospace;font-size:.72rem}
+.chip.ok{border-color:rgba(88,179,128,.6);color:var(--green)}
+.chip.brass{border-color:rgba(217,164,65,.65);color:var(--brass)}
+
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--brass);color:var(--plum);border:1.5px solid var(--brass);border-radius:4px;padding:13px 22px;font:600 1rem "IBM Plex Sans","Noto Sans Thai",sans-serif;box-shadow:4px 5px 0 rgba(0,0,0,.4);text-decoration:none;cursor:pointer}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 7px 0 rgba(0,0,0,.4);color:var(--plum)}
+.btn:active{transform:none;box-shadow:3px 4px 0 rgba(0,0,0,.4)}
+.btn.sm{padding:9px 16px;font-size:.9rem}
+
+.top{position:sticky;top:0;z-index:50;background:rgba(34,23,38,.97);border-bottom:1px solid rgba(217,164,65,.35)}
+.nav{display:flex;align-items:center;gap:14px 26px;padding:14px 0;flex-wrap:wrap}
+.brand{font-family:Kanit,sans-serif;font-weight:700;font-size:1.35rem;color:var(--cream);text-decoration:none}
+.brand:hover{color:var(--cream)}
+.brand-sub{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.74rem;font-weight:400;color:var(--cream-mute);margin-top:-2px}
+.nav-links{display:flex;gap:20px;list-style:none;margin-left:auto;flex-wrap:wrap}
+.nav-links a{color:var(--purple);text-decoration:underline;text-decoration-color:rgba(167,139,250,.35);text-underline-offset:4px;font-weight:500}
+.nav-links a:hover{color:var(--purple-hi)}
+.nav-links a[aria-current="page"]{color:var(--brass);text-decoration-color:rgba(217,164,65,.5)}
+.nav-side{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+main{display:block}
+section{padding:72px 0}
+#main{scroll-margin-top:80px}
+
+.live{position:absolute;z-index:6;display:inline-flex;align-items:center;gap:9px;background:var(--panel);border:1.5px solid var(--coral);color:var(--coral);font:600 .8rem "IBM Plex Mono",monospace;letter-spacing:.07em;padding:7px 14px;border-radius:3px;box-shadow:4px 5px 0 rgba(0,0,0,.4);transform:rotate(-2deg)}
+.live .dot{width:8px;height:8px;border-radius:50%;background:var(--coral)}
+@media (prefers-reduced-motion:no-preference){
+  .live .dot{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+}
+
+/* page head + perk banner */
+.rackhead{padding:64px 0 72px}
+.rackhead h1{font-size:clamp(1.9rem,4vw,2.7rem);max-width:24ch}
+.rackhead .sec-echo{display:block;font-family:Kanit,"Noto Sans Thai",sans-serif;font-weight:500;font-size:1.02rem;color:var(--cream-mute);margin-top:6px}
+.rackhead .intro{margin-top:16px;color:var(--cream-dim);max-width:58ch}
+.head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.head-actions{display:flex;flex-direction:column;gap:14px;align-items:flex-end}
+
+/* room switch — console toggle */
+.room-switch{border:1.5px solid rgba(217,164,65,.5);border-radius:5px;background:var(--panel-deep);box-shadow:4px 5px 0 rgba(0,0,0,.35);display:inline-flex;gap:4px;padding:5px}
+.room-switch legend{float:left;margin-right:10px;padding:6px 4px 6px 10px;font:600 .78rem "IBM Plex Mono",monospace;color:var(--brass);letter-spacing:.05em}
+.room-switch label{position:relative}
+.room-switch input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.room-switch input:focus-visible + span{outline:2px solid var(--cream);outline-offset:2px}
+.room-switch span{display:inline-block;padding:7px 16px;border-radius:4px;font:500 .9rem "IBM Plex Sans","Noto Sans Thai",sans-serif;color:var(--cream-dim);border:1px solid transparent}
+.room-switch input:checked + span{background:var(--brass);color:var(--plum);font-weight:600;border-color:var(--brass)}
+.room-now{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--cream-mute)}
+
+/* perk banner — coin breaks its top edge (L3 over L2) */
+.perk{margin-top:30px;padding:22px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.coin{position:absolute;top:-17px;right:34px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#F0CE85,#D9A441 55%,#A1741F);border:1.5px solid #8F651F;box-shadow:3px 4px 0 rgba(0,0,0,.4);display:grid;place-items:center;color:var(--plum);font:700 .58rem "IBM Plex Mono",monospace;transform:rotate(8deg)}
+.perk .txt{flex:1 1 320px}
+.perk .txt strong{font-family:Kanit,sans-serif;font-size:1.15rem;font-weight:600;display:block;color:var(--cream)}
+.perk .txt p{margin-top:4px;color:var(--cream-dim);font-size:.92rem;max-width:56ch}
+.perk .chips{display:flex;gap:10px;flex-wrap:wrap}
+
+/* channel rack */
+.rack{list-style:none;display:flex;flex-direction:column;gap:16px;position:relative;padding-left:30px;margin-top:40px}
+.rack::before{content:"";position:absolute;left:9px;top:10px;bottom:10px;width:3px;background:linear-gradient(180deg,rgba(217,164,65,0),rgba(217,164,65,.55) 12%,rgba(217,164,65,.55) 88%,rgba(217,164,65,0))}
+.strip{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding:16px 20px}
+.strip::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:var(--brass);border-radius:0 2px 2px 0}
+.strip .ch{font:600 .78rem "IBM Plex Mono",monospace;color:var(--brass);letter-spacing:.05em;min-width:52px}
+.song{flex:1 1 240px;min-width:0}
+.song h2{font-size:1.08rem}
+.song .meta{font-size:.84rem;color:var(--cream-mute);margin-top:2px}
+.song .sl{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--cream-mute);margin-left:10px}
+.genre-chip{flex:none}
+/* mini brass fader: cap height maps the price (฿20 low to ฿50 high) */
+.mfader{--trackH:58px;width:26px;height:var(--trackH);position:relative;background:var(--panel-deep);border:1px solid rgba(246,244,239,.14);border-radius:13px;flex:none}
+.mfader::before{content:"";position:absolute;left:50%;top:5px;bottom:5px;width:1.5px;transform:translateX(-50%);background:rgba(246,244,239,.15)}
+.mfader .f-fill{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:4px;height:calc(var(--lvl)*1%);background:linear-gradient(180deg,rgba(217,164,65,.85),rgba(217,164,65,.2))}
+.mfader .cap{position:absolute;left:50%;top:calc(100% - (var(--lvl)*1%) - 5px);transform:translateX(-50%);width:22px;height:10px;border-radius:2px;background:linear-gradient(180deg,#F0CE85,#D9A441 50%,#A1741F);border:1px solid #8F651F}
+.price{display:flex;flex-direction:column;align-items:center;min-width:58px}
+.price .p{font:600 1.2rem/1.1 "IBM Plex Mono",monospace;color:var(--cream)}
+.price .per{font-size:.7rem;color:var(--cream-mute);font-family:"IBM Plex Mono",monospace}
+.rack-note{margin-top:26px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--cream-mute)}
+
+/* footer */
+.foot{margin-top:96px;border-top:1px solid rgba(217,164,65,.35);background:var(--foot);padding:46px 0 26px}
+.foot-grid{display:grid;grid-template-columns:1.1fr 1.5fr .7fr;gap:38px}
+.foot h3{font-size:1rem;color:var(--brass);margin-bottom:12px}
+.foot .addr{list-style:none;font-size:.8rem;line-height:1.9;color:var(--cream-dim);word-break:break-all}
+.foot .addr .nm{color:var(--cream);font-weight:600}
+.tracks{list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--cream-dim);font-size:.92rem}
+.fine{font-size:.8rem;color:var(--cream-mute);margin-top:14px;max-width:46ch}
+.foot-bottom{margin-top:34px;padding-top:16px;border-top:1px solid rgba(246,244,239,.12);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--cream-mute)}
+
+@media (max-width:960px){
+  .foot-grid{grid-template-columns:1fr;gap:28px}
+  .head-actions{align-items:flex-start}
+}
+@media (max-width:640px){
+  section{padding:56px 0}
+  .rackhead{padding:52px 0 60px}
+  .mfader{--trackH:52px}
+  .brand-sub{display:none}
+  .nav-links{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปยังเนื้อหา — Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <nav class="nav" aria-label="เมนูหลัก">
+      <div>
+        <a class="brand" href="landing.html">PlayRight</a>
+        <span class="brand-sub" lang="th">ทุกจังหวะคือรายได้</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="catalog.html" aria-current="page">Catalog <span class="en">แคตตาล็อก</span></a></li>
+        <li><a href="play.html">Settlement slip <span class="en">สลิป</span></a></li>
+        <li><a href="dashboard.html">Console <span class="en">คอนโซล</span></a></li>
+      </ul>
+      <div class="nav-side">
+        <span class="chip demo">Demo on BSC Testnet</span>
+        <a class="btn sm" href="play.html">ลองเล่นหนึ่งจังหวะ</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="rackhead rails" aria-labelledby="rack-h">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <h1 id="rack-h" lang="th">แร็คช่องสัญญาณ — เพลงของห้องนี้
+            <span class="sec-echo en">Channel rack — this room's licensed tracks</span>
+          </h1>
+          <p class="intro" lang="th">เลือกเพลง กดเล่น แล้วระบบแบ่งเงิน 70/10/20 ให้ทันทีที่จังหวะจบ — ราคาต่อจังหวะ ฿20–50 นับเป็น Mock THB (โทเคนสาธิต) ฟาเดอร์ทองเหลืองข้างราคาคือตำแหน่งราคาในแร็ค</p>
+        </div>
+        <div class="head-actions">
+          <fieldset class="room-switch">
+            <legend>ROOM</legend>
+            <label><input type="radio" name="room" value="band" checked><span lang="th">วงสด <span class="en">live band</span></span></label>
+            <label><input type="radio" name="room" value="dj"><span lang="th">DJ เซ็ต</span></label>
+          </fieldset>
+          <span class="room-now" id="room-now" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <div class="panel perk">
+        <span class="coin" aria-hidden="true">$PLAY</span>
+        <div class="txt">
+          <strong lang="th">ถือ $PLAY ตั้งแต่ 500 ล้าน — เข้าคิวก่อนใคร</strong>
+          <p lang="th">แฟนที่ถือโทเคน $PLAY ถึงเกณฑ์จะได้สิทธิ์คิวด่วนในการขอเพลง ขุดตาม bonding curve ของ OpenFour บน BSC testnet</p>
+        </div>
+        <div class="chips">
+          <span class="chip brass mono">$PLAY 0x23c5…6AF8</span>
+          <span class="chip demo">demo token</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="racksec" aria-labelledby="racklist-h" style="padding-top:0">
+    <div class="wrap">
+      <h2 id="racklist-h" class="sr">รายการเพลงทั้งหมด</h2>
+      <ol class="rack">
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 01</span>
+          <div class="song">
+            <h2 lang="th">ฝนตกที่ถนนสีลม</h2>
+            <p class="meta" lang="th">วง มื้อค่ำ <span class="sl">SL-4F2A</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">ป๊อป</span>
+          <div class="mfader" style="--lvl:53" role="img" aria-label="ตำแหน่งราคาระดับกลางสำหรับ ฿35"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿35</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 02</span>
+          <div class="song">
+            <h2 lang="th">แสงนีออนไม่หลับ</h2>
+            <p class="meta" lang="th">ปั้นดาว <span class="sl">SL-9C11</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">อินดี้</span>
+          <div class="mfader" style="--lvl:37" role="img" aria-label="ตำแหน่งราคาต่ำกลางสำหรับ ฿30"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿30</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="dj">
+          <span class="ch">CH 03</span>
+          <div class="song">
+            <h2 lang="th">เสียงเบสของเมือง</h2>
+            <p class="meta" lang="th">DJ หมอก <span class="sl">SL-7B04</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">อิเล็กทรอนิกส์</span>
+          <div class="mfader" style="--lvl:70" role="img" aria-label="ตำแหน่งราคาสูงสำหรับ ฿40"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿40</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 04</span>
+          <div class="song">
+            <h2 lang="th">รอยยิ้มในไฟเขียว</h2>
+            <p class="meta" lang="th">สายลมคณะ <span class="sl">SL-2D6E</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">โฟล์ค</span>
+          <div class="mfader" style="--lvl:23" role="img" aria-label="ตำแหน่งราคาต่ำสำหรับ ฿25"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿25</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 05</span>
+          <div class="song">
+            <h2 lang="th">ค่ำนี้มีเธอ</h2>
+            <p class="meta" lang="th">นภา ดวงจันทร์ <span class="sl">SL-5A9F</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">ลูกทุ่งฟิวชัน</span>
+          <div class="mfader" style="--lvl:87" role="img" aria-label="ตำแหน่งราคาสูงมากสำหรับ ฿45"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿45</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="dj">
+          <span class="ch">CH 06</span>
+          <div class="song">
+            <h2 lang="th">วนลูปถึงเช้า</h2>
+            <p class="meta" lang="th">DJ ฝนหลังฟ้า <span class="sl">SL-1E77</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">เทคโน</span>
+          <div class="mfader" style="--lvl:96" role="img" aria-label="ตำแหน่งราคาสูงสุดสำหรับ ฿50"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿50</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 07</span>
+          <div class="song">
+            <h2 lang="th">บันไดสู่ดาว</h2>
+            <p class="meta" lang="th">วง เสียงกระจก <span class="sl">SL-3F08</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">ป๊อป</span>
+          <div class="mfader" style="--lvl:10" role="img" aria-label="ตำแหน่งราคาต่ำสุดสำหรับ ฿20"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿20</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="dj">
+          <span class="ch">CH 08</span>
+          <div class="song">
+            <h2 lang="th">เมืองที่ไม่เคยงีบ</h2>
+            <p class="meta" lang="th">DJ โซฟา <span class="sl">SL-8A21</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">โล-ไฟ</span>
+          <div class="mfader" style="--lvl:37" role="img" aria-label="ตำแหน่งราคาต่ำกลางสำหรับ ฿30"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿30</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+        <li class="panel strip" data-room="band">
+          <span class="ch">CH 09</span>
+          <div class="song">
+            <h2 lang="th">ทางรถไฟสายเก่า</h2>
+            <p class="meta" lang="th">วง ราวต้นไม้ <span class="sl">SL-6C44</span></p>
+          </div>
+          <span class="chip brass genre-chip" lang="th">โฟล์ค</span>
+          <div class="mfader" style="--lvl:31" role="img" aria-label="ตำแหน่งราคาต่ำสำหรับ ฿28"><span class="f-fill"></span><span class="cap"></span></div>
+          <div class="price"><span class="p">฿28</span><span class="per">/ play</span></div>
+          <a class="btn sm" href="play.html" lang="th">เล่นเพลงนี้</a>
+        </li>
+      </ol>
+      <div class="rack-note">
+        <span lang="th">เพลงและราคาทั้งหมดเป็นข้อมูลสาธิต (demo data) — ชื่อศิลปินสมมติ</span>
+        <span>split ทุกจังหวะ: label 70 / venue 10 / platform 20</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="landing.html">PlayRight</a>
+        <p class="fine">Every play pays. <span lang="th">ทุกจังหวะคือรายได้</span> — Demo on BSC Testnet (chain 97); Mock THB และ $PLAY เป็นโทเคนสาธิต</p>
+      </div>
+      <div>
+        <h3>สัญญาบนเชน (BSC testnet)</h3>
+        <ul class="addr mono">
+          <li><span class="nm">MockTHB</span> 0x31FE806363Bd0FCD22efa0C774D9706E9668b442</li>
+          <li><span class="nm">VenueStake</span> 0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc</li>
+          <li><span class="nm">$PLAY</span> 0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8</li>
+          <li><span class="nm">explorer</span> <a href="https://testnet.bscscan.com">testnet.bscscan.com</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>เส้นทางพัฒนา</h3>
+        <ul class="tracks">
+          <li>Developer</li>
+          <li>Startup</li>
+          <li>Four.meme / OpenFour</li>
+          <li>Cournot</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>PerPlay Protocol — BNB Hack Bangkok demo</span>
+      <nav aria-label="หน้าอื่นในเดโม">
+        <a href="landing.html">Home</a> / <a href="play.html">สลิป</a> / <a href="dashboard.html">คอนโซล</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var form = document.querySelector('.room-switch');
+  var now = document.getElementById('room-now');
+  if(!form) return;
+  function apply(){
+    var v = form.querySelector('input:checked').value;
+    var n = 0;
+    document.querySelectorAll('.strip').forEach(function(s){
+      var show = (s.dataset.room === v);
+      s.hidden = !show;
+      if(show) n++;
+    });
+    if(now){
+      now.textContent = (v === 'dj' ? 'DJ เซ็ต' : 'วงสด') + ' — เปิด ' + n + ' ช่อง';
+    }
+  }
+  form.addEventListener('change', apply);
+  apply();
+})();
+</script>
+</body>
+</html>

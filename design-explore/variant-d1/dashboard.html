@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight — แดชบอร์ดร้าน / Venue dashboard (Variant D1)</title>
+<meta name="description" content="ยอดขาย การแบ่งเงิน พันธบัตร และผู้เฝ้าความเสี่ยง ของร้านในค่ำนี้ — Demo on BSC Testnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --panel:#FCFBF7; --ink:#23262B;
+  --purple:#5C2D91; --brass:#A87B2D; --green:#1E7B4F; --signal:#E85D4A;
+  --plum:#221726; --cream:#F6F4EF;
+  --sans:"IBM Plex Sans","Noto Sans Thai",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Kanit","Noto Sans Thai","IBM Plex Sans",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--purple);text-decoration-thickness:1.5px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:2px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-48px;background:var(--purple);color:var(--cream);padding:8px 14px;font-weight:600;z-index:100;transition:top .15s}
+.skip:focus{top:12px}
+
+.site-head{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.head-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 24px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand b{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.site-nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.site-nav a{font-size:14.5px;font-weight:500;color:var(--ink);text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
+.site-nav a:hover{border-bottom-color:var(--brass)}
+.site-nav a[aria-current="page"]{border-bottom-color:var(--ink);font-weight:600}
+.demo-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:4px 11px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.demo-chip i{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;flex:none}
+
+.ruled{background-image:
+  repeating-linear-gradient(to bottom, rgba(35,38,43,.03) 0 1px, transparent 1px 28px),
+  repeating-linear-gradient(to right, rgba(35,38,43,.02) 0 1px, transparent 1px 28px)}
+.slip{background:var(--panel);border:1.5px solid var(--ink);border-radius:3px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:3px 10px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.chip.ok{color:var(--green)}
+.chip.ok i{width:8px;height:8px;background:var(--green);border-radius:50%;flex:none}
+.chip.live{color:var(--signal);border-color:var(--signal)}
+.chip.live i{width:8px;height:8px;background:var(--signal);border-radius:50%;flex:none;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:var(--cream);border:1.5px solid var(--ink);padding:11px 20px;font-weight:600;font-size:15.5px;text-decoration:none;border-radius:2px;box-shadow:3px 4px 0 rgba(35,38,43,.2);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 5px 0 rgba(35,38,43,.2)}
+.btn:active{transform:translate(2px,3px);box-shadow:1px 1px 0 rgba(35,38,43,.2)}
+.mono{font-family:var(--mono)}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.18;letter-spacing:-.01em}
+.sub-en{font-size:15px;color:rgba(35,38,43,.75);margin-top:4px}
+main{padding:52px 0 84px}
+h2{font-family:var(--disp);font-weight:600;font-size:17px}
+.p-head{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.7);display:flex;align-items:center;gap:8px}
+.p-head i{width:10px;height:10px;background:var(--brass);border:1.5px solid var(--ink);flex:none}
+
+.grid-top{display:grid;grid-template-columns:340px 1fr;gap:34px;margin-top:34px;align-items:start}
+@media(max-width:900px){.grid-top{grid-template-columns:1fr}}
+.grid-bottom{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:34px}
+@media(max-width:900px){.grid-bottom{grid-template-columns:1fr}}
+
+/* till roll: torn tape */
+.till-col{position:relative}
+.till{position:relative;background:var(--panel);border:1.5px solid var(--ink);border-top:0;border-bottom:0;padding:26px 22px 10px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.till::before{content:"";position:absolute;left:-1px;right:-1px;top:-11px;height:11px;
+  background:conic-gradient(from -45deg at 50% 100%,var(--panel) 90deg,transparent 0) 0 0/18px 11px repeat-x}
+.till::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-11px;height:11px;
+  background:conic-gradient(from 135deg at 50% 0,var(--panel) 90deg,transparent 0) 0 0/18px 11px repeat-x}
+.till-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.8);border-bottom:1.5px solid rgba(35,38,43,.5);padding-bottom:12px}
+.till-figs{display:grid;gap:0;margin-top:6px}
+.till-fig{display:flex;align-items:baseline;gap:10px;padding:11px 0;border-bottom:1px dotted rgba(35,38,43,.45);font-size:13.5px}
+.till-fig .k{color:rgba(35,38,43,.78)}
+.till-fig .dots{flex:1;border-bottom:1.5px dotted rgba(35,38,43,.4);transform:translateY(-4px)}
+.till-fig .v{font-family:var(--mono);font-weight:600;font-size:17px}
+.till-fig .v.money{color:var(--green);font-size:22px}
+.till-last{margin-top:14px;display:grid;gap:7px}
+.till-last p{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.75);display:flex;justify-content:space-between;gap:10px}
+.till-foot{font-family:var(--mono);font-size:11px;color:rgba(35,38,43,.55);padding:14px 0 16px;border-top:1.5px dashed rgba(35,38,43,.45);margin-top:14px}
+.stamp{position:absolute;top:-34px;right:-22px;z-index:4;width:110px;height:110px;color:var(--green);transform:rotate(1.2deg);mix-blend-mode:multiply;opacity:.95;pointer-events:none}
+.stamp text{font-family:var(--mono);font-weight:600;letter-spacing:.2em;font-size:12px}
+
+/* meters instrument */
+.meters{position:relative;padding:24px}
+.cal-tag{position:absolute;top:-16px;right:18px;transform:rotate(-2deg);background:var(--brass);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--mono);font-size:11.5px;font-weight:600;padding:4px 12px;box-shadow:2px 3px 0 rgba(35,38,43,.18)}
+.meter{margin-top:18px}
+.meter-head{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px}
+.meter-head b{font-weight:600}
+.meter-head .v{font-family:var(--mono);font-weight:600;font-size:15px}
+.meter-track{position:relative;height:26px;border:1.5px solid var(--ink);background:repeating-linear-gradient(to right,rgba(35,38,43,.06) 0 1px,transparent 1px 10%);margin-top:6px}
+.meter-fill{height:100%;background:repeating-linear-gradient(-45deg,var(--brass) 0 8px,#8f6423 8px 16px);border-right:1.5px solid var(--ink)}
+.m-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:rgba(35,38,43,.6);margin-top:4px}
+.m-total{margin-top:18px;border-top:1.5px solid var(--ink);padding-top:12px;font-family:var(--mono);font-size:13px;color:rgba(35,38,43,.85);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.m-total b{font-size:16px}
+
+/* dark bond band */
+.bond-band{background:var(--plum);color:var(--cream);border:1.5px solid var(--ink);border-radius:3px;box-shadow:5px 6px 0 rgba(35,38,43,.14);margin-top:34px;padding:28px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+.bond-band h2{color:var(--cream);font-size:19px}
+.bond-band p{font-size:13.5px;color:rgba(246,244,239,.75);margin-top:8px;max-width:52ch}
+.bond-fig{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.bond-fig .big{font-family:var(--mono);font-weight:600;font-size:40px;line-height:1;color:var(--brass)}
+.bond-fig .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tag-dark{border:1.5px solid rgba(246,244,239,.5);font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:2px;color:rgba(246,244,239,.85)}
+.ok-dark{display:inline-flex;align-items:center;gap:7px;color:#7BC896;font-weight:600;font-size:14px;border:1.5px solid #7BC896;padding:3px 12px;border-radius:2px}
+@media(max-width:760px){.bond-band{grid-template-columns:1fr}}
+
+/* guard card */
+.guard{padding:24px}
+.guard .claim{font-size:14.5px;margin-top:12px;max-width:48ch}
+.ev{margin-top:14px;display:grid;gap:9px;list-style:none}
+.ev li{display:flex;gap:10px;font-size:13px;color:rgba(35,38,43,.85)}
+.ev li i{width:8px;height:8px;background:var(--ink);flex:none;margin-top:6px}
+.guard-right{border-left:1.5px solid rgba(35,38,43,.35);padding-left:24px;margin-top:20px}
+.g-fig{font-family:var(--mono);font-weight:600;font-size:40px;line-height:1}
+.g-cap{font-size:12.5px;color:rgba(35,38,43,.7);margin-top:4px}
+.decide{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.d-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--green);color:var(--green);font-weight:700;padding:4px 13px;border-radius:2px;background:var(--panel)}
+.decide small{font-size:12px;color:rgba(35,38,43,.7)}
+.gauge{position:relative;height:30px;border:1.5px solid var(--ink);margin-top:18px;background:var(--panel)}
+.gauge .hold{position:absolute;top:0;bottom:0;left:50%;right:0;background:repeating-linear-gradient(-45deg,rgba(35,38,43,.16) 0 5px,transparent 5px 10px);border-left:1.5px dashed var(--ink)}
+.gauge .needle{position:absolute;top:-7px;bottom:-7px;left:.55%;width:4px;background:var(--brass);border:1.5px solid var(--ink)}
+.g-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:rgba(35,38,43,.6);margin-top:5px}
+.guard{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}
+@media(max-width:760px){.guard{grid-template-columns:1fr}.guard-right{border-left:0;padding-left:0;border-top:1.5px solid rgba(35,38,43,.35);padding-top:20px}}
+
+/* recent plays */
+.recent{padding:24px}
+.rp{display:grid;grid-template-columns:56px 1fr auto auto;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px dotted rgba(35,38,43,.45);font-size:13.5px}
+.rp:last-of-type{border-bottom:0}
+.rp .t{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.7)}
+.rp .s b{font-weight:600}
+.rp .s small{display:block;font-size:12px;color:rgba(35,38,43,.6)}
+.rp .a{font-family:var(--mono);font-weight:600}
+.rp .live-c{display:inline-flex;align-items:center;gap:6px;color:var(--signal);font-size:11.5px;font-weight:600}
+.rp .live-c i{width:8px;height:8px;background:var(--signal);border-radius:50%;animation:pulse 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="landing.html" aria-label="PlayRight home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="6" fill="#A87B2D" stroke="#23262B" stroke-width="1.5"/><rect x="3" y="14" width="16" height="6" fill="#F6F4EF" stroke="#23262B" stroke-width="1.5"/></svg>
+      <b>PlayRight</b>
+    </a>
+    <nav class="site-nav" aria-label="Pages">
+      <a href="landing.html">Pitch</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="play.html">Play</a>
+      <a href="dashboard.html" aria-current="page">Dashboard</a>
+    </nav>
+    <span class="demo-chip"><i aria-hidden="true"></i>Demo on BSC Testnet</span>
+  </div>
+</header>
+
+<main id="main" class="ruled">
+  <div class="wrap">
+    <h1>แดชบอร์ดของร้าน — The Note Bar</h1>
+    <p class="sub-en" lang="en">Tonight at the venue: till roll, settlement meters, venue bond, and the Cournot guard.</p>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <span class="chip">ตัวอย่างข้อมูล (demo data)</span>
+      <span class="chip"><i aria-hidden="true" style="width:8px;height:8px;background:#A87B2D;border:1.5px solid #23262B;border-radius:50%;flex:none"></i>โต๊ะ 12 — 21:42</span>
+    </div>
+
+    <div class="grid-top">
+      <!-- till roll -->
+      <div class="till-col">
+        <div class="stamp" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/>
+            <circle cx="60" cy="60" r="41" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path id="arcD" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
+            <text><textPath href="#arcD" startOffset="50%" text-anchor="middle">TILL</textPath></text>
+            <g transform="rotate(180 60 60)"><text><textPath href="#arcD" startOffset="50%" text-anchor="middle">CLOSED 21:42</textPath></text></g>
+            <rect x="53" y="53" width="14" height="14" transform="rotate(45 60 60)" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="till">
+          <div class="till-meta"><span>till roll</span><span>2026-11-26</span></div>
+          <div class="till-figs">
+            <div class="till-fig"><span class="k">plays</span><span class="dots" aria-hidden="true"></span><span class="v">12</span></div>
+            <div class="till-fig"><span class="k">gross</span><span class="dots" aria-hidden="true"></span><span class="v money">฿340.00</span></div>
+            <div class="till-fig"><span class="k">avg settle</span><span class="dots" aria-hidden="true"></span><span class="v">1.4s</span></div>
+            <div class="till-fig"><span class="k">bond status</span><span class="dots" aria-hidden="true"></span><span class="v" style="color:var(--green);font-size:14px">bonded</span></div>
+          </div>
+          <div class="till-last">
+            <p><span>21:38 เต้นในห้องเล็ก</span><span>฿30</span></p>
+            <p><span>21:33 ค่ำนี้มีเธอ</span><span>฿45</span></p>
+            <p><span>21:29 ทางรถไฟสายเก่า</span><span>฿20</span></p>
+          </div>
+          <p class="till-foot">Mock THB — demo token / เงินจริงไม่ได้เคลื่อนไหวในเดโมนี้</p>
+        </div>
+      </div>
+
+      <!-- settlement meters -->
+      <div class="slip meters">
+        <span class="cal-tag" aria-hidden="true">cal 70/10/20</span>
+        <p class="p-head"><i aria-hidden="true"></i>settlement meters — cumulative tonight</p>
+        <h2 style="margin-top:8px">แบ่งเงินสะสมของค่ำนี้</h2>
+        <div class="meter">
+          <div class="meter-head"><b>label — 70%</b><span class="v">฿238.00</span></div>
+          <div class="meter-track" role="img" aria-label="ค่ายเพลงได้รับ 70 เปอร์เซ็นต์"><div class="meter-fill" style="width:70%"></div></div>
+          <div class="m-scale" aria-hidden="true"><span>0</span><span>50</span><span>100%</span></div>
+        </div>
+        <div class="meter">
+          <div class="meter-head"><b>venue — 10%</b><span class="v">฿34.00</span></div>
+          <div class="meter-track" role="img" aria-label="ร้านได้รับ 10 เปอร์เซ็นต์"><div class="meter-fill" style="width:10%"></div></div>
+        </div>
+        <div class="meter">
+          <div class="meter-head"><b>platform — 20%</b><span class="v">฿68.00</span></div>
+          <div class="meter-track" role="img" aria-label="แพลตฟอร์มได้รับ 20 เปอร์เซ็นต์"><div class="meter-fill" style="width:20%"></div></div>
+        </div>
+        <p class="m-total"><b>฿340.00</b> <span>= 238.00 + 34.00 + 68.00 mTHB — ทุกบาทมีใบเสร็จผูกลงเชน (chain 97)</span></p>
+      </div>
+    </div>
+
+    <!-- dark bond band -->
+    <div class="bond-band">
+      <div>
+        <h2>พันธบัตรร้าน — VenueStake</h2>
+        <p lang="th">ร้านต้องวางพันธบัตรก่อนขายเพลงได้ ร้านที่ยังไม่ผูกพันธบัตรจะถูกระบบปฏิเสธด้วย 402 และเพลงปลอมจะถูกสแลชเข้าคลังของโปรโตคอล</p>
+        <p lang="en" style="margin-top:6px">Unbonded venues are refused (402). Fake plays are slashed to the protocol treasury.</p>
+      </div>
+      <div class="bond-fig">
+        <span class="big">1,200 mTHB</span>
+        <div class="row">
+          <span class="ok-dark"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>bonded</span>
+          <span class="tag-dark">slash authority: admin (demo)</span>
+        </div>
+        <span class="tag-dark" style="font-size:10.5px">bond ref. VS-0117</span>
+      </div>
+    </div>
+
+    <div class="grid-bottom">
+      <!-- Cournot guard -->
+      <div class="slip guard">
+        <div>
+          <p class="p-head"><i aria-hidden="true"></i>Cournot guard — settlement risk</p>
+          <h2 style="margin-top:8px">ผู้เฝ้าความเสี่ยงก่อนจ่ายจริง</h2>
+          <p class="claim" lang="th">ชุดรายการ #221 — มี 3 เพลงที่ตรวจลายเสียงซ้ำไม่ผ่าน อาจเป็นเพลงปลอม</p>
+          <ul class="ev">
+            <li><i aria-hidden="true"></i><span lang="th">เซ็ตลิสต์ตรงกับที่บรรเลง 12 จาก 12 รายการ</span></li>
+            <li><i aria-hidden="true"></i><span lang="th">พันธบัตรผูกอยู่ และไม่มีประวัติถูกสแลช</span></li>
+          </ul>
+        </div>
+        <div class="guard-right">
+          <p class="g-fig">0.55%</p>
+          <p class="g-cap">settlement-risk probability</p>
+          <div class="decide">
+            <span class="d-chip"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>PROCEED</span>
+            <small>HOLD above 50%</small>
+          </div>
+          <div class="gauge" aria-hidden="true"><div class="hold"></div><div class="needle"></div></div>
+          <div class="g-scale" aria-hidden="true"><span>0%</span><span>50% — HOLD line</span><span>100%</span></div>
+          <p style="margin-top:14px"><span class="chip" style="font-size:11px">labeled (demo)</span></p>
+        </div>
+      </div>
+
+      <!-- recent plays -->
+      <div class="slip recent">
+        <p class="p-head"><i aria-hidden="true"></i>recent plays — slip lines</p>
+        <h2 style="margin-top:8px;margin-bottom:6px">เพลงที่เพิ่งเล่น</h2>
+        <div class="rp">
+          <span class="t">21:42</span>
+          <span class="s"><b>ฝนตกที่เชียงใหม่</b><small>วงใบไม้ — โต๊ะ 12</small></span>
+          <span class="a">฿35</span>
+          <span class="live-c"><i aria-hidden="true"></i>กำลังเล่น</span>
+        </div>
+        <div class="rp">
+          <span class="t">21:38</span>
+          <span class="s"><b>เต้นในห้องเล็ก</b><small>คลับซีน — โต๊ะ 7</small></span>
+          <span class="a">฿30</span><span></span>
+        </div>
+        <div class="rp">
+          <span class="t">21:33</span>
+          <span class="s"><b>ค่ำนี้มีเธอ</b><small>เดือนเมษา — โต๊ะ 3</small></span>
+          <span class="a">฿45</span><span></span>
+        </div>
+        <div class="rp">
+          <span class="t">21:29</span>
+          <span class="s"><b>ทางรถไฟสายเก่า</b><small>สถานีเก่า — โต๊ะ 12</small></span>
+          <span class="a">฿20</span><span></span>
+        </div>
+        <div class="rp">
+          <span class="t">21:24</span>
+          <span class="s"><b>เพลงของพรุ่งนี้</b><small>อนาวิล — โต๊ะ 9</small></span>
+          <span class="a">฿40</span><span></span>
+        </div>
+        <div class="rp">
+          <span class="t">21:19</span>
+          <span class="s"><b>รอยยิ้มกลางเมือง</b><small>สายลมแวง — โต๊ะ 5</small></span>
+          <span class="a">฿25</span><span></span>
+        </div>
+        <p style="margin-top:12px;font-size:12.5px;color:rgba(35,38,43,.65)">แสดง 6 จาก 12 รายการของค่ำนี้ <a href="play.html">ดูใบเสร็จล่าสุด</a></p>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

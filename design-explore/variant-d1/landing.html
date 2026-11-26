@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight — Every play pays. (Variant D1)</title>
+<meta name="description" content="Per-play music licensing for Thai venues. The pitch, printed as a receipt. Demo on BSC Testnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --panel:#FCFBF7; --ink:#23262B;
+  --purple:#5C2D91; --brass:#A87B2D; --green:#1E7B4F; --signal:#E85D4A;
+  --plum:#221726; --cream:#F6F4EF;
+  --sans:"IBM Plex Sans","Noto Sans Thai",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Kanit","Noto Sans Thai","IBM Plex Sans",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--purple);text-decoration-thickness:1.5px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:2px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-48px;background:var(--purple);color:var(--cream);padding:8px 14px;font-weight:600;z-index:100;transition:top .15s}
+.skip:focus{top:12px}
+
+/* ---------- header ---------- */
+.site-head{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.head-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 24px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand b{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.site-nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.site-nav a{font-size:14.5px;font-weight:500;color:var(--ink);text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
+.site-nav a:hover{border-bottom-color:var(--brass)}
+.site-nav a[aria-current="page"]{border-bottom-color:var(--ink);font-weight:600}
+.demo-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:4px 11px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.demo-chip i{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;flex:none}
+
+/* ---------- shared layer system ---------- */
+.ruled{background-image:
+  repeating-linear-gradient(to bottom, rgba(35,38,43,.03) 0 1px, transparent 1px 28px),
+  repeating-linear-gradient(to right, rgba(35,38,43,.02) 0 1px, transparent 1px 28px)}
+.slip{background:var(--panel);border:1.5px solid var(--ink);border-radius:3px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:3px 10px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.chip.ok{color:var(--green)}
+.chip.ok i{width:8px;height:8px;background:var(--green);border-radius:50%;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:var(--cream);border:1.5px solid var(--ink);padding:11px 20px;font-weight:600;font-size:15.5px;text-decoration:none;border-radius:2px;box-shadow:3px 4px 0 rgba(35,38,43,.2);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 5px 0 rgba(35,38,43,.2)}
+.btn:active{transform:translate(2px,3px);box-shadow:1px 1px 0 rgba(35,38,43,.2)}
+.btn.small{padding:7px 14px;font-size:14px}
+.mono{font-family:var(--mono)}
+h2{font-family:var(--disp);font-weight:600;font-size:clamp(1.55rem,3vw,2.05rem);line-height:1.2;letter-spacing:-.01em}
+.sub-th{font-size:15px;color:rgba(35,38,43,.78);margin-top:4px}
+section{padding:76px 0}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 92px}
+.hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:60px;align-items:center}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.35rem,4.8vw,3.5rem);line-height:1.1;letter-spacing:-.015em}
+.hero-th{font-family:var(--disp);font-weight:600;font-size:clamp(1.15rem,2vw,1.4rem);margin-top:10px}
+.hero-copy{max-width:60ch;margin-top:18px;color:rgba(35,38,43,.88)}
+.stats{margin-top:26px;border-top:1.5px solid var(--ink);max-width:46ch}
+.stats>div{display:flex;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px solid rgba(35,38,43,.35)}
+.stats .n{font-family:var(--mono);font-weight:600;font-size:26px;flex:none}
+.stats .l{font-size:14px;color:rgba(35,38,43,.8)}
+.cta-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:28px}
+
+/* receipt composition: L2 under-card, L3 receipt, L3 fader, L3 stamp */
+.hero-art{position:relative;padding:30px 34px 40px 14px}
+.under-card{position:absolute;inset:6% -1% -5% 5%;background:var(--purple);border:1.5px solid var(--ink);transform:rotate(2deg);box-shadow:6px 7px 0 rgba(35,38,43,.18);z-index:1}
+.under-card::after{content:"";position:absolute;inset:12px;background:repeating-linear-gradient(to bottom,rgba(246,244,239,.13) 0 1px,transparent 1px 22px)}
+.under-card span{position:absolute;left:18px;bottom:14px;font-family:var(--mono);font-size:11px;color:rgba(246,244,239,.75);z-index:1}
+.receipt{position:relative;z-index:2;background:var(--panel);border:1.5px solid var(--ink);border-bottom:0;max-width:400px;margin-left:auto;padding:28px 22px 8px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.receipt::before{content:"";position:absolute;left:12px;right:12px;top:12px;border-top:1.5px dashed rgba(35,38,43,.45)}
+.receipt::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-11px;height:11px;
+  background:conic-gradient(from 135deg at 50% 0,var(--panel) 90deg,transparent 0) 0 0/18px 11px repeat-x}
+.r-head{text-align:center;margin-top:10px}
+.r-head b{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.01em}
+.r-head small{display:block;font-family:var(--mono);font-size:11px;color:rgba(35,38,43,.7);margin-top:2px}
+.r-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-top:14px;color:rgba(35,38,43,.85)}
+.r-rows{margin-top:12px;border-top:1.5px solid rgba(35,38,43,.5);padding-top:12px;display:grid;gap:9px}
+.r-row{display:flex;align-items:baseline;font-size:13.5px}
+.r-row .dots{flex:1;border-bottom:1.5px dotted rgba(35,38,43,.45);margin:0 7px;transform:translateY(-4px)}
+.r-row .mono{font-size:13px;font-weight:500}
+.r-note{font-family:var(--mono);font-size:11.5px;color:rgba(35,38,43,.72)}
+.r-state{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-weight:600;font-size:12.5px}
+.r-state svg{flex:none}
+.ins-label{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;margin:16px 0 0;color:rgba(35,38,43,.8)}
+.ins-label i{width:10px;height:10px;background:var(--brass);border:1.5px solid var(--ink);flex:none}
+.ins-label span{color:rgba(35,38,43,.55)}
+.fader-bank{position:relative;z-index:3;display:block;width:117%;margin:8px -14% 2px -3%}
+.r-split{border-top:1.5px solid rgba(35,38,43,.5);margin-top:8px;padding-top:10px;display:grid;gap:6px}
+.r-foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;padding:12px 0 18px;border-top:1.5px dashed rgba(35,38,43,.45);margin-top:12px}
+.stamp{position:absolute;top:-26px;right:-24px;z-index:4;width:118px;height:118px;color:var(--green);transform:rotate(1.2deg);mix-blend-mode:multiply;opacity:.95;pointer-events:none}
+.stamp text{font-family:var(--mono);font-weight:600;letter-spacing:.2em;font-size:12.5px}
+@media (prefers-reduced-motion:no-preference){
+  .receipt-wrap{animation:printUp .7s cubic-bezier(.2,.7,.2,1) .12s both}
+  @keyframes printUp{from{transform:translateY(26px);opacity:0;clip-path:inset(100% 0 0 0)}to{transform:none;opacity:1;clip-path:inset(0 0 0 0)}}
+}
+
+/* ---------- how it works ---------- */
+.how .steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:34px;padding:0}
+.step{padding:24px 22px;border-left:1.5px solid rgba(35,38,43,.35)}
+.step:first-child{border-left:0}
+.step .no{font-family:var(--mono);font-weight:600;font-size:15px;letter-spacing:.1em;color:rgba(35,38,43,.65)}
+.step h3{font-family:var(--disp);font-weight:600;font-size:17px;margin:12px 0 5px}
+.step p{font-size:13.5px;color:rgba(35,38,43,.82)}
+.step p .mono{font-size:12.5px}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}.step:nth-child(odd){border-left:0}.step:nth-child(n+3){border-top:1.5px solid rgba(35,38,43,.35)}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}.step{border-left:0}.step:nth-child(n+2){border-top:1.5px solid rgba(35,38,43,.35)}}
+
+/* ---------- bond ---------- */
+.bond-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;margin-top:8px}
+.bond-copy p{max-width:58ch;margin-top:14px;color:rgba(35,38,43,.88)}
+.bond-copy ul{margin-top:14px;display:grid;gap:10px;list-style:none}
+.bond-copy li{display:flex;gap:10px;font-size:15px}
+.bond-copy li svg{flex:none;margin-top:3px}
+.cert-wrap{position:relative;padding:10px 26px 26px 0}
+.cert{position:relative;transform:rotate(-1deg);padding:24px 24px 20px;max-width:340px;margin-left:auto}
+.cert .c-head{font-family:var(--disp);font-weight:600;font-size:17px}
+.cert .c-no{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.7);margin-top:2px}
+.cert .c-fig{font-family:var(--mono);font-weight:600;font-size:34px;color:var(--green);margin-top:16px}
+.cert .c-cap{font-size:13px;color:rgba(35,38,43,.75);margin-top:2px}
+.cert .c-status{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seal{position:absolute;top:-22px;right:-2px;width:74px;height:74px;color:var(--brass);transform:rotate(1.2deg);mix-blend-mode:multiply}
+@media(max-width:860px){.bond-grid{grid-template-columns:1fr;gap:40px}}
+
+/* ---------- dark signal band ---------- */
+.band{background:var(--plum);color:var(--cream)}
+.band h2{color:var(--cream)}
+.band .sub-th{color:rgba(246,244,239,.72)}
+.path{position:relative;margin-top:44px}
+.path::before{content:"";position:absolute;top:11px;left:9%;right:9%;border-top:1.5px dashed rgba(246,244,239,.32)}
+.path ol{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.path li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:0 8px}
+.node{width:24px;height:24px;border:1.5px solid var(--brass);border-radius:50%;background:var(--plum);display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--cream);flex:none}
+.path .p-l{font-size:13.5px;font-weight:600}
+.path .p-th{font-size:12px;color:rgba(246,244,239,.66)}
+.band-facts{margin-top:46px;border-top:1px solid rgba(246,244,239,.25);display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding-top:24px}
+.band-facts b{display:block;font-family:var(--mono);font-weight:600;font-size:14.5px;color:var(--brass)}
+.band-facts p{font-size:13px;color:rgba(246,244,239,.75);margin-top:4px;max-width:34ch}
+@media(max-width:860px){.path ol{grid-template-columns:1fr 1fr;row-gap:22px}.path::before{display:none}
+.band-facts{grid-template-columns:1fr}}
+
+/* ---------- oracle ---------- */
+.oracle-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:0;margin-top:34px;overflow:hidden}
+.or-left{padding:28px;border-right:1.5px solid rgba(35,38,43,.35)}
+.or-right{padding:28px;background:rgba(35,38,43,.035)}
+.or-left h3{font-family:var(--disp);font-weight:600;font-size:16px}
+.or-left .claim{font-size:15px;margin-top:10px;max-width:48ch}
+.ev{margin-top:16px;display:grid;gap:10px;list-style:none}
+.ev li{display:flex;gap:10px;font-size:13.5px;color:rgba(35,38,43,.85)}
+.ev li i{width:8px;height:8px;background:var(--ink);flex:none;margin-top:6px}
+.or-fig{font-family:var(--mono);font-weight:600;font-size:44px;line-height:1}
+.or-cap{font-size:13px;color:rgba(35,38,43,.72);margin-top:6px}
+.decide{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.decide .d-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--green);color:var(--green);font-weight:700;padding:5px 14px;border-radius:2px;background:var(--panel)}
+.decide small{font-size:12.5px;color:rgba(35,38,43,.7)}
+.gauge{position:relative;height:34px;border:1.5px solid var(--ink);margin-top:22px;background:var(--panel)}
+.gauge .hold{position:absolute;top:0;bottom:0;left:50%;right:0;background:repeating-linear-gradient(-45deg,rgba(35,38,43,.16) 0 5px,transparent 5px 10px);border-left:1.5px dashed var(--ink)}
+.gauge .needle{position:absolute;top:-7px;bottom:-7px;left:.55%;width:4px;background:var(--brass);border:1.5px solid var(--ink)}
+.g-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:rgba(35,38,43,.65);margin-top:6px}
+.or-tag{margin-top:20px}
+@media(max-width:860px){.oracle-grid{grid-template-columns:1fr}.or-left{border-right:0;border-bottom:1.5px solid rgba(35,38,43,.35)}}
+
+/* ---------- pre-footer + footer ---------- */
+.pre-foot{border-top:3px double var(--ink);border-bottom:1.5px solid var(--ink)}
+.pre-foot .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:28px;padding-bottom:28px}
+.pre-foot p{font-size:15px;max-width:52ch}
+footer{padding:52px 0 64px}
+.foot-grid{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:44px}
+.foot-grid h2{font-size:15px;font-family:var(--sans);font-weight:600}
+.foot-grid p{font-size:13.5px;color:rgba(35,38,43,.8);margin-top:10px;max-width:34ch}
+.addr{display:grid;gap:12px;margin-top:12px}
+.addr dt{font-family:var(--mono);font-size:11.5px;color:rgba(35,38,43,.65)}
+.addr dd{font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.tracks{display:flex;flex-wrap:wrap;gap:8px 0;margin-top:12px;font-size:13.5px;align-items:center}
+.tracks a{font-weight:500}
+.tracks span{color:rgba(35,38,43,.5);margin:0 8px}
+.foot-note{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:rgba(35,38,43,.6)}
+@media(max-width:860px){.foot-grid{grid-template-columns:1fr}}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:52px}.hero-art{max-width:470px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="landing.html" aria-label="PlayRight home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="6" fill="#A87B2D" stroke="#23262B" stroke-width="1.5"/><rect x="3" y="14" width="16" height="6" fill="#F6F4EF" stroke="#23262B" stroke-width="1.5"/></svg>
+      <b>PlayRight</b>
+    </a>
+    <nav class="site-nav" aria-label="Pages">
+      <a href="landing.html" aria-current="page">Pitch</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="play.html">Play</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <span class="demo-chip"><i aria-hidden="true"></i>Demo on BSC Testnet</span>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- hero: L1 ruling behind, L2 purple under-card, L3 receipt + fader + stamp -->
+  <section class="hero ruled" aria-labelledby="h-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="h-hero">Every play pays.</h1>
+        <p class="hero-th" lang="th">ทุกจังหวะคือรายได้</p>
+        <p class="hero-copy">PerPlay collects per-play music licensing at Thai venues. A fan pays for the song playing now, the venue settles in seconds, and rights holders get paid per play — with every receipt anchored on-chain.</p>
+        <div class="stats">
+          <div><span class="n">≈ ฿240M</span><span class="l">licensing revenue goes uncollected every month</span></div>
+          <div><span class="n">5,000+</span><span class="l">venues in Thailand playing licensed music</span></div>
+        </div>
+        <div class="cta-row">
+          <a class="btn" href="catalog.html">Open the venue demo</a>
+          <a href="play.html">See a settled play</a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="receipt-wrap" style="position:relative">
+          <div class="under-card" aria-hidden="true"><span>perplay — play slip 004817 — chain 97</span></div>
+          <div class="receipt">
+            <div class="r-head"><b>PlayRight</b><small>play slip — per-play licensing — Bangkok demo</small></div>
+            <div class="r-meta"><span>slip no. 004817</span><span>table 12 — 21:42</span></div>
+            <div class="r-rows">
+              <div class="r-row"><span>1× live play — <span lang="th">ฝนตกที่เชียงใหม่</span></span><span class="dots" aria-hidden="true"></span><span class="mono">฿30.00</span></div>
+              <p class="r-note">fingerprint match 98.2% — setlist ok</p>
+              <div class="r-row"><span>paid via PromptPay (mock)</span><span class="dots" aria-hidden="true"></span><span class="r-state"><svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 6.8l1.7 1.7 3.2-3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>settled</span></div>
+            </div>
+            <p class="ins-label"><i aria-hidden="true"></i>split fader bank <span>— share of each play, mTHB</span></p>
+            <svg class="fader-bank" viewBox="0 0 300 192" role="img" aria-label="Split fader bank: label 70 percent, venue 10 percent, platform 20 percent">
+              <g stroke="#23262B" stroke-width="1.5" opacity=".75">
+                <path d="M22 154h6M22 127.6h6M22 101.2h6M22 74.8h6M22 48.4h6M22 22h6"/>
+                <path d="M122 154h6M122 127.6h6M122 101.2h6M122 74.8h6M122 48.4h6M122 22h6"/>
+                <path d="M222 154h6M222 127.6h6M222 101.2h6M222 74.8h6M222 48.4h6M222 22h6"/>
+              </g>
+              <g fill="#FCFBF7" stroke="#23262B" stroke-width="2">
+                <rect x="34" y="22" width="12" height="132" rx="2"/>
+                <rect x="134" y="22" width="12" height="132" rx="2"/>
+                <rect x="234" y="22" width="12" height="132" rx="2"/>
+              </g>
+              <g fill="#A87B2D" stroke="#23262B" stroke-width="2">
+                <rect x="23" y="52.6" width="34" height="18" rx="3"/>
+                <rect x="123" y="131.8" width="34" height="18" rx="3"/>
+                <rect x="223" y="118.6" width="34" height="18" rx="3"/>
+              </g>
+              <g fill="#F6F4EF">
+                <rect x="30" y="60.1" width="20" height="3"/>
+                <rect x="130" y="139.3" width="20" height="3"/>
+                <rect x="230" y="126.1" width="20" height="3"/>
+              </g>
+              <g font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" fill="#23262B">
+                <text x="56" y="66">70</text><text x="156" y="145.3">10</text><text x="256" y="132.1">20</text>
+              </g>
+              <g font-family="IBM Plex Mono,monospace" font-size="11" fill="#23262B" text-anchor="middle">
+                <text x="40" y="182">label</text><text x="140" y="182">venue</text><text x="240" y="182">platform</text>
+              </g>
+            </svg>
+            <div class="r-split">
+              <div class="r-row"><span>label — 70%</span><span class="dots" aria-hidden="true"></span><span class="mono">21.00 mTHB</span></div>
+              <div class="r-row"><span>venue — 10%</span><span class="dots" aria-hidden="true"></span><span class="mono">3.00 mTHB</span></div>
+              <div class="r-row"><span>platform — 20%</span><span class="dots" aria-hidden="true"></span><span class="mono">6.00 mTHB</span></div>
+            </div>
+            <div class="r-foot"><span>anchor: BSC testnet 97</span><span>e2e 1.5s</span></div>
+          </div>
+          <div class="stamp" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/>
+              <circle cx="60" cy="60" r="41" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path id="arcT" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
+              <text><textPath href="#arcT" startOffset="50%" text-anchor="middle">SETTLED</textPath></text>
+              <g transform="rotate(180 60 60)"><text><textPath href="#arcT" startOffset="50%" text-anchor="middle">BSC TESTNET 97</textPath></text></g>
+              <rect x="53" y="53" width="14" height="14" transform="rotate(45 60 60)" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- how it works: one slip, ruled columns -->
+  <section class="how" aria-labelledby="h-how">
+    <div class="wrap">
+      <h2 id="h-how">How a play pays</h2>
+      <p class="sub-th" lang="th">จากการสแกนถึงเงินเข้าบัญชี ภายในไม่กี่วินาที</p>
+      <div class="slip steps">
+        <div class="step">
+          <p class="no">01</p>
+          <h3>Fan scans the table QR</h3>
+          <p lang="th">แฟนเพลงสแกนคิวอาร์ที่โต๊ะ</p>
+        </div>
+        <div class="step">
+          <p class="no">02</p>
+          <h3>Pays for the playing song</h3>
+          <p><span lang="th">จ่ายไม่เกิน ฿30 ต่อเพลง</span> <span class="chip" style="font-size:10.5px;padding:1px 7px">Mock THB</span></p>
+        </div>
+        <div class="step">
+          <p class="no">03</p>
+          <h3>Setlist + fingerprint verify</h3>
+          <p lang="th">ระบบตรวจลายเสียงกับเซ็ตลิสต์ของวงอัตโนมัติ</p>
+        </div>
+        <div class="step">
+          <p class="no">04</p>
+          <h3>Split lands on-chain</h3>
+          <p lang="th">แบ่ง 70/10/20 และผูกใบเสร็จลงเชน</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- bond story -->
+  <section class="bond ruled" aria-labelledby="h-bond">
+    <div class="wrap">
+      <div class="bond-grid">
+        <div class="bond-copy">
+          <h2 id="h-bond">A bond stands behind every venue</h2>
+          <p class="sub-th" lang="th">พันธบัตรที่ทำให้ทุกการเล่นจริงจัง</p>
+          <p>Venues stake a bond in VenueStake before they may sell a single play. The stake is the honest-signal layer: it costs something to lie.</p>
+          <ul>
+            <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1.5" y="1.5" width="12" height="12" fill="none" stroke="#23262B" stroke-width="1.5"/><path d="M4.4 7.8l2.1 2.1 4-4.4" fill="none" stroke="#1E7B4F" stroke-width="1.8"/></svg><span lang="th">ร้านวางพันธบัตร 1,200 mTHB ก่อนขายเพลงได้</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1.5" y="1.5" width="12" height="12" fill="none" stroke="#23262B" stroke-width="1.5"/><path d="M4.5 4.5l6 6M10.5 4.5l-6 6" fill="none" stroke="#23262B" stroke-width="1.8"/></svg><span lang="th">ร้านที่ยังไม่ผูกพันธบัตรถูกปฏิเสธด้วย 402</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1.5" y="1.5" width="12" height="12" fill="none" stroke="#23262B" stroke-width="1.5"/><path d="M4.5 10.5l6-6M6.5 4.5h4v4" fill="none" stroke="#1E7B4F" stroke-width="1.6"/></svg><span lang="th">เพลงปลอมถูกสแลชเข้าคลังของโปรโตคอล</span></li>
+          </ul>
+        </div>
+        <div class="cert-wrap">
+          <div class="slip cert">
+            <p class="c-head">VenueStake bond</p>
+            <p class="c-no">bond ref. VS-0117 — venue: The Note Bar</p>
+            <p class="c-fig">1,200 mTHB</p>
+            <p class="c-cap" lang="th">ยอดพันธบัตรที่วางไว้กับโปรโตคอล</p>
+            <div class="c-status">
+              <span class="chip ok"><i aria-hidden="true"></i>bonded</span>
+              <span class="chip">slash authority: admin (demo)</span>
+            </div>
+            <svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="4"/>
+              <circle cx="60" cy="60" r="38" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M60 34v52M34 60h52" stroke="currentColor" stroke-width="3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- dark plum band: the signal path -->
+  <section class="band" aria-labelledby="h-sig">
+    <div class="wrap">
+      <h2 id="h-sig">The signal path, end to end</h2>
+      <p class="sub-th" lang="th">เส้นทางของเงิน ตั้งแต่สแกนจนถึงเชน</p>
+      <div class="path">
+        <ol>
+          <li><span class="node">1</span><span class="p-l">scan</span><span class="p-th" lang="th">สแกนคิวอาร์</span></li>
+          <li><span class="node">2</span><span class="p-l">pay ≤ ฿30</span><span class="p-th" lang="th">ชำระผ่าน PromptPay (mock)</span></li>
+          <li><span class="node">3</span><span class="p-l">verify</span><span class="p-th" lang="th">ตรวจลายเสียง</span></li>
+          <li><span class="node">4</span><span class="p-l">split 70/10/20</span><span class="p-th" lang="th">แบ่งเงินบนเชน</span></li>
+          <li><span class="node">5</span><span class="p-l">anchor</span><span class="p-th" lang="th">ผูกใบเสร็จลงเชน</span></li>
+        </ol>
+      </div>
+      <div class="band-facts">
+        <div><b>$PLAY — priority queue at ≥500M held</b><p lang="th">แฟนที่ถือโทเคน $PLAY (PerPlay Protocol, OpenFour bonding curve) ครบ 500 ล้าน จะได้เข้าคิวก่อน</p></div>
+        <div><b>mTHB — demo settlement token</b><p lang="th">โทเคนชำระบัญชีชั่วคราวของเดโม แทน THB stable ที่ได้รับใบอนุญาตจาก ก.ง. (คาด มี.ค. 2027)</p></div>
+        <div><b>anchor — BSC testnet 97</b><p>e2e 1.5s measured, target ≤30s. Explorer: testnet.bscscan.com</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- oracle guard -->
+  <section class="oracle" aria-labelledby="h-orc">
+    <div class="wrap">
+      <h2 id="h-orc">The settlement-risk guard</h2>
+      <p class="sub-th" lang="th">ผู้เฝ้าความเสี่ยงของ Cournot ทำงานก่อนเงินออกจากกอง</p>
+      <div class="slip oracle-grid">
+        <div class="or-left">
+          <h3>Current claim</h3>
+          <p class="claim" lang="th">ชุดรายการค่ำนี้ #221 — มี 3 เพลงที่ตรวจลายเสียงซ้ำไม่ผ่าน อาจเป็นเพลงปลอม</p>
+          <ul class="ev">
+            <li><i aria-hidden="true"></i><span lang="th">เซ็ตลิสต์ตรงกับที่บรรเลง 12 จาก 12 รายการ</span></li>
+            <li><i aria-hidden="true"></i><span lang="th">พันธบัตรของร้านผูกอยู่ และไม่มีประวัติถูกตัด</span></li>
+          </ul>
+        </div>
+        <div class="or-right">
+          <p class="or-fig">0.55%</p>
+          <p class="or-cap">settlement-risk probability, Cournot guard</p>
+          <div class="decide">
+            <span class="d-chip"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>PROCEED</span>
+            <small>HOLD above 50%</small>
+          </div>
+          <div class="gauge" aria-hidden="true"><div class="hold"></div><div class="needle"></div></div>
+          <div class="g-scale" aria-hidden="true"><span>0%</span><span>50% — HOLD line</span><span>100%</span></div>
+          <p class="or-tag"><span class="chip" style="font-size:11px">labeled (demo)</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- pre-footer CTA -->
+  <div class="pre-foot">
+    <div class="wrap">
+      <p>See it run end to end — scan to a settled receipt in 1.5 seconds.</p>
+      <a class="btn" href="catalog.html">Open the venue demo</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <div>
+        <h2>PlayRight</h2>
+        <p>Per-play music licensing for Thai venues. Every play pays.</p>
+        <p lang="th" style="margin-top:6px">ทุกจังหวะคือรายได้</p>
+      </div>
+      <div>
+        <h2>Contract addresses (BSC testnet)</h2>
+        <dl class="addr">
+          <dt>MockTHB</dt>
+          <dd><a href="https://testnet.bscscan.com/address/0x31FE806363Bd0FCD22efa0C774D9706E9668b442">0x31FE806363Bd0FCD22efa0C774D9706E9668b442</a></dd>
+          <dt>VenueStake</dt>
+          <dd><a href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc</a></dd>
+          <dt>$PLAY (PerPlay Protocol)</dt>
+          <dd><a href="https://testnet.bscscan.com/address/0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8">0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8</a></dd>
+        </dl>
+        <p class="foot-note">Explorer: <a href="https://testnet.bscscan.com">testnet.bscscan.com</a></p>
+      </div>
+      <div>
+        <h2>Tracks</h2>
+        <div class="tracks">
+          <a href="landing.html">Developer</a><span aria-hidden="true">/</span>
+          <a href="landing.html">Startup</a><span aria-hidden="true">/</span>
+          <a href="landing.html">Four.meme OpenFour</a><span aria-hidden="true">/</span>
+          <a href="landing.html">Cournot</a>
+        </div>
+        <p class="foot-note">Demo on BSC Testnet. Not a licensed THB stable; not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+</main>
+</body>
+</html>

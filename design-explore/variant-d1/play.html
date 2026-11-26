@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayRight — ชำระแล้ว / Paid &amp; settled (Variant D1)</title>
+<meta name="description" content="สแกน จ่าย ตรวจ และตั้งบนเชน — scan, pay, verify, settle. Demo on BSC Testnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --panel:#FCFBF7; --ink:#23262B;
+  --purple:#5C2D91; --brass:#A87B2D; --green:#1E7B4F; --signal:#E85D4A;
+  --plum:#221726; --cream:#F6F4EF;
+  --sans:"IBM Plex Sans","Noto Sans Thai",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Kanit","Noto Sans Thai","IBM Plex Sans",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--purple);text-decoration-thickness:1.5px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px;border-radius:2px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-48px;background:var(--purple);color:var(--cream);padding:8px 14px;font-weight:600;z-index:100;transition:top .15s}
+.skip:focus{top:12px}
+
+.site-head{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1.5px solid var(--ink)}
+.head-in{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 24px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand svg{display:block}
+.brand b{font-family:var(--disp);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.site-nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.site-nav a{font-size:14.5px;font-weight:500;color:var(--ink);text-decoration:none;padding:6px 12px;border-bottom:2px solid transparent}
+.site-nav a:hover{border-bottom-color:var(--brass)}
+.site-nav a[aria-current="page"]{border-bottom-color:var(--ink);font-weight:600}
+.demo-chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:4px 11px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.demo-chip i{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;flex:none}
+
+.ruled{background-image:
+  repeating-linear-gradient(to bottom, rgba(35,38,43,.03) 0 1px, transparent 1px 28px),
+  repeating-linear-gradient(to right, rgba(35,38,43,.02) 0 1px, transparent 1px 28px)}
+.slip{background:var(--panel);border:1.5px solid var(--ink);border-radius:3px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:var(--panel);padding:3px 10px;font-family:var(--mono);font-size:12px;border-radius:2px}
+.chip.ok{color:var(--green)}
+.chip.ok i{width:8px;height:8px;background:var(--green);border-radius:50%;flex:none}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:var(--cream);border:1.5px solid var(--ink);padding:11px 20px;font-weight:600;font-size:15.5px;text-decoration:none;border-radius:2px;box-shadow:3px 4px 0 rgba(35,38,43,.2);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 5px 0 rgba(35,38,43,.2)}
+.btn:active{transform:translate(2px,3px);box-shadow:1px 1px 0 rgba(35,38,43,.2)}
+.btn.small{padding:7px 14px;font-size:14px}
+.mono{font-family:var(--mono)}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,3.4vw,2.4rem);line-height:1.18;letter-spacing:-.01em}
+.sub-en{font-size:15px;color:rgba(35,38,43,.75);margin-top:4px}
+main{padding:52px 0 84px}
+
+/* step strip: paid state, all done */
+.steps-done{list-style:none;display:flex;flex-wrap:wrap;gap:0;margin-top:28px;border:1.5px solid var(--ink);border-radius:2px;background:var(--panel);box-shadow:3px 4px 0 rgba(35,38,43,.12);overflow:hidden}
+.steps-done li{display:flex;align-items:center;gap:9px;padding:12px 20px;font-size:14px;font-weight:600;border-left:1.5px solid rgba(35,38,43,.35);flex:1 1 auto}
+.steps-done li:first-child{border-left:0}
+.steps-done svg{flex:none}
+.steps-done small{display:block;font-weight:400;font-size:11.5px;color:rgba(35,38,43,.62)}
+@media(max-width:640px){.steps-done{flex-direction:column}.steps-done li{border-left:0;border-top:1.5px solid rgba(35,38,43,.35)}.steps-done li:first-child{border-top:0}}
+
+.pay-grid{display:grid;grid-template-columns:380px 1fr;gap:56px;margin-top:40px;align-items:start}
+@media(max-width:900px){.pay-grid{grid-template-columns:1fr;gap:44px}}
+
+/* QR tile */
+figure.pay-fig{margin:0}
+.tile{position:relative;border:1.5px solid var(--ink);background:var(--purple);padding:26px;box-shadow:6px 7px 0 rgba(35,38,43,.18);border-radius:3px}
+.tile svg{display:block;width:100%;height:auto}
+.amount{margin-top:22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.amount .a{font-family:var(--mono);font-weight:600;font-size:44px;line-height:1}
+.amount .chip{font-size:11px}
+figcaption{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.7);margin-top:12px}
+.pay-copy{margin-top:14px;font-size:14.5px;color:rgba(35,38,43,.85);max-width:38ch}
+
+/* receipt */
+.receipt-col{position:relative}
+.receipt{position:relative;z-index:2;background:var(--panel);border:1.5px solid var(--ink);border-bottom:0;max-width:440px;padding:28px 22px 8px;box-shadow:5px 6px 0 rgba(35,38,43,.14)}
+.receipt::before{content:"";position:absolute;left:12px;right:12px;top:12px;border-top:1.5px dashed rgba(35,38,43,.45)}
+.receipt::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-11px;height:11px;
+  background:conic-gradient(from 135deg at 50% 0,var(--panel) 90deg,transparent 0) 0 0/18px 11px repeat-x}
+.r-head{text-align:center;margin-top:10px}
+.r-head b{font-family:var(--disp);font-weight:700;font-size:19px}
+.r-head small{display:block;font-family:var(--mono);font-size:11px;color:rgba(35,38,43,.7);margin-top:2px}
+.r-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-top:14px;color:rgba(35,38,43,.85)}
+.r-rows{margin-top:12px;border-top:1.5px solid rgba(35,38,43,.5);padding-top:12px;display:grid;gap:9px}
+.r-row{display:flex;align-items:baseline;font-size:13.5px}
+.r-row .dots{flex:1;border-bottom:1.5px dotted rgba(35,38,43,.45);margin:0 7px;transform:translateY(-4px)}
+.r-row .mono{font-size:13px;font-weight:500}
+.r-note{font-family:var(--mono);font-size:11.5px;color:rgba(35,38,43,.72)}
+.r-state{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-weight:600;font-size:12.5px}
+.r-state svg{flex:none}
+.r-split{border-top:1.5px solid rgba(35,38,43,.5);margin-top:8px;padding-top:10px;display:grid;gap:6px}
+.ins-label{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;margin:16px 0 0;color:rgba(35,38,43,.8)}
+.ins-label i{width:10px;height:10px;background:var(--brass);border:1.5px solid var(--ink);flex:none}
+.ins-label span{color:rgba(35,38,43,.55)}
+.fader-bank{position:relative;z-index:3;display:block;width:114%;margin:8px -12% 2px -2%}
+.r-foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;padding:12px 0 18px;border-top:1.5px dashed rgba(35,38,43,.45);margin-top:12px}
+.stamp{position:absolute;top:-26px;right:-18px;z-index:4;width:112px;height:112px;color:var(--green);transform:rotate(1.2deg);mix-blend-mode:multiply;opacity:.95;pointer-events:none}
+.stamp text{font-family:var(--mono);font-weight:600;letter-spacing:.2em;font-size:12.5px}
+
+/* dark anchor band */
+.anchor{background:var(--plum);color:var(--cream);border:1.5px solid var(--ink);box-shadow:5px 6px 0 rgba(35,38,43,.14);border-radius:3px;margin-top:44px;padding:26px 28px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+.anchor h2{font-family:var(--disp);font-weight:600;font-size:19px;color:var(--cream)}
+.anchor p{font-size:13.5px;color:rgba(246,244,239,.75);margin-top:6px;max-width:56ch}
+.tx{font-family:var(--mono);font-size:12.5px;color:rgba(246,244,239,.9);word-break:break-all;margin-top:12px}
+.anchor-facts{display:grid;gap:12px}
+.fact{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(246,244,239,.22);padding-bottom:10px}
+.fact .k{font-size:12.5px;color:rgba(246,244,239,.65)}
+.fact .v{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--brass)}
+.fact .v.green{color:#7BC896}
+.fact .v.cream{color:var(--cream)}
+@media(max-width:760px){.anchor{grid-template-columns:1fr}}
+
+.next-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:30px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปที่เนื้อหา</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="landing.html" aria-label="PlayRight home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="6" fill="#A87B2D" stroke="#23262B" stroke-width="1.5"/><rect x="3" y="14" width="16" height="6" fill="#F6F4EF" stroke="#23262B" stroke-width="1.5"/></svg>
+      <b>PlayRight</b>
+    </a>
+    <nav class="site-nav" aria-label="Pages">
+      <a href="landing.html">Pitch</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="play.html" aria-current="page">Play</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <span class="demo-chip"><i aria-hidden="true"></i>Demo on BSC Testnet</span>
+  </div>
+</header>
+
+<main id="main" class="ruled">
+  <div class="wrap">
+    <h1>สั่งเพลงสำเร็จ — ชำระเงินแล้ว</h1>
+    <p class="sub-en" lang="en">Paid and settled — the receipt below is already on-chain.</p>
+
+    <ol class="steps-done">
+      <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" fill="#1E7B4F"/><path d="M4.6 7.8l1.9 1.9 3.7-4" fill="none" stroke="#FCFBF7" stroke-width="1.7"/></svg><span>สแกน<small lang="en">scan</small></span></li>
+      <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" fill="#1E7B4F"/><path d="M4.6 7.8l1.9 1.9 3.7-4" fill="none" stroke="#FCFBF7" stroke-width="1.7"/></svg><span>ชำระเงิน<small lang="en">pay ≤ ฿30</small></span></li>
+      <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" fill="#1E7B4F"/><path d="M4.6 7.8l1.9 1.9 3.7-4" fill="none" stroke="#FCFBF7" stroke-width="1.7"/></svg><span>ตรวจลายเสียง<small lang="en">fingerprint 98.2%</small></span></li>
+      <li><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6.5" fill="#1E7B4F"/><path d="M4.6 7.8l1.9 1.9 3.7-4" fill="none" stroke="#FCFBF7" stroke-width="1.7"/></svg><span>ตั้งบนเชนแล้ว<small lang="en">settled on-chain</small></span></li>
+    </ol>
+
+    <div class="pay-grid">
+      <!-- purple PromptPay tile -->
+      <figure class="pay-fig">
+        <div class="tile">
+          <svg id="qr" viewBox="0 0 29 29" role="img" aria-label="คิวอาร์สำหรับสาธิต ไม่สามารถสแกนได้จริง (non-scannable demo QR)"></svg>
+        </div>
+        <div class="amount">
+          <span class="a">฿30.00</span>
+          <span class="chip">Mock THB — demo token</span>
+        </div>
+        <figcaption>non-scannable demo QR — PromptPay (mock)</figcaption>
+        <p class="pay-copy" lang="th">จ่ายผ่าน PromptPay ฉบับสาธิต เงินเข้าระบบชำระบัญชี mTHB แล้วแบ่งทันทีตามสัดส่วน 70/10/20</p>
+      </figure>
+
+      <!-- settlement receipt -->
+      <div class="receipt-col">
+        <div class="receipt">
+          <div class="r-head"><b>PlayRight</b><small>play slip — settlement copy — Bangkok demo</small></div>
+          <div class="r-meta"><span>slip no. 004817</span><span>table 12 — 21:42</span></div>
+          <div class="r-rows">
+            <div class="r-row"><span>1× live play — <span lang="th">ฝนตกที่เชียงใหม่</span> (วงใบไม้)</span><span class="dots" aria-hidden="true"></span><span class="mono">฿30.00</span></div>
+            <p class="r-note">fingerprint match 98.2% — setlist 12/12</p>
+            <div class="r-row"><span>paid via PromptPay (mock)</span><span class="dots" aria-hidden="true"></span><span class="r-state"><svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 6.8l1.7 1.7 3.2-3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>settled</span></div>
+          </div>
+          <p class="ins-label"><i aria-hidden="true"></i>split fader bank <span>— share of this play, mTHB</span></p>
+          <svg class="fader-bank" viewBox="0 0 300 192" role="img" aria-label="แบ่งเงิน: ค่ายเพลง 70 เปอร์เซ็นต์ ร้าน 10 เปอร์เซ็นต์ แพลตฟอร์ม 20 เปอร์เซ็นต์">
+            <g stroke="#23262B" stroke-width="1.5" opacity=".75">
+              <path d="M22 154h6M22 127.6h6M22 101.2h6M22 74.8h6M22 48.4h6M22 22h6"/>
+              <path d="M122 154h6M122 127.6h6M122 101.2h6M122 74.8h6M122 48.4h6M122 22h6"/>
+              <path d="M222 154h6M222 127.6h6M222 101.2h6M222 74.8h6M222 48.4h6M222 22h6"/>
+            </g>
+            <g fill="#FCFBF7" stroke="#23262B" stroke-width="2">
+              <rect x="34" y="22" width="12" height="132" rx="2"/>
+              <rect x="134" y="22" width="12" height="132" rx="2"/>
+              <rect x="234" y="22" width="12" height="132" rx="2"/>
+            </g>
+            <g fill="#A87B2D" stroke="#23262B" stroke-width="2">
+              <rect x="23" y="52.6" width="34" height="18" rx="3"/>
+              <rect x="123" y="131.8" width="34" height="18" rx="3"/>
+              <rect x="223" y="118.6" width="34" height="18" rx="3"/>
+            </g>
+            <g fill="#F6F4EF">
+              <rect x="30" y="60.1" width="20" height="3"/>
+              <rect x="130" y="139.3" width="20" height="3"/>
+              <rect x="230" y="126.1" width="20" height="3"/>
+            </g>
+            <g font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" fill="#23262B">
+              <text x="56" y="66">70</text><text x="156" y="145.3">10</text><text x="256" y="132.1">20</text>
+            </g>
+            <g font-family="IBM Plex Mono,monospace" font-size="11" fill="#23262B" text-anchor="middle">
+              <text x="40" y="182">label</text><text x="140" y="182">venue</text><text x="240" y="182">platform</text>
+            </g>
+          </svg>
+          <div class="r-split">
+            <div class="r-row"><span>label — 70%</span><span class="dots" aria-hidden="true"></span><span class="mono">21.00 mTHB</span></div>
+            <div class="r-row"><span>venue — 10%</span><span class="dots" aria-hidden="true"></span><span class="mono">3.00 mTHB</span></div>
+            <div class="r-row"><span>platform — 20%</span><span class="dots" aria-hidden="true"></span><span class="mono">6.00 mTHB</span></div>
+          </div>
+          <div class="r-foot"><span>anchor: BSC testnet 97</span><span>e2e 1.5s</span></div>
+        </div>
+        <div class="stamp" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/>
+            <circle cx="60" cy="60" r="41" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path id="arcP" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
+            <text><textPath href="#arcP" startOffset="50%" text-anchor="middle">SETTLED</textPath></text>
+            <g transform="rotate(180 60 60)"><text><textPath href="#arcP" startOffset="50%" text-anchor="middle">ON-CHAIN 97</textPath></text></g>
+            <rect x="53" y="53" width="14" height="14" transform="rotate(45 60 60)" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- dark plum anchor band -->
+    <div class="anchor">
+      <div>
+        <h2>ใบเสร็จถูกผูกลงเชนแล้ว</h2>
+        <p lang="en">The receipt is anchored on BSC Testnet (chain 97). Split and anchor happen in the same flow — end to end in 1.5 seconds, target ≤30s.</p>
+        <p class="tx">anchor tx <span style="color:rgba(246,244,239,.6)">(demo tx)</span> 0x8f3e91c2a4b7d6502e11c8f34a9b5d07c6e21f88430ab9d5c7e2f1a94b0a3912</p>
+      </div>
+      <div class="anchor-facts">
+        <div class="fact"><span class="k">chain</span><span class="v cream">BSC testnet 97</span></div>
+        <div class="fact"><span class="k">e2e</span><span class="v">1.5s</span></div>
+        <div class="fact"><span class="k">status</span><span class="v green">settled ✓</span></div>
+        <div class="fact"><span class="k" lang="en">explorer</span><span class="v cream"><a href="https://testnet.bscscan.com" style="color:inherit">testnet.bscscan.com</a></span></div>
+      </div>
+    </div>
+
+    <div class="next-row">
+      <a class="btn" href="dashboard.html">ดูแดชบอร์ดของร้าน</a>
+      <a href="catalog.html">กลับไปเลือกเพลง</a>
+    </div>
+  </div>
+</main>
+
+<script>
+/* decorative demo QR: seeded pattern, never scannable */
+(function(){
+  var svg=document.getElementById('qr');
+  var NS='http://www.w3.org/2000/svg';
+  function rect(x,y,w,h,fill){var r=document.createElementNS(NS,'rect');r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);r.setAttribute('fill',fill);svg.appendChild(r);}
+  rect(0,0,29,29,'#5C2D91');
+  function finder(x,y){
+    rect(x,y,7,7,'#F6F4EF');rect(x+1,y+1,5,5,'#5C2D91');rect(x+2,y+2,3,3,'#F6F4EF');
+  }
+  finder(0,0);finder(22,0);finder(0,22);
+  /* timing rails */
+  for(var i=8;i<21;i+=2){rect(i,6,1,1,'#F6F4EF');rect(6,i,1,1,'#F6F4EF');}
+  /* seeded modules */
+  var s=97;function rnd(){s=(s*16807)%2147483647;return s/2147483647;}
+  for(var y=0;y<29;y++)for(var x=0;x<29;x++){
+    var inF=(x<8&&y<8)||(x>20&&y<8)||(x<8&&y>20);
+    var quiet=(x>=11&&x<=17&&y>=11&&y<=17);
+    if(inF||quiet)continue;
+    if(rnd()<.44)rect(x,y,1,1,'#F6F4EF');
+  }
+  rect(12,12,5,5,'#F6F4EF');
+  rect(13.5,13.5,2,2,'#5C2D91');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>แคตตาล็อกเพลง (Catalog, PlayRight demo)</title>
+<meta name="description" content="รายการเพลงที่สถานที่ขอเล่นได้ พร้อมสลิปแบ่งรายได้ 70/10/20 บน BSC Testnet (demo build)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F4EF; --plum:#221726; --ink:#23262B; --cream:#F6F4EF;
+  --slip-p:#FCFBF7; --slip-m:#2C1B30;
+  --purple:#5C2D91; --purple-m:#C4A0E8;
+  --brass-m:#D9A441; --brass-p:#A87B2D; --brass-deep:#8A6520;
+  --green-p:#1E7B4F; --green-m:#58B380;
+  --ln-p:rgba(35,38,43,.06); --ln-m:rgba(246,244,239,.05);
+  --dim-p:rgba(35,38,43,.72); --dim-m:rgba(246,244,239,.78);
+  --sh-p:5px 6px 0 rgba(35,38,43,.14);
+  --sh-m:5px 6px 0 rgba(0,0,0,.35);
+  --disp:'Kanit','Noto Sans Thai',system-ui,sans-serif;
+  --sans:'IBM Plex Sans','Noto Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16.5px/1.65 var(--sans)}
+h1,h2,h3{font-family:var(--disp);font-weight:600;line-height:1.2;margin:0}
+p{margin:.45em 0}
+a{color:var(--purple)}
+:focus-visible{outline:2.5px solid var(--purple);outline-offset:2px;border-radius:2px}
+.w-plum :focus-visible{outline-color:var(--brass-m)}
+.skip{position:absolute;left:-999px;top:10px;z-index:60;background:var(--purple);color:#fff;padding:.55em 1.1em;font-weight:600;border-radius:2px}
+.skip:focus{left:10px}
+.ruled-p{background-image:repeating-linear-gradient(180deg,transparent 0 30px,var(--ln-p) 30px 31px)}
+.ruled-m{background-image:repeating-linear-gradient(90deg,transparent 0 74px,var(--ln-m) 74px 75px)}
+.slip-p{background:var(--slip-p);border:1.5px solid var(--ink);border-radius:3px;box-shadow:var(--sh-p)}
+.slip-m{background:var(--slip-m);border:1.5px solid rgba(217,164,65,.42);border-radius:3px;box-shadow:var(--sh-m)}
+.chip{display:inline-block;font:500 .72rem/1.2 var(--mono);letter-spacing:.03em;padding:.4em .62em;border:1px solid currentColor;border-radius:2px;white-space:nowrap}
+.c-purple{color:var(--purple)} .c-brassd{color:var(--brass-deep)} .c-greenp{color:var(--green-p)}
+.c-pm{color:var(--purple-m)} .c-bm{color:var(--brass-m)} .c-gm{color:var(--green-m)}
+.btn{display:inline-block;background:var(--purple);color:#fff;font:600 1rem var(--sans);padding:.7em 1.4em;border:1.5px solid var(--ink);border-radius:3px;box-shadow:4px 5px 0 rgba(35,38,43,.18);text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 6px 0 rgba(35,38,43,.18)}
+.btn:active{transform:translate(2px,3px);box-shadow:2px 3px 0 rgba(35,38,43,.18)}
+.btn-sm{font-size:.82rem;padding:.45em .85em;white-space:nowrap}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px clamp(18px,4vw,44px);border-bottom:1.5px solid var(--ink)}
+.brand{font:700 1.32rem/1 var(--disp);color:inherit;text-decoration:none;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:9px}
+.bmark{width:15px;height:15px;background:var(--brass-p);clip-path:polygon(0 0,100% 50%,0 100%)}
+.topnav{margin-left:auto;display:flex;gap:clamp(12px,2vw,26px)}
+.topnav a{color:inherit;text-decoration:none;font-weight:500;font-size:.95rem;padding:.2em 0;border-bottom:2px solid transparent}
+.topnav a:hover,.topnav a[aria-current="page"]{border-bottom-color:var(--brass-p)}
+.dim{color:var(--dim-p)} .dimc{color:var(--dim-m)}
+.foil{color:var(--brass-m)}
+@supports (-webkit-background-clip:text){
+  .foil{background:linear-gradient(180deg,#EFCF83,#C08A33);-webkit-background-clip:text;background-clip:text;color:transparent}
+}
+/* page head */
+.catalog-head{padding:56px clamp(18px,5vw,56px) 24px}
+.catalog-head h1{font-size:clamp(1.9rem,4vw,2.7rem)}
+.catalog-head h1 .en{display:block;font:500 .55em var(--sans);letter-spacing:0;color:var(--dim-p);margin-top:8px}
+.cat-intro{max-width:62ch;color:var(--dim-p)}
+/* split: paper ledger + plum console band */
+.cat-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0;align-items:start;padding:0 0 90px}
+.table-wrap{position:relative;padding:32px 26px 18px;min-width:0}
+.price-chip{position:absolute;top:-14px;left:26px;background:var(--purple);color:#fff;border-color:var(--ink);box-shadow:3px 4px 0 rgba(35,38,43,.2);z-index:3}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+thead th{font:600 .74rem var(--mono);letter-spacing:.05em;text-align:left;padding:10px 12px;border-bottom:1.5px solid var(--ink)}
+tbody td{padding:12px;border-bottom:1px dotted rgba(35,38,43,.4);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+td.price,th.price{text-align:right}
+td.price{font-family:var(--mono);font-weight:600;white-space:nowrap}
+td.act{text-align:right;white-space:nowrap}
+.song-t b{font-weight:600;display:block}
+.song-t .gloss{display:block;font-size:.78rem;color:var(--dim-p)}
+.gen{font:500 .72rem var(--mono);color:var(--dim-p);border:1px solid rgba(35,38,43,.4);padding:.3em .5em;border-radius:2px;white-space:nowrap}
+.rownum{font-family:var(--mono);color:var(--dim-p)}
+.table-note{margin:14px 12px 0;font:400 .74rem var(--mono);color:var(--dim-p)}
+.console-side{background:var(--plum);border-left:1.5px solid rgba(217,164,65,.4);padding:30px 24px 44px;color:var(--cream);position:relative;min-width:0}
+.perk{padding:24px 22px;position:relative;margin-left:-62px;max-width:calc(100% + 62px);z-index:3}
+.perk .kick{font-size:.72rem;color:var(--dim-p);margin:0 0 4px}
+.perk h2{font-size:1.18rem;margin-bottom:4px}
+.perkn{font:600 1.05rem var(--mono);color:var(--brass-m);margin:8px 0}
+.perk p{font-size:.88rem;color:var(--dim-p);max-width:42ch}
+.perk .perk-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.src{margin-top:36px}
+.src h2,.settle h2{font-size:1.02rem;margin-bottom:10px}
+.seg{display:flex;border:1.5px solid rgba(246,244,239,.5);border-radius:3px;overflow:hidden}
+.segbtn{flex:1;background:transparent;color:var(--cream);font:500 .92rem var(--sans);padding:.6em .4em;border:none;cursor:pointer}
+.segbtn + .segbtn{border-left:1.5px solid rgba(246,244,239,.35)}
+.segbtn[aria-pressed="true"]{background:var(--purple-m);color:var(--plum);font-weight:600}
+.segbtn:hover{background:rgba(246,244,239,.08)}
+.segbtn[aria-pressed="true"]:hover{background:var(--purple-m)}
+.readout{margin-top:10px;font-size:.85rem;color:var(--dim-m)}
+.readout b{color:var(--cream)}
+.settle{margin-top:36px}
+.minibar{display:flex;align-items:center;gap:10px;margin:10px 0}
+.minibar .mlab{width:76px;font:500 .66rem var(--mono);letter-spacing:.1em;color:var(--dim-m)}
+.mtrack{flex:1;height:10px;border:1px solid rgba(246,244,239,.3);position:relative;background:repeating-linear-gradient(90deg,rgba(246,244,239,.08) 0 9px,transparent 9px 10px)}
+.mfill{position:absolute;inset:1px auto 1px 1px;width:var(--w);background:linear-gradient(90deg,#EFCF83,#C08A33)}
+.mval{width:32px;text-align:right;font:600 .85rem var(--mono);color:var(--brass-m)}
+.bondline{margin-top:36px;border-top:1px dashed rgba(246,244,239,.3);padding-top:18px;font:400 .76rem var(--mono);color:var(--dim-m);display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.bondline a{color:var(--purple-m)}
+/* toggle dims inactive rows; never color-only (dim + rownum strike label) */
+tr{transition:opacity .2s}
+#songs[data-src="dj"] tr[data-src="band"] td{opacity:.45}
+#songs[data-src="band"] tr[data-src="dj"] td{opacity:.45}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:1000px){
+  .cat-grid{grid-template-columns:1fr}
+  .console-side{border-left:none;border-top:1.5px solid rgba(217,164,65,.4)}
+  .perk{margin-left:0;max-width:none}
+}
+@media (max-width:620px){
+  .col-artist,.col-gen{display:none}
+  .table-wrap{padding:32px 14px 14px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหา</a>
+<header class="top">
+  <a class="brand" href="landing.html"><span class="bmark" aria-hidden="true"></span>PlayRight</a>
+  <span class="chip c-purple">Demo on BSC Testnet</span>
+  <nav class="topnav" aria-label="เมนูหลัก">
+    <a href="catalog.html" aria-current="page">แคตตาล็อก</a>
+    <a href="play.html">สลิก</a>
+    <a href="dashboard.html">คอนโซล</a>
+  </nav>
+</header>
+<main id="main">
+<section class="catalog-head ruled-p" aria-labelledby="pageh">
+  <h1 id="pageh" lang="th">เลือกเพลงที่จะเล่น<span class="en">Song catalog for the venue</span></h1>
+  <p class="cat-intro" lang="th">แต่ละเพลงคือหนึ่งคำขอจ่ายผ่าน Mock THB (demo) เมื่อระบบยืนยันว่าเพลงเล่นจริง รายได้ถูกแบ่ง 70/10/20 และบันทึกสลิกลง BSC Testnet ทันที</p>
+</section>
+
+<section class="cat-grid" aria-label="รายการเพลงและคอนโซลของสถานที่">
+  <div class="table-wrap slip-p ruled-p">
+    <p class="chip price-chip">THE HUMMING BAR, TONIGHT</p>
+    <table id="songs" data-src="band">
+      <thead>
+        <tr>
+          <th scope="col" class="col-num">#</th>
+          <th scope="col">เพลง</th>
+          <th scope="col" class="col-artist">ศิลปิน</th>
+          <th scope="col" class="col-gen">รูปแบบ</th>
+          <th scope="col" class="price">ราคา</th>
+          <th scope="col" class="act"><span class="sr-only" style="position:absolute;left:-9999px">การดำเนินการ</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-src="band">
+          <td class="rownum">01</td>
+          <td class="song-t"><b lang="th">ฝนตกที่สีลม</b><span class="gloss">Rain over Silom</span></td>
+          <td class="col-artist" lang="th">วงดินแดง</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿30.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="dj">
+          <td class="rownum">02</td>
+          <td class="song-t"><b lang="th">ฟ้าร้องเมืองเก่า</b><span class="gloss">Thunder over the old town</span></td>
+          <td class="col-artist" lang="th">DJ ปราย</td>
+          <td class="col-gen"><span class="gen">DJ set</span></td>
+          <td class="price">฿20.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="band">
+          <td class="rownum">03</td>
+          <td class="song-t"><b lang="th">รำวงยามดึก</b><span class="gloss">Late-night ramwong</span></td>
+          <td class="col-artist" lang="th">วงดินแดง</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿25.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="dj">
+          <td class="rownum">04</td>
+          <td class="song-t"><b lang="th">แสงนีออนชลบุรี</b><span class="gloss">Neon Chonburi</span></td>
+          <td class="col-artist" lang="th">DJ ปราย</td>
+          <td class="col-gen"><span class="gen">DJ set</span></td>
+          <td class="price">฿20.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="band">
+          <td class="rownum">05</td>
+          <td class="song-t"><b lang="th">เสียงแซ็กโซโฟนย่านราชดำเนิน</b><span class="gloss">Saxophone at Ratchadamnoen</span></td>
+          <td class="col-artist" lang="th">สี่เต่าเรสเซอร์</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿50.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="band">
+          <td class="rownum">06</td>
+          <td class="song-t"><b lang="th">ลมหนาวทุ่งหลวง</b><span class="gloss">Cold wind over the plain</span></td>
+          <td class="col-artist" lang="th">วงดินแดง</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿30.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="dj">
+          <td class="rownum">07</td>
+          <td class="song-t"><b lang="th">คลื่นเทเลทับทะเลอันดามัน</b><span class="gloss">Telewave over the Andaman</span></td>
+          <td class="col-artist" lang="th">DJ ปราย</td>
+          <td class="col-gen"><span class="gen">DJ set</span></td>
+          <td class="price">฿20.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="band">
+          <td class="rownum">08</td>
+          <td class="song-t"><b lang="th">เพลงหมอลำซิ่งอีสานบ้านเรา</b><span class="gloss">Molam from our Isaan home</span></td>
+          <td class="col-artist" lang="th">สี่เต่าเรสเซอร์</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿40.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="dj">
+          <td class="rownum">09</td>
+          <td class="song-t"><b lang="th">ดาวเทียมเหนือกรุงเทพฯ</b><span class="gloss">Satellite over Bangkok</span></td>
+          <td class="col-artist" lang="th">DJ ปราย</td>
+          <td class="col-gen"><span class="gen">DJ set</span></td>
+          <td class="price">฿20.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+        <tr data-src="band">
+          <td class="rownum">10</td>
+          <td class="song-t"><b lang="th">เพลงปิดวันที่ยังไม่มีชื่อ</b><span class="gloss">The closing song without a name</span></td>
+          <td class="col-artist" lang="th">วงดินแดง</td>
+          <td class="col-gen"><span class="gen">live band</span></td>
+          <td class="price">฿45.00</td>
+          <td class="act"><a class="btn btn-sm" href="play.html">ขอเพลง</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-note">ข้อมูลเพลงและราคาเป็นตัวอย่างสำหรับเดโม ราคาจริงอยู่ระหว่าง ฿20 ถึง ฿50 ต่อคำขอ</p>
+  </div>
+
+  <aside class="console-side ruled-m" aria-label="คอนโซลของสถานที่">
+    <div class="perk slip-p">
+      <p class="kick">FAN PERK (OPENFOUR CURVE)</p>
+      <h2 lang="th">คิวล่วงหน้าสำหรับผู้ถือ $PLAY</h2>
+      <p class="perkn">$PLAY 0x23c5…6AF8</p>
+      <p lang="th">แฟนเพลงที่ถือ $PLAY ตั้งแต่ 500 ล้านโทเค็นขึ้นไป จะได้คิวขอเพลงล่วงหน้า โทเค็นวิ่งบน OpenFour bonding curve ของ BSC Testnet</p>
+      <div class="perk-tags">
+        <span class="chip c-purple">demo token</span>
+        <span class="chip c-brassd">testnet</span>
+      </div>
+    </div>
+
+    <div class="src">
+      <h2 id="srclab" lang="th">รูปแบบการเล่นของคืนนี้</h2>
+      <div class="seg" role="group" aria-labelledby="srclab">
+        <button type="button" class="segbtn" id="btn-band" aria-pressed="true" lang="th">วงสด</button>
+        <button type="button" class="segbtn" id="btn-dj" aria-pressed="false" lang="th">ชุด DJ</button>
+      </div>
+      <p class="readout" id="src-out" aria-live="polite" lang="th">รายการเล่นได้: <b>วงสด</b> (6 เพลง) เพลงชุด DJ จะถูกจางไว้</p>
+    </div>
+
+    <div class="settle" aria-label="สัดส่วนการแบ่งรายได้">
+      <h2>SPLIT PER PLAY</h2>
+      <div class="minibar"><span class="mlab">LABEL</span><span class="mtrack"><span class="mfill" style="--w:70%"></span></span><b class="mval">70</b></div>
+      <div class="minibar"><span class="mlab">VENUE</span><span class="mtrack"><span class="mfill" style="--w:10%"></span></span><b class="mval">10</b></div>
+      <div class="minibar"><span class="mlab">PLATFORM</span><span class="mtrack"><span class="mfill" style="--w:20%"></span></span><b class="mval">20</b></div>
+    </div>
+
+    <div class="bondline">
+      <span class="chip c-gm">bond staked 1,200 mTHB</span>
+      <span>VenueStake <a href="https://testnet.bscscan.com/address/0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc" title="0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc">0x9b7c…4EeBc</a> (demo)</span>
+    </div>
+  </aside>
+</section>
+</main>
+<script>
+(function(){
+  var table = document.getElementById('songs');
+  var out = document.getElementById('src-out');
+  var btnBand = document.getElementById('btn-band');
+  var btnDj = document.getElementById('btn-dj');
+  function setSrc(src){
+    table.setAttribute('data-src', src);
+    var isBand = src === 'band';
+    btnBand.setAttribute('aria-pressed', isBand ? 'true' : 'false');
+    btnDj.setAttribute('aria-pressed', isBand ? 'false' : 'true');
+    out.innerHTML = isBand
+      ? 'รายการเล่นได้: <b>วงสด</b> (6 เพลง) เพลงชุด DJ จะถูกจางไว้'
+      : 'รายการเล่นได้: <b>ชุด DJ</b> (4 เพลง) เพลงวงสดจะถูกจางไว้';
+  }
+  btnBand.addEventListener('click', function(){ setSrc('band'); });
+  btnDj.addEventListener('click', function(){ setSrc('dj'); });
+})();
+</script>
+</body>
+</html>
