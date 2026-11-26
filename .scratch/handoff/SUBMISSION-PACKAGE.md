@@ -10,6 +10,10 @@ Deadline: **submissions close 09:00 Nov 27**, Demo Night 15:00 (Park Hyatt Bangk
 > 📋 **"Deployment Details" field → ready-to-paste addresses:**  
 > **[`DEPLOYMENT-DETAILS.md`](DEPLOYMENT-DETAILS.md)** — MockTHB, VenueStake, $PLAY, OpenFour  
 > Registry/Core/Tools, deploy txs, BscScan links. All verified on-chain (chain 97).
+>
+> 🖼️ **Images to upload (4, all 1920×1080):** `video/v2/submission/`  
+> `shot-01-thumbnail.png` · `shot-02-onepager.png` · `shot-03-pay-qr.png` · `shot-04-dashboard.png`  
+> Thumbnails + one-pager are designed plates; the two screenshots are **live captures** of the demo.
 
 ---
 
