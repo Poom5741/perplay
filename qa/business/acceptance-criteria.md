@@ -1,6 +1,6 @@
 # PerPlay QA Business Acceptance Criteria
 
-Owner: 观澜 (business analysis) · Task #4 · 2026-11-25
+Owner: Orion (business analysis) · Task #4 · 2026-11-25
 
 This document translates the business commitments recorded in `validation/PR-FAQ.md`,
 `validation/HYPOTHESIS-SCORECARD.md`, `validation/VALIDATION-PLAN.md` (E1 kill-criteria)
@@ -68,12 +68,12 @@ Criteria that depend on real field data (Wizard-of-Oz, E4) are out of scope and 
   with fixtures; skipped-with-reason if no trial API key — record why, per Task #2
   baseline convention), **e2e** (setlist registration → performance → authorization).
 
-### AC-5 · Receipt on-chain: every play yields a viewable Base testnet transaction (PR-FAQ Q3 "receipt บน blockchain — เห็นทุกครั้ง ทุกบาท"; POC-SPEC artifact list)
+### AC-5 · Receipt on-chain: every play yields a viewable BSC Testnet transaction (PR-FAQ Q3 "receipt บน blockchain — เห็นทุกครั้ง ทุกบาท"; POC-SPEC artifact list)
 
 - **AC-5.1** Every confirmed play produces exactly one receipt whose
-  `hash(play_event)` is anchored on Base testnet and returns a clickable, publicly
-  viewable tx link. Pass: 10/10 sampled plays yield tx links that resolve on
-  basescan.org (testnet). Fail on any missing or unresolvable link.
+  `hash(play_event)` is anchored on BSC Testnet (chainId 97) and returns a
+  clickable, publicly viewable tx link. Pass: 10/10 sampled plays yield tx links
+  that resolve on testnet.bscscan.com. Fail on any missing or unresolvable link.
 - **AC-5.2** The receipt tx content must correspond to the play (same song ID and play
   event ID as shown in the UI). Fail on mismatch.
 

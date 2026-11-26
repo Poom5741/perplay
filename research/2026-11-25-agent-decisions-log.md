@@ -27,6 +27,12 @@ Biggest gap = Integration (receipts were Base-only).
 
 ## D3 · Dual-anchor receipts: Base Sepolia + opBNB Testnet
 
+> **SUPERSEDED (2026-11-26, hackathon demo-scope lock, issue #33 Q1):** BNB Hack
+> Bangkok requires the build on BNB Chain; receipts now anchor to **BSC Testnet
+> (chainId 97) only**. Base is retired from the demoed flow and opBNB is skipped.
+> `poc/lib/chain.mjs` keeps the multi-chain array shape, so re-adding a chain is a
+> one-entry change. Rationale below preserved for the record.
+
 Decision: anchor the canonical play event to BOTH chains in one flow
 (`poc/lib/chain.mjs`), not switch or roadmap-only. Rationale: proves the receipt
 format is chain-agnostic, converts the Integration weakness into the strongest
@@ -52,7 +58,7 @@ Cut from the critical path tonight (user decision).
 
 ## Open items
 
-1. Fund the anchor wallet on opBNB testnet (faucet) + redeploy `poc/` server.
-2. Run `npm run e2e` after redeploy to verify dual anchors in the receipt UI.
+1. Fund the three demo wallets on **BSC Testnet** (faucet: testnet.bnbchain.org/faucet-story): platform/deploy `0x91754d955D7E2174200Cd2521fc3C953Cb483A03`, demo venue `0x270DF8383cf9771b5d65A101C0610f54A7e84ce8`, fan `0x37A35aDD13DE8F0c95E462d5772A865aff78900b`.
+2. Run `npm run e2e` after funding to verify the anchor on BscScan testnet.
 3. Top up LivingBrain (livingbrain.com/workspace?section=billing) for live recall.
 4. Rehearse English pitch twice before Demo Night (Nov 27, 15:00–18:00, Park Hyatt).

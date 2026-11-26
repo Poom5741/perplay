@@ -9,7 +9,7 @@
 
 | Asset | Path | Type | Command |
 |---|---|---|---|
-| E2E test script | `poc/scripts/e2e.mjs` | e2e (API-level, spawns real server + real Base Sepolia tx) | `npm run e2e` (in `poc/`) |
+| E2E test script | `poc/scripts/e2e.mjs` | e2e (API-level, spawns real server + real BSC Testnet tx) | `npm run e2e` (in `poc/`) |
 | Server under test | `poc/server.mjs` | — | `npm start` (port 3000) |
 | a2awire birth script | `poc/scripts/a2awire.mjs` | not a test; identity registration + golden-vector self-check, requires `.env` with `PRIVATE_KEY` | `node scripts/a2awire.mjs` |
 
@@ -51,9 +51,9 @@ Dependencies installed for the run: `cd poc && npm install` → 42 packages, exi
 **Root cause of all 6 failures (one cause):** no `poc/.env` → `PRIVATE_KEY` missing → `poc/lib/chain.mjs:16-17` returns `{ configured: false, reason: 'PRIVATE_KEY missing — anchoring disabled (run npm run wallet)' }`. Checks 2, 3, 9, 10, 12, 19 all depend on on-chain anchoring.
 
 **Environment needed to make these pass:**
-1. `poc/.env` with `PRIVATE_KEY=<funded Base Sepolia key>` (run `npm run wallet` to generate; faucet via a2awire or any Sepolia faucet).
-2. RPC: defaults to `https://sepolia.base.org` (`BASE_RPC_URL` env to override).
-3. Internet access to Base Sepolia.
+1. `poc/.env` with `PRIVATE_KEY=<funded BSC Testnet key>` (run `npm run wallet` to generate all three demo wallets; faucet: https://testnet.bnbchain.org/faucet-story).
+2. RPC: defaults to `https://bsc-testnet.publicnode.com` (`BSC_RPC_URL` env to override).
+3. Internet access to BSC Testnet.
 
 Everything else (server, catalog, PromptPay CRC, verify, ledger) passes **without** chain config.
 

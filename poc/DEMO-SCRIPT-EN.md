@@ -16,7 +16,7 @@
 ## Minute 2–3 · Venue screen + on-chain proof
 
 4. Screen switches to **"Now playing: … — licensed ✅"** — "this is the backstage screen a venue can show anyone."
-5. Point at the **receipt on-chain** links → tap → real transactions on **Base Sepolia and opBNB Testnet** (input data = the canonical play event) — "every play leaves immutable proof, on two chains."
+5. Point at the **receipt on-chain** links → tap → a real transaction on **BSC Testnet (chainId 97)** (input data = the canonical play event) — "every play leaves immutable proof, on the hackathon's home chain."
 6. Point at **end-to-end: X.Xs** — "the whole flow, request to on-chain proof, in 1–3 seconds; target ≤30."
 
 ## Minute 3–4 · Splits + two verify modes

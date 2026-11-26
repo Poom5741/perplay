@@ -43,13 +43,13 @@ Everything else (server, catalog 100 songs, 70/10/20 splits, PromptPay CRC, setl
    ```
    PRIVATE_KEY=0x<64-hex private key>
    ```
-2. The key's account must hold **Base Sepolia ETH** (faucet: `https://faucet.base.org` or the Coinbase faucet). A zero-balance wallet makes `wallet funded` fail and anchoring stall until `anchorError`.
-3. Optional: `BASE_RPC_URL` (defaults to `https://sepolia.base.org`).
+2. The key's account must hold **BSC Testnet BNB** (faucet: `https://testnet.bnbchain.org/faucet-story`). A zero-balance wallet makes `wallet funded` fail and anchoring stall until `anchorError`.
+3. Optional: `BSC_RPC_URL` (defaults to `https://bsc-testnet.publicnode.com`).
 4. **⛔ Needs Human decision:** a funded testnet private key must be provisioned by Poom — the team will not generate/handle key material. Until provided, chain-enabled expectations cannot be exercised and hypothesis #1 stays NOT PROVEN.
 
 ## Chain-ENABLED expectations (once `poc/.env` is in place)
 
-- 19/19 checks pass, `chain enabled: true`, `txs` holds two real Base Sepolia explorer URLs.
+- 19/19 checks pass, `chain enabled: true`, `txs` holds real BSC Testnet explorer URLs.
 - `mode e2e` reports real per-play seconds (`setlist`, `acr`); hypothesis #1 passes only if both ≤ 30s.
 - `suiteDurationSec` in the JSON reports total wall time (chain-disabled baseline: **3.7s**; chain-enabled adds two real tx waits, historically the dominant cost).
 

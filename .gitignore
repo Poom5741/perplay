@@ -3,3 +3,6 @@ node_modules/
 .env.*
 .a2awire-identity.json
 *.pem
+launchpad/node_modules/
+launchpad/.env
+.dsh-mattskillsdeck-cache/

@@ -1,4 +1,4 @@
-// a2awire birth — register agent identity (testnet) so the faucet drips Base Sepolia gas
+// a2awire birth — register agent identity (testnet); repointed to BSC Testnet (chain 97) after the 2026-11-26 chain migration (was Base Sepolia faucet era)
 // to the PlayRight PoC wallet. Key stays local; service never holds chain keys.
 import { privateKeyToAccount } from 'viem/accounts';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -7,7 +7,7 @@ const env = readFileSync('.env', 'utf8');
 const pk = env.match(/PRIVATE_KEY=(\S+)/)?.[1];
 const account = privateKeyToAccount(pk.startsWith('0x') ? pk : `0x${pk}`);
 
-const domain = { name: 'A2AWire', version: '1', chainId: 84532 };
+const domain = { name: 'A2AWire', version: '1', chainId: 97 };
 const types = { Birth: [
   { name: 'agentName', type: 'string' },
   { name: 'signer', type: 'address' },

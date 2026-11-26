@@ -1,26 +1,18 @@
-// Chain anchoring — hash(play_event) → data-only tx on MULTIPLE testnets
-// Primary: Base Sepolia · Second: opBNB Testnet (BNB Chain — hackathon Integration)
-// VERIFIED: tx shape identical for mainnets (~<$0.01/receipt) — switch via env
+// Chain anchoring — hash(play_event) → data-only tx on BNB Smart Chain Testnet
+// Primary: BSC Testnet (chainId 97) · hackathon Integration target (decision D3 superseded 2026-11-26)
+// VERIFIED: tx shape identical for mainnet (~<$0.01/receipt) — switch via env
 import { createPublicClient, createWalletClient, http, formatEther } from 'viem';
-import { baseSepolia, opBNBTestnet } from 'viem/chains';
+import { bscTestnet } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 
 const CHAINS = [
   {
-    id: 'base-sepolia',
-    label: 'Base Sepolia',
-    viemChain: baseSepolia,
-    rpc: process.env.BASE_RPC_URL || 'https://sepolia.base.org',
-    explorer: 'https://sepolia.basescan.org/tx/',
+    id: 'bsc-testnet',
+    label: 'BSC Testnet',
+    viemChain: bscTestnet,
+    rpc: process.env.BSC_RPC_URL || 'https://bsc-testnet.publicnode.com',
+    explorer: 'https://testnet.bscscan.com/tx/',
     primary: true,
-  },
-  {
-    id: 'opbnb-testnet',
-    label: 'opBNB Testnet',
-    viemChain: opBNBTestnet,
-    rpc: process.env.OPBNB_RPC_URL || 'https://opbnb-testnet-rpc.bnbchain.org',
-    explorer: 'https://testnet.opbnbscan.com/tx/',
-    primary: false,
   },
 ];
 
@@ -49,7 +41,7 @@ export async function chainStatus() {
       const bal = await cl.publicClient.getBalance({ address: cl.account.address });
       return {
         id: c.id, chain: c.label, primary: c.primary, explorer: c.explorer,
-        blockNumber: Number(block), balanceETH: formatEther(bal), funded: bal > 0n,
+        blockNumber: Number(block), balanceETH: formatEther(bal), funded: bal > 0n, // balanceETH = native token (BNB on BSC) — legacy field name kept for app.js
       };
     })
   );
@@ -100,7 +92,7 @@ export async function anchorReceipt(playEvent) {
     })
   );
 
-  const primary = anchors.find(a => a.ok && a.chainId === 'base-sepolia')
+  const primary = anchors.find(a => a.ok && a.chainId === 'bsc-testnet')
     || anchors.find(a => a.ok)
     || anchors[0];
   if (!primary.ok) throw new Error(primary.error || 'all chains failed');

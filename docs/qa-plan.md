@@ -24,7 +24,7 @@ Coverage: all `/api/*` routes of `server.mjs` (health / catalog / setlist / veri
 Acceptance criteria (draft): spawn the real server (reuse the spawn pattern from `e2e.mjs`) and hit every route, asserting status code + JSON schema; cover error paths (404 songId, verify against an unregistered setlist) → 4xx, never 500. Maps to issue #12.
 
 ### 2.3 E2E (full flow)
-Coverage: the existing `poc/scripts/e2e.mjs` flow (request→paid→verified→anchored, real Base Sepolia tx) plus the browser layer: `public/app.js` three-page flow (catalog → QR → status board). Includes headed mode + video recording (issue #13), CI hookup (issue #14), real-device ≤30s measurement (issue #23).
+Coverage: the existing `poc/scripts/e2e.mjs` flow (request→paid→verified→anchored, real BSC Testnet tx) plus the browser layer: `public/app.js` three-page flow (catalog → QR → status board). Includes headed mode + video recording (issue #13), CI hookup (issue #14), real-device ≤30s measurement (issue #23).
 Acceptance criteria (draft): headless `npm run e2e` fully green with per-play timing ≤30s printed; browser e2e (Playwright — new dependency needs Human approval) completes one full click-through and produces a video file; CI runs the headless version on every push.
 
 ### 2.4 Manual (browser, human)

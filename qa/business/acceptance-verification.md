@@ -1,6 +1,6 @@
 # Business Acceptance Verification — AC-1..AC-8 vs QA evidence
 
-Owner: 观澜 (business analysis) · Task #9 → **final-round update: Task #18** · 2026-11-25
+Owner: Orion (business analysis) · Task #9 → **final-round update: Task #18** · 2026-11-25
 Criteria under test: `qa/business/acceptance-criteria.md` (accepted, Task #4)
 
 > **FINAL-ROUND VERDICT for this QA round.** Supersedes the Task #9 interim report: every
@@ -15,12 +15,12 @@ Evidence base (all fresh, dated 2026-11-25):
 - **I** = `node --test poc/tests/integration/*.test.mjs` → **29 pass / 0 fail** (re-run by me:
   23 api incl. the D2 regression test, 2 data-guard tests from #16, 4 body-error tests from
   #19)
-- **M** = `qa/manual/runs/run-2026-11-25.md` — 知微's 13-case run (pre-fix) **plus the
+- **M** = `qa/manual/runs/run-2026-11-25.md` — Vega's 13-case run (pre-fix) **plus the
   post-fix re-run section**: TC-07 / TC-08-UI / TC-10 / TC-15 all **PASS** after the fixes
   (fresh screenshots in `qa/manual/runs/screenshots/rerun-*`)
 - **R** = live spot-check by me: server on :3000, API play → confirm → `#/screen` — `#receipt`
   renders (artist/label/request time + anchor-error branch with retry); D1 fix confirmed in a
-  real browser; 玄策 independently verified the same in Task #13
+  real browser; Atlas independently verified the same in Task #13
 - **E** = `tests/qa-baseline.md` §5 (post-D1/D2) and §6 (post-D4/D3): unit 34/34, integration
   29/29, e2e **13/19 chain-disabled** (all 6 failures need a funded `PRIVATE_KEY` in
   `poc/.env`; absent — verified again)
@@ -29,7 +29,7 @@ Evidence base (all fresh, dated 2026-11-25):
 
 Fix status recap (from accepted cards #13, #16, #19):
 - **D1 fixed**: time formatter `t` hoisted to module scope (`poc/public/app.js:16`);
-  receipt renders on `#/screen/:id` — browser-verified by 玄策 (#13), by 知微's re-run TC-07
+  receipt renders on `#/screen/:id` — browser-verified by Atlas (#13), by Vega's re-run TC-07
   (no ReferenceError in any poll tick), and by me (R).
 - **D2 fixed**: cross-song scan now rejected — `poc/server.mjs` scan handler returns **409**
   (`fingerprint mismatch: scan matches S001, play is for S003`), play stays unlicensed;
@@ -84,7 +84,7 @@ Fix status recap (from accepted cards #13, #16, #19):
 
 ### AC-5 · Receipt on-chain, viewable tx per play — **NOT-YET-TESTABLE (UI side PASS; chain side blocked on Human wallet)**
 - UI render: **PASS** — pre-fix D1 (empty `#receipt`) is fixed and verified three ways:
-  玄策's browser DOM assertion (#13), 知微's official re-run TC-07/TC-08-UI (receipt renders
+  Atlas's browser DOM assertion (#13), Vega's official re-run TC-07/TC-08-UI (receipt renders
   meta + timestamp + anchor warning with retry, zero ReferenceErrors; screenshot
   rerun-tc07-receipt.png), and my live spot-check (R). Tx-link branch correctly absent while
   chain is unconfigured.

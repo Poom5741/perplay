@@ -14,7 +14,7 @@ Pinned to Node 22 (`actions/setup-node` `node-version: '22'`) to match the versi
 
 ## CI-specific caveats
 
-- **No `poc/.env` in CI**: there is no funded `PRIVATE_KEY`, so the e2e suite runs in chain-disabled mode by design. The 6 chain-related failures are the *expected* result until someone provisions a funded Base Sepolia key (flagged to Human in `poc/scripts/e2e-runbook.md`). The e2e step therefore asserts the baseline (13/19) instead of demanding 19/19.
+- **No `poc/.env` in CI**: there is no funded `PRIVATE_KEY`, so the e2e suite runs in chain-disabled mode by design. The 6 chain-related failures are the *expected* result until someone provisions a funded BSC Testnet key (flagged to Human in `poc/scripts/e2e-runbook.md`). The e2e step therefore asserts the baseline (13/19) instead of demanding 19/19.
 - **Port collisions**: integration tests use port 3210, e2e uses 3001 — GitHub runners are single-job VMs, so no conflict.
 - **Data wipe**: `e2e.mjs` deletes `poc/data/` on every run; that is its documented behavior and harmless in CI.
 - **Judge from JSON, not exit code**: `e2e-report.mjs` exits 1 on the expected 13/19 (because `j.pass` is false), so the workflow treats the reporter log — not its exit code — as authoritative, per `poc/scripts/e2e-runbook.md`.

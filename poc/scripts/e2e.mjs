@@ -1,5 +1,5 @@
 // E2E test — proves POC-SPEC hypothesis #1: request→paid→verified→anchored ≤30s per play
-// Runs the REAL server + REAL Base Sepolia tx. Usage: npm run e2e
+// Runs the REAL server + REAL BSC Testnet tx. Usage: npm run e2e
 import { spawn } from 'node:child_process';
 import { readFileSync, rmSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -37,7 +37,7 @@ try {
   }
   if (!h) { console.error(serverOut.slice(-2000)); throw new Error('server never came up'); }
   ok('server up', true, `${h.songs} songs, ${h.fingerprints} fingerprints`);
-  ok('chain configured', h.chain.configured, `${h.chain.address} @ Base Sepolia block ${h.chain.blockNumber}`);
+  ok('chain configured', h.chain.configured, `${h.chain.address} @ BSC Testnet block ${h.chain.blockNumber}`);
   ok('wallet funded', h.chain.funded, `${h.chain.balanceETH} ETH`);
 
   // catalog: 100 songs with splits 70/10/20
@@ -64,7 +64,7 @@ try {
     if (aFinal.anchorError && aFinal.status === 'verified') break;
   }
   const aSecs = +((Date.now() - t0) / 1000).toFixed(1);
-  ok('A3 receipt anchored on Base Sepolia', aFinal.status === 'anchored', aFinal.explorerUrl);
+  ok('A3 receipt anchored on BSC Testnet', aFinal.status === 'anchored', aFinal.explorerUrl);
   ok('A4 hypothesis #1: end-to-end ≤30s', aSecs <= 30 && aFinal.e2eSeconds <= 30, `measured ${aFinal.e2eSeconds ?? aSecs}s (wall ${aSecs}s incl. poll)`);
 
   // ---- MODE B: audio-scan (DJ/ACR placeholder) ----

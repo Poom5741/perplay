@@ -1,6 +1,6 @@
 # Issue ↔ Board ↔ QA Card Sync Report
 
-Owner: 观澜 (business analysis) · Task #8 · 2026-11-25
+Owner: Orion (business analysis) · Task #8 · 2026-11-25
 
 ## 1. Board sync verification
 
