@@ -48,3 +48,10 @@ npm run e2e
 ## Hackathon
 
 Built for **BNB Hack: Bangkok** (Nov 25–27 2026). Receipts are anchored on **BSC Testnet (chainId 97)** — primary RPC `https://bsc-testnet.publicnode.com`, explorer `https://testnet.bscscan.com` (see `poc/lib/chain.mjs`). The token economy is documented in [`pitch/token-economy-one-pager.md`](pitch/token-economy-one-pager.md).
+
+## Live public demo
+
+Deployed on Cloudflare Workers (same code paths as `poc/server.mjs`): **https://perplay-demo.poom-a1d.workers.dev**
+
+- Same routes, same libs; state in a Durable Object (strongly consistent — KV's edge cache can serve stale receipt polls); static SPA via Assets binding; secrets via `wrangler secret put`.
+- Deploy: `npx wrangler deploy --config poc/wrangler.jsonc` (see `poc/wrangler.jsonc` header for secrets).

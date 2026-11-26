@@ -1,0 +1,30 @@
+{
+  // PerPlay venue demo — Cloudflare Workers deploy (same code paths as poc/server.mjs)
+  "name": "perplay-demo",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "VENUE_NAME": "ผับ Demo (Bangkok)",
+    "VENUE_STAKE_ADDRESS": "0x9b7c63DF46D8B01997BAE9Bac756d803Abd4EeBc",
+    "VENUE_WALLET_ADDRESS": "0x270DF8383cf9771b5d65A101C0610f54A7e84ce8",
+    "MTHB_ADDRESS": "0x31FE806363Bd0FCD22efa0C774D9706E9668b442",
+    "PLAY_TOKEN_ADDRESS": "0x23c5B20c74f1bC2c731D05451f5f2DA7a2CE6AF8",
+    "FAN_WALLET_ADDRESS": "0x37A35aDD13DE8F0c95E462d5772A865aff78900b",
+    "SETTLEMENT_ENABLED": "true",
+    "COURNOT_ENABLED": "true",
+    "PERK_THRESHOLD": "500000000"
+  },
+  // PRIVATE_KEY + PROMPTPAY_TARGET are wrangler secrets (never in git):
+  //   npx wrangler secret put PRIVATE_KEY --config poc/wrangler.jsonc
+  //   npx wrangler secret put PROMPTPAY_TARGET --config poc/wrangler.jsonc
+  "durable_objects": {
+    "bindings": [{ "name": "PLAY_DO", "class_name": "PlayDO" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["PlayDO"] }]
+}

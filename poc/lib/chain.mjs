@@ -79,11 +79,16 @@ export async function anchorReceipt(playEvent) {
   const anchors = await Promise.all(
     CHAINS.map(async (c) => {
       const cl = clients.get(c.id);
+      // legacy tx + one retry — publicnode intermittently rejects raw sends with
+      // "Missing or invalid parameters" (same treatment as settlement.mjs sends)
+      const send = () => cl.walletClient.sendTransaction({
+        to: cl.account.address, data, value: 0n,
+        gas: 40000n, type: 'legacy', // data-only tx to self
+      });
       try {
-        const hash = await cl.walletClient.sendTransaction({
-          to: cl.account.address, data, value: 0n,
-          gas: 40000n, // data-only tx to self
-        });
+        let hash;
+        try { hash = await send(); }
+        catch { await new Promise(r => setTimeout(r, 3000)); hash = await send(); }
         await cl.publicClient.waitForTransactionReceipt({ hash, timeout: 60_000 });
         return { chain: c.label, chainId: c.id, ok: true, txHash: hash, explorerUrl: `${c.explorer}${hash}` };
       } catch (e) {
