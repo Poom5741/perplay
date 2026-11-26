@@ -1,0 +1,16 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.28"
+optimizer = true
+optimizer_runs = 1000
+fs_permissions = [{ access = "read-write", path = "./" }]
+
+# BSC Testnet (chainId 97) — the demo chain (ADR-0001)
+# BSC_RPC_URL env overrides the endpoint when set
+[rpc_endpoints]
+bscTestnet = "${BSC_RPC_URL}"
+
+[fmt]
+line_length = 110
