@@ -17,14 +17,19 @@ const badge = s => `<span class="status s-${s}">${STATUS_EN[s] || s}</span>`;
 const t = ms => ms ? new Date(ms).toLocaleTimeString('en-US') : ''; // shared time formatter (was pageScreen-local → D1 ReferenceError in renderReceipt)
 
 // decorative ring stamp (rotated print object)
-const stampSVG = (top, bottom) => `<svg viewBox="0 0 120 120" aria-hidden="true">
+const stampSVG = (top, bottom) => {
+  const arcId = 'arc' + Math.random().toString(36).slice(2, 8);
+  return `<svg viewBox="0 0 120 120" aria-hidden="true">
   <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="3"/>
   <circle cx="60" cy="60" r="41" fill="none" stroke="currentColor" stroke-width="1.5"/>
-  <path id="arc${Math.random().toString(36).slice(2, 6)}" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
-  <text><textPath href="#arc${Math.random().toString(36).slice(2, 6)}" startOffset="50%" text-anchor="middle">${top}</textPath></text>
-  <g transform="rotate(180 60 60)"><text><textPath href="#arc${Math.random().toString(36).slice(2, 6)}" startOffset="50%" text-anchor="middle">${bottom}</textPath></text></g>
+  <path id="${arcId}" d="M60 60 m-48 0 a48 48 0 1 1 96 0" fill="none"/>
+  <text><textPath href="#${arcId}" startOffset="50%" text-anchor="middle">${top}</textPath></text>
+  <g transform="rotate(180 60 60)"><text><textPath href="#${arcId}" startOffset="50%" text-anchor="middle">${bottom}</textPath></text></g>
   <rect x="53" y="53" width="14" height="14" transform="rotate(45 60 60)" fill="currentColor"/>
-</svg>`;
+</svg>`; };
+
+// licensed-play split — fixed by design (one-pager: label 70 / venue 10 / platform 20)
+const SPLIT = { label: 0.7, venue: 0.1, platform: 0.2 };
 
 // brass fader bank: label 70 / venue 10 / platform 20
 const faderBankSVG = (l, v, p) => `<svg class="fader-bank" viewBox="0 0 300 192" role="img" aria-label="Split fader bank: label 70 percent, venue 10 percent, platform 20 percent">
@@ -227,9 +232,9 @@ async function pagePay(id) {
         <p class="ins-label"><i aria-hidden="true"></i>split fader bank <span>— share of this play, mTHB</span></p>
         ${faderBankSVG()}
         <div class="r-split">
-          <div class="r-row"><span>label — 70%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * 0.7)}</span></div>
-          <div class="r-row"><span>venue — 10%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * 0.1)}</span></div>
-          <div class="r-row"><span>platform — 20%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * 0.2)}</span></div>
+          <div class="r-row"><span>label — 70%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * SPLIT.label)}</span></div>
+          <div class="r-row"><span>venue — 10%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * SPLIT.venue)}</span></div>
+          <div class="r-row"><span>platform — 20%</span><span class="dots" aria-hidden="true"></span><span class="mono">${THB(play.amountTHB * SPLIT.platform)}</span></div>
         </div>
         <div class="r-foot"><span>anchor: BSC testnet 97</span><span>status: <span id="pstatus">${STATUS_EN[play.status] || play.status}</span></span></div>
       </div>
@@ -336,7 +341,6 @@ async function pageDashboard() {
   const { plays: recent } = await api('/plays/recent');
   const rows = recent;
   const partyRows = obj => Object.entries(obj).map(([k, v]) => `<tr><td lang="th">${k}</td><td class="num">${THB(v)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">no entries yet</td></tr>';
-  const pct = (v, tot) => `${((v / tot) * 100).toFixed(0)}%`;
   const hypo = L.hypothesis.e2eUnder30s === true ? '✓ every play ≤30s' : L.hypothesis.e2eUnder30s === null ? '' : `⚠ some plays over 30s (max ${L.maxE2ESeconds}s)`;
   app.innerHTML = `
   <div class="page-head">
@@ -373,16 +377,16 @@ async function pageDashboard() {
     <div class="band meters">
       <p class="p-head" style="color:rgba(246,244,239,.75)"><i aria-hidden="true"></i>settlement meters — cumulative, split 70/10/20</p>
       <div class="meter">
-        <div class="meter-head"><b>label — 70%</b><span class="v">${THB(L.totalTHB * 0.7)}</span></div>
+        <div class="meter-head"><b>label — 70%</b><span class="v">${THB(L.totalTHB * SPLIT.label)}</span></div>
         <div class="meter-track" role="img" aria-label="label receives 70 percent"><div class="meter-fill" style="width:70%"></div></div>
         <div class="m-scale" aria-hidden="true"><span>0</span><span>50</span><span>100%</span></div>
       </div>
       <div class="meter">
-        <div class="meter-head"><b>venue — 10%</b><span class="v">${THB(L.totalTHB * 0.1)}</span></div>
+        <div class="meter-head"><b>venue — 10%</b><span class="v">${THB(L.totalTHB * SPLIT.venue)}</span></div>
         <div class="meter-track" role="img" aria-label="venue receives 10 percent"><div class="meter-fill" style="width:10%"></div></div>
       </div>
       <div class="meter">
-        <div class="meter-head"><b>platform — 20%</b><span class="v">${THB(L.totalTHB * 0.2)}</span></div>
+        <div class="meter-head"><b>platform — 20%</b><span class="v">${THB(L.totalTHB * SPLIT.platform)}</span></div>
         <div class="meter-track" role="img" aria-label="platform receives 20 percent"><div class="meter-fill" style="width:20%"></div></div>
       </div>
       <p class="m-total"><b>${THB(L.totalTHB)}</b> <span>= every baht has a receipt anchored on-chain (chain 97)</span></p>

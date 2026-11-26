@@ -35,7 +35,7 @@ Thai venues pay blanket licenses (~48,000 THB/month for a typical venue) whether
 | **Rights holders** (labels, artists) | Nothing volatile — THB only | 70% of every verified play, with play-level proof | Revenue they can audit; zero crypto exposure |
 | **Venues** | A venue bond (mTHB in the demo; $PLAY post-hackathon) | 10% of plays at their venue; pay-for-what-plays instead of blanket fees | Fairer costs + fraud-proof licensing relationship |
 | **Customers** (fans) | THB to pay; $PLAY optional | A play that provably supports the artist; priority-queue perk if holding $PLAY | 1-tap, ≤1 THB, no wallet friction required |
-| **Platform** | A $PLAY stake | 20% protocol fee | Runs verification + settlement rails |
+| **Platform** | A protocol stake (mTHB in the demo; $PLAY post-hackathon) | 20% protocol fee | Runs verification + settlement rails |
 
 *(Demo implementation note: the venue bond contract `VenueStake` is deployed with mTHB as its collateral — settlement-denominated, so a slash is measured in the same unit royalties are paid in. Swapping the bond to $PLAY is a one-line constructor change after the hackathon.)*
 
@@ -53,5 +53,5 @@ Scan → pay mTHB → fingerprint verify → receipt + 70/10/20 split on **BSC t
 
 - **Traction:** TED Fund-supported PoC; founder-level discussions with a top Thai music label; live demo at BNB Hack: Bangkok (Nov 25–27, 2026).
 - **Market:** Thailand's venue music licensing first (~240M THB/month demand-side estimate); expansion path through SEA blanket-license markets.
-- **Business model:** 20% protocol fee on every settled play; $PLAY stake requirements create structural demand for the coordination asset.
+- **Business model:** 20% protocol fee on every settled play; bond requirements (mTHB demo, $PLAY post-hackathon) create structural demand for the coordination asset.
 - **Ask:** pre-seed — onboarding the first 50 venues *(placeholder — edit before pitching)*.

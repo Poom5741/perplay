@@ -153,16 +153,6 @@ td.num{font-family:var(--mono);font-weight:600;white-space:nowrap}
 .perk .pk-mono{font-family:var(--mono);font-size:12px;color:var(--brass);margin-top:8px}
 .perk.eligible{box-shadow:5px 6px 0 rgba(30,123,79,.5);border-color:var(--green)}
 .perk .unlock{display:inline-flex;align-items:center;gap:8px;border:1.5px solid #7BC896;color:#7BC896;font-weight:700;font-size:13px;padding:4px 13px;border-radius:2px}
-.anchor{margin-top:44px;padding:26px 28px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
-.anchor h2{font-family:var(--disp);font-weight:600;font-size:19px}
-.anchor .tx{font-family:var(--mono);font-size:12.5px;color:rgba(246,244,239,.9);word-break:break-all;margin-top:12px}
-.anchor-facts{display:grid;gap:12px}
-.fact{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(246,244,239,.22);padding-bottom:10px}
-.fact .k{font-size:12.5px;color:rgba(246,244,239,.65)}
-.fact .v{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--brass)}
-.fact .v.green{color:#7BC896}
-.fact .v.cream{color:var(--cream)}
-@media(max-width:760px){.anchor{grid-template-columns:1fr}}
 
 /* ---------- pay page ---------- */
 .steps-done{list-style:none;display:flex;flex-wrap:wrap;gap:0;margin-top:28px;border:1.5px solid var(--ink);border-radius:2px;background:var(--panel);box-shadow:3px 4px 0 rgba(35,38,43,.12);overflow:hidden}
@@ -239,11 +229,6 @@ figcaption{font-family:var(--mono);font-size:12px;color:rgba(35,38,43,.7);margin
 .rp .s b{font-weight:600}
 .rp .s small{display:block;font-size:12px;color:rgba(35,38,43,.6)}
 .rp .a{font-family:var(--mono);font-weight:600}
-.kpi-band{margin-top:34px;padding:22px 26px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.kpi-band .k{font-size:12px;font-family:var(--mono);color:rgba(246,244,239,.6)}
-.kpi-band .n{font-family:var(--mono);font-weight:600;font-size:24px;color:var(--cream);margin-top:2px}
-.kpi-band .n.money{color:#7BC896}
-@media(max-width:760px){.kpi-band{grid-template-columns:1fr 1fr}}
 
 /* ---------- screen (projection) ---------- */
 .screen{min-height:72vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}

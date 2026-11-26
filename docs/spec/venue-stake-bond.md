@@ -4,11 +4,11 @@ Resolved 2026-11-26 via wayfinder ticket [#32](https://github.com/Poom5741/perpl
 
 ## Purpose
 
-A venue posts a $PLAY stake to join the protocol. The stake is **collateral — insurance against fake plays** — and slashing is the penalty that gives the bond its teeth. The escrow contract is the demo's skin-in-the-game proof: funds are visibly locked on BscScan and move only through the contract's three exits.
+A venue posts an mTHB stake to join the protocol (demo bond in the settlement token; $PLAY becomes the default bond asset post-hackathon). The stake is **collateral — insurance against fake plays** — and slashing is the penalty that gives the bond its teeth. The escrow contract is the demo's skin-in-the-game proof: funds are visibly locked on BscScan and move only through the contract's three exits.
 
 ## Contract shape
 
-- **Token:** $PLAY (ERC-20, "PerPlay Protocol").
+- **Token:** mTHB (Mock THB demo ERC-20) tonight — settlement-denominated collateral; $PLAY ("PerPlay Protocol") takes over as the default bond asset post-hackathon.
 - **Contract:** `VenueStake` — one contract; `admin` is the platform EOA tonight, a multisig in production.
 - **Interface sketch (the Foundry build implements this shape; events carry additive fields — `StakeAdded` adds `total`, `StakeSlashed` adds `to` and `remaining`):**
 

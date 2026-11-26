@@ -27,3 +27,23 @@ Testnet", demo-token tags on mTHB and $PLAY, "slash authority: admin
 e2e 1.5 s. Bilingual Thai/English. AA text contrast, keyboard
 focus-visible, reduced-motion respected. Decorative QR blocks are
 labeled non-scannable.
+
+## Round 2 — B×C hybrids (Poom's pick: "mix of b and c, multiple layers, thoughtful color")
+
+Three hybrids shipped after round 1, layering the print world over the
+console world (L0 base → L1 faint ruling → L2 slip panels with hard
+letterpress shadows → L3 overlapping objects → L4 foil accents) with
+split color roles (purple = action only, brass = instruments, green =
+settled, warm signal = LIVE <1%):
+
+- `variant-d1/` — **Print desk**: paper world leads; console as printed
+  instruments (`shot-d1-landing.png`)
+- `variant-d2/` — **Console print**: plum console leads; receipt slip
+  pinned on (`shot-d2-landing.png`)
+- `variant-d3/` — **Split console**: 50/50 hemispheres, receipt tears
+  across the seam (`shot-d3-landing.png`)
+
+**Outcome: D1 selected** → ported to the live app as
+`poc/public/{index.html,app.js,style.css}` (English-only UI, `lang="th"`
+on data, all API routes intact, e2e 19/19). The static variant pages are
+exploration snapshots and are not kept in sync with the live app.
