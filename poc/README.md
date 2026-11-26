@@ -29,7 +29,7 @@
 
 ## ตัวเลขต้นทุน (มีที่มา)
 
-- ต่อ receipt: 40,000 gas × ~0.1 gwei (gasPrice จริงบน BSC Testnet วัด 26 Nov) ≈ **0.000004 BNB/tx** — ไม่ถึง 1 สตางค์ · mainnet BSC ~0.05 gwei → ~<$0.01/receipt (INFERENCE ตาม POC-SPEC)
+- ต่อ receipt: ใช้จริง **29,560 gas** (gas cap 40,000) × ~0.1 gwei (gasPrice จริงบน BSC Testnet วัด 26 Nov) ≈ **0.000003 BNB/tx** — ไม่ถึง 1 สตางค์ · mainnet BSC ~0.05 gwei → ~<$0.01/receipt (ยืนยันจาก receipt `0x931eb75c…`, block 144974404)
 - ACRCloud: ~$5/1,000 scans = ~0.17฿/จับ (VERIFIED — autovj.club / acrcloud.com free trial 14 วัน)
 
 ## รันเอง
