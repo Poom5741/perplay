@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PerPlay — one-pager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../plates/src/plates.css">
+<style>
+  html,body{width:1920px;height:1080px}
+  .plate .rule.top{top:108px} .plate .rule.bottom{top:1010px}
+  .rail{left:76px;right:76px}
+  .rail-top{top:40px;height:50px} .rail-bot{top:1020px;height:44px}
+
+  /* 2 columns x 2 rows */
+  .body{position:absolute;left:76px;right:76px;top:124px;bottom:78px;
+        display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;gap:22px 40px;overflow:hidden}
+
+  .col-a{grid-column:1;grid-row:1 / span 2;display:flex;flex-direction:column}
+  .col-b{grid-column:2;grid-row:1}
+  .col-c{grid-column:2;grid-row:2}
+
+  .shead{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-weight:600;
+         font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin-bottom:10px}
+  .shead::before{content:"";width:11px;height:11px;background:var(--brass);flex:none}
+  .shead .n{margin-left:auto;color:var(--dim);letter-spacing:.10em}
+
+  h1{font-size:56px;line-height:.92;letter-spacing:-.028em;margin:0 0 12px}
+  h1 .u{color:var(--purple)}
+
+  .lead{font-family:var(--sans);font-weight:400;font-size:22px;line-height:1.36;color:var(--dim);margin:0 0 14px}
+  .lead b{color:var(--txt);font-weight:600}
+
+  /* problem card */
+  .bill{border:1.5px solid var(--card-line);background:var(--card-bg);border-radius:3px;box-shadow:var(--shadow);padding:15px 20px;margin-bottom:12px}
+  .bill .t{font-family:var(--mono);font-weight:600;font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-deep);margin-bottom:10px}
+  .bill .amt{display:flex;align-items:baseline;gap:11px;margin-bottom:10px}
+  .bill .amt .n{font-family:var(--disp);font-weight:700;font-size:46px;line-height:1;color:var(--signal);letter-spacing:-.02em}
+  .bill .amt .u{font-family:var(--mono);font-weight:500;font-size:23px;color:var(--dim);letter-spacing:.05em}
+  .bill .row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:20px;padding:6px 0;border-top:1px dashed rgba(35,38,43,.16);color:var(--dim)}
+  .bill .row .v{color:var(--txt);font-weight:500}
+  .bill .row .v.none{color:var(--signal);font-weight:600}
+  .bill .foot{margin-top:10px;font-family:var(--sans);font-weight:500;font-size:21px;line-height:1.35;color:var(--txt)}
+
+  .vs{display:flex;align-items:center;gap:14px;margin:0 0 10px}
+  .vs .bar{flex:1;height:1.5px;background:rgba(35,38,43,.18)}
+  .vs .k{font-family:var(--mono);font-weight:600;font-size:20px;letter-spacing:.16em;color:var(--green);text-transform:uppercase}
+
+  .fix{border:1.5px solid var(--card-line);background:var(--card-bg);border-radius:3px;box-shadow:var(--shadow);padding:15px 20px}
+  .fix .amt{display:flex;align-items:baseline;gap:11px;margin-bottom:8px}
+  .fix .amt .n{font-family:var(--disp);font-weight:700;font-size:46px;line-height:1;color:var(--green);letter-spacing:-.02em}
+  .fix .amt .u{font-family:var(--mono);font-weight:500;font-size:23px;color:var(--dim);letter-spacing:.05em}
+  .fix .line{font-family:var(--sans);font-weight:500;font-size:21px;line-height:1.38;color:var(--txt)}
+  .fix .line em{font-style:normal;color:var(--dim)}
+
+  /* flow */
+  .flow{display:grid;gap:4px}
+  .fstep{display:grid;grid-template-columns:32px 1fr;gap:11px;align-items:start;padding:6px 0;border-bottom:1px dashed rgba(35,38,43,.16)}
+  .fstep:last-child{border-bottom:0}
+  .fstep .no{font-family:var(--mono);font-weight:600;font-size:21px;color:var(--purple);padding-top:2px}
+  .fstep .h{font-family:var(--sans);font-weight:600;font-size:22px;line-height:1.18;margin-bottom:1px}
+  .fstep .d{font-family:var(--mono);font-weight:400;font-size:18px;line-height:1.32;color:var(--dim)}
+  .fstep .d .ok{color:var(--green);font-weight:600}
+  .fstep .d .no{color:var(--signal);font-weight:600;color:var(--signal)}
+
+  /* proof */
+  .proof{display:grid;gap:0;margin-bottom:14px}
+  .prow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:6px 0;border-bottom:1px dashed rgba(35,38,43,.16)}
+  .prow:last-child{border-bottom:0}
+  .prow .k{font-family:var(--mono);font-weight:500;font-size:21px;color:var(--dim)}
+  .prow .v{font-family:var(--mono);font-weight:600;font-size:21px;color:var(--txt);text-align:right}
+  .prow .v.g{color:var(--green)}
+
+  .tracks{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+  .tr{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-weight:600;font-size:19px;
+      letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border:1.5px solid;border-radius:2px}
+  .tr.ok{color:var(--green);border-color:rgba(30,123,79,.55);background:rgba(30,123,79,.07)}
+  .tr.plan{color:var(--brass-deep);border-color:rgba(168,123,45,.6);background:rgba(168,123,45,.08)}
+
+  /* links live in the left column under the solution card, not in the right column */
+  .links{display:grid;gap:4px;margin-top:12px;padding-top:11px;border-top:1px dashed rgba(35,38,43,.18)}
+  .lk{display:flex;align-items:baseline;gap:10px;font-family:var(--mono);font-size:19px}
+  .lk .k{color:var(--dim);flex:none;width:96px;letter-spacing:.06em;text-transform:uppercase;font-size:18px}
+  .lk .v{color:var(--purple);font-weight:500}
+  .lk .v.p{color:var(--txt)}
+
+  .note{font-family:var(--mono);font-weight:400;font-size:17px;line-height:1.38;color:var(--dim);
+        padding-top:9px;margin-top:9px;border-top:1px dashed rgba(35,38,43,.18)}
+  .note b{color:var(--brass-deep);font-weight:600}
+</style>
+</head>
+<body>
+<div class="plate">
+  <div class="crop tl"></div><div class="crop tr"></div><div class="crop bl"></div><div class="crop br"></div>
+  <div class="rule top"></div><div class="rule bottom"></div>
+
+  <header class="rail rail-top">
+    <div class="mark"><i></i><i></i><i></i></div>
+    <div class="wordmark">PerPlay</div>
+    <span class="rail-mono">per-play music licensing · bangkok</span>
+    <div class="grow"></div>
+    <span class="folio"><b>ONE-PAGER</b> / 01</span>
+    <span class="tag">BNB Hack Bangkok 2026</span>
+  </header>
+
+  <main class="body">
+
+    <!-- ===== A: problem → solution ===== -->
+    <div class="col-a">
+      <div class="shead"><span>Problem → Solution</span><span class="n">01</span></div>
+      <h1>Every play<br><span class="u">pays.</span></h1>
+      <p class="lead">Thai venues buy a <b>blanket annual music licence</b> and get no log of what actually played. PerPlay sells the licence <b>per song, per play</b> — and proves it on-chain.</p>
+
+      <div class="bill">
+        <div class="t">Today · blanket licence</div>
+        <div class="amt"><span class="n">16,000</span><span class="u">THB / year</span></div>
+        <div class="row"><span>Play-level log</span><span class="v none">none</span></div>
+        <div class="row"><span>Proof of what sounded</span><span class="v none">none</span></div>
+        <div class="row"><span>Cost on an empty Tuesday</span><span class="v">same</span></div>
+        <div class="foot">Paid whether you play — it does not go down when the room is empty.</div>
+      </div>
+
+      <div class="vs">
+        <span class="bar"></span><span class="k">with PerPlay</span><span class="bar"></span>
+      </div>
+
+      <div class="fix">
+        <div class="amt"><span class="n">฿30</span><span class="u">per play · per song</span></div>
+        <div class="line">Scan a <b>PromptPay QR</b>, verify the track, and the royalty <b>splits 70 / 10 / 20</b> — label, venue, platform.</div>
+        <div class="line"><em>Empty night = zero cost. Every ฿30 is logged.</em></div>
+      </div>
+
+      <div class="links">
+        <div class="lk"><span class="k">Live demo</span><span class="v">perplay-demo.poom-a1d.workers.dev</span></div>
+        <div class="lk"><span class="k">Repo</span><span class="v">github.com/Poom5741/perplay</span></div>
+        <div class="lk"><span class="k">Chain</span><span class="v p">BNB Smart Chain Testnet · chainId 97</span></div>
+        <div class="lk"><span class="k">Token</span><span class="v p">$PLAY · 0x23c5…CE6AF8</span></div>
+      </div>
+    </div>
+
+    <!-- ===== B: how it works ===== -->
+    <div class="col-b">
+      <div class="shead"><span>How it works</span><span class="n">02</span></div>
+      <div class="flow">
+        <div class="fstep"><span class="no">01</span>
+          <div><div class="h">Order a play</div><div class="d">catalogue · ฿30 per song</div></div></div>
+        <div class="fstep"><span class="no">02</span>
+          <div><div class="h">Pay by PromptPay QR</div><div class="d">genuine EMVCo dynamic QR <span class="ok">(CRC16 verified)</span></div></div></div>
+        <div class="fstep"><span class="no">03</span>
+          <div><div class="h">Verify what played</div><div class="d">fingerprint or setlist check <span class="no">(PoC mock)</span></div></div></div>
+        <div class="fstep"><span class="no">04</span>
+          <div><div class="h">Anchor the receipt</div><div class="d">hash(play) → BSC Testnet tx <span class="ok">(REAL)</span></div></div></div>
+        <div class="fstep"><span class="no">05</span>
+          <div><div class="h">Split 70/10/20</div><div class="d">settled in mock THB · venue bond enforced</div></div></div>
+      </div>
+    </div>
+
+    <!-- ===== C: proof, tracks, links ===== -->
+    <div class="col-c">
+      <div class="shead"><span>Proof &amp; tracks</span><span class="n">03</span></div>
+
+      <div class="proof">
+        <div class="prow"><span class="k">End-to-end per play</span><span class="v g">0.6–3.5 s</span></div>
+        <div class="prow"><span class="k">Gas per receipt</span><span class="v g">29,560</span></div>
+        <div class="prow"><span class="k">Cost per receipt</span><span class="v">&lt;$0.01 mainnet</span></div>
+        <div class="prow"><span class="k">Split accounting</span><span class="v g">exact 70/10/20</span></div>
+        <div class="prow"><span class="k">Cournot oracle</span><span class="v g">live → PROCEED</span></div>
+      </div>
+
+      <div class="tracks">
+        <span class="tr ok">✓ Developer Track</span>
+        <span class="tr ok">✓ Four.meme / OpenFour</span>
+        <span class="tr ok">✓ Cournot</span>
+        <span class="tr plan">◇ CMC × Atlas</span>
+      </div>
+
+      <div class="note"><b>Honest scope:</b> receipt anchoring is real on BSC Testnet; the PromptPay QR payload is genuine but collection is simulated; fingerprinting is a PoC mock. Mock THB is a test settlement token, not a real stablecoin.</div>
+    </div>
+
+  </main>
+
+  <footer class="rail rail-bot">
+    <span class="rail-mono"><b>Three transfers · one receipt · zero black box</b></span>
+    <div class="grow"></div>
+    <span class="rail-mono">1920 × 1080 · paper #F6F4EF · 26 nov 2026</span>
+  </footer>
+</div>
+</body>
+</html>

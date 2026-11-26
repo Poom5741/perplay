@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PerPlay — submission screenshot frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../plates/src/plates.css">
+<style>
+  html,body{width:1920px;height:1080px;background:#23262B}
+  .frame{position:relative;width:1920px;height:1080px;background:#23262B;
+         display:flex;flex-direction:column;padding:0}
+
+  /* top rail */
+  .top{height:62px;flex:none;display:flex;align-items:center;gap:16px;padding:0 46px;
+       border-bottom:1.5px solid rgba(246,244,239,.16)}
+  .top .mark{display:flex;flex-direction:column;justify-content:center;gap:4px;width:30px;height:24px}
+  .top .mark i{display:block;height:5px}
+  .top .mark i:nth-child(1){width:30px;background:#A87B2D}
+  .top .mark i:nth-child(2){width:21px;background:#F6F4EF}
+  .top .mark i:nth-child(3){width:12px;background:#5C2D91}
+  .top .wordmark{font-family:var(--disp);font-weight:700;font-size:30px;line-height:1;letter-spacing:-.012em;color:#F6F4EF}
+  .top .sep{font-family:var(--mono);font-weight:500;font-size:21px;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,244,239,.52)}
+  .top .grow{flex:1}
+  .top .step{font-family:var(--mono);font-weight:600;font-size:21px;letter-spacing:.12em;text-transform:uppercase;color:#D9A441}
+
+  /* screenshot area */
+  .shot{flex:1;position:relative;background:#0E0F12;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .shot img{display:block;max-width:calc(100% - 24px);max-height:calc(100% - 24px);object-fit:contain}
+
+  /* caption bar */
+  .cap{flex:none;height:112px;display:flex;align-items:center;gap:40px;padding:0 46px;
+       border-top:1.5px solid rgba(246,244,239,.16);background:#23262B}
+  .cap .num{font-family:var(--disp);font-weight:700;font-size:46px;line-height:1;color:#5C2D91;
+            border-right:1.5px solid rgba(246,244,239,.20);padding-right:34px;flex:none}
+  .cap .txt{flex:1;min-width:0}
+  .cap .h{font-family:var(--sans);font-weight:600;font-size:30px;line-height:1.18;color:#F6F4EF;margin-bottom:4px}
+  .cap .d{font-family:var(--mono);font-weight:400;font-size:20px;line-height:1.32;color:rgba(246,244,239,.62)}
+  .cap .d .ok{color:#5FD08A;font-weight:600}
+  .cap .d .no{color:#F08A7A;font-weight:600}
+  .cap .right{flex:none;text-align:right}
+  .cap .right .l{font-family:var(--mono);font-weight:500;font-size:18px;letter-spacing:.10em;text-transform:uppercase;color:rgba(246,244,239,.44);margin-bottom:5px}
+  .cap .right .v{font-family:var(--mono);font-weight:600;font-size:23px;color:#D9A441}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header class="top">
+    <div class="mark"><i></i><i></i><i></i></div>
+    <div class="wordmark">PerPlay</div>
+    <div class="sep">live demo · BSC Testnet</div>
+    <div class="grow"></div>
+    <div class="step">perplay-demo.poom-a1d.workers.dev</div>
+  </header>
+
+  <div class="shot">
+    <img src="__IMG__" alt="">
+  </div>
+
+  <footer class="cap">
+    <div class="num">__NUM__</div>
+    <div class="txt">
+      <div class="h">__HEAD__</div>
+      <div class="d">__BODY__</div>
+    </div>
+    <div class="right">
+      <div class="l">__RLABEL__</div>
+      <div class="v">__RVAL__</div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
