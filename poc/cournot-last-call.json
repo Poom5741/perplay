@@ -21,12 +21,12 @@
       "charged": false,
       "x402": null,
       "free_quota": {
-        "ip": "203.170.214.212",
+        "ip": "171.96.154.1",
         "total": 3,
-        "used": 3,
-        "remaining": 0
+        "used": 2,
+        "remaining": 1
       },
-      "probability": 0.0055,
+      "probability": 0.0049,
       "markets": [
         {
           "market_info": {
@@ -72,7 +72,7 @@
             "start_time": "",
             "end_time": "2027-01-01T05:00:00Z",
             "market_outcome": "YES",
-            "market_outcome_price": 0.0055
+            "market_outcome_price": 0.0049
           },
           "matching_confidence": 0
         },
@@ -140,68 +140,68 @@
       "basis": [
         {
           "source": "kalshi",
-          "summary": "kalshi latest yes price 0.0055 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
-          "time": "2026-11-26T08:42:41Z",
+          "summary": "kalshi latest yes price 0.0049 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
+          "time": "2026-11-26T20:17:59Z",
           "url": "https://kalshi.com/markets/kxbtcy/kxbtcy-27jan0100?op_market_ticker=KXBTCY-27JAN0100-T149999.99"
         },
         {
           "source": "binance",
-          "summary": "Over 76 days of coverage, XRP fell by -0.254084 from 1.3956 to 1.041, fluctuating between 1.0158 and 1.6582 with an annualized volatility of 0.588746 and a maximum drawdown of -0.337786.",
-          "time": "2026-11-26T04:52:16.184Z",
+          "summary": "Over the 76-day period, XRP dropped -25.4084% from 1.3956 to 1.041 with an annualized volatility of 0.588746 and a maximum drawdown of -33.7786%.",
+          "time": "2026-11-26T16:52:37.849Z",
           "url": "https://www.binance.com/en/futures/XRPUSDT"
         },
         {
           "source": "venues",
-          "summary": "Across venues over the 76 days, XRP medium-term returns ranged from -0.262803 to -0.254013 with annualized volatility between 0.588143 and 0.624977, while 24-hour mark prices traded from 0.9588 to 0.9591 amid positive funding rates between 0.00001 and 0.0001.",
-          "time": "2026-11-26T04:52:16.184Z",
+          "summary": "Over the 76-day window, XRP returns ranged from -27.0425% to -25.4013%, with annualized volatility between 58.8143% and 62.4755% and maximum drawdowns between -35.2837% and -33.7723%.",
+          "time": "2026-11-26T16:52:37.849Z",
           "url": "https://www.coinglass.com/currencies/XRP"
         },
         {
           "source": "binance",
-          "summary": "Across 76 days of coverage, BTC declined -8.6667% from 78200.7 to 71423.3, moving between 71082 and 87385.1 with a maximum drawdown of -17.5048% and annualized volatility of 36.6415%.",
-          "time": "2026-11-26T06:01:31.492Z",
+          "summary": "Over the 76 days, BTC fell -8.6667% from 78200.7 to 71423.3, recording a maximum drawdown of -17.5048% and an annualized volatility of 36.6415%.",
+          "time": "2026-11-26T18:01:37.398Z",
           "url": "https://www.binance.com/en/futures/BTCUSDT"
         },
         {
           "source": "venues",
-          "summary": "Across venues over 76 days, BTC returns ranged from -8.667% to -7.8879% with annualized volatility between 36.6415% and 37.0399%, while mark prices spanned from 60667.1 to 60680.4.",
-          "time": "2026-11-26T06:01:31.492Z",
+          "summary": "Across venues over the 76-day medium window, returns ranged from -0.125833 to -0.086469 with annualized volatility between 0.366415 and 0.378821, while mark prices spanned from 60530 to 60545.",
+          "time": "2026-11-26T18:01:37.398Z",
           "url": "https://www.coinglass.com/currencies/BTC"
         },
         {
           "source": "deribit",
-          "summary": "Over the 76-day window, BTC options showed a DVOL of 0.3878, an ATM IV of 0.57465, call open interest of 13554, put open interest of 8963.4, a put-call ratio of 0.66131, and a max pain price of 66000.",
-          "time": "2026-11-26T06:01:31.492Z",
+          "summary": "Over the 76-day medium horizon ending November 12, 2026, BTC market structure registered a 66000 max pain, 15088.6 in volume, 13554 call open interest, 8963.4 put open interest, a 0.66131 put-call ratio, 0.3878 DVOL, and 0.57465 ATM implied volatility.",
+          "time": "2026-11-26T18:01:37.398Z",
           "url": "https://www.deribit.com/options/BTC"
         },
         {
           "source": "binance",
-          "summary": "Over the 14-day window covering 15 days, XRP fell from 1.041 to 0.9529 with a -8.463% return, reaching a mark price of 0.9528 alongside open interest of 335851241.5 and a long-short ratio of 2.6887.",
-          "time": "2026-11-26T08:27:58.208Z",
+          "summary": "Over the 14 calendar days ending November 26, 2026, XRP declined by -8.684% from 1.041 to 0.9506, recording a minimum price of 0.8591, a maximum of 1.0438, and a mark price of 0.950643.",
+          "time": "2026-11-26T20:18:17.188Z",
           "url": "https://www.binance.com/en/futures/XRPUSDT"
         },
         {
           "source": "venues",
-          "summary": "Across venues, XRP mark prices range from 0.9526 to 0.9529 with 24-hour price changes between 3.6202% and 3.779%, while funding rates span 0.000013 to 0.0001 and 24-hour open interest changes fluctuate from -16.6256% to 2.8936%.",
-          "time": "2026-11-26T08:27:58.208Z",
+          "summary": "Across venues, XRP mark prices range from 0.9504 to 0.9507 with 24-hour price changes between 0.01246 and 0.01343, while funding rates span 0.000013 to 0.0001 and open interest changes range from -0.166256 to 0.028936.",
+          "time": "2026-11-26T20:18:17.188Z",
           "url": "https://www.coinglass.com/currencies/XRP"
         },
         {
           "source": "forecast",
-          "summary": "Across 3 models generated on 2026-11-26, XRP forecasts indicate upward probabilities of 0, 0.75, and 1, with 1 downward direction.",
-          "time": "2026-11-26T08:27:58.208Z",
+          "summary": "All 3 models forecast an upward direction for XRP on 2026-11-26, with Kronos assigning a 0.75 probability and both Chronos and TimesFM assigning a 1 probability.",
+          "time": "2026-11-26T20:18:17.188Z",
           "url": ""
         },
         {
           "source": "binance",
-          "summary": "Over the 76 days covered, DOGE dropped by -0.220084 from an initial price of 0.08524 to 0.06648, experiencing a maximum drawdown of -0.337849 and an annualized volatility of 0.627522.",
-          "time": "2026-11-26T04:52:19.104Z",
+          "summary": "Over the 76 days, DOGE fell by -22.0084% from 0.08524 to 0.06648 with an annualized volatility of 0.627522 and a maximum drawdown of -0.337849.",
+          "time": "2026-11-26T16:52:48.975Z",
           "url": "https://www.binance.com/en/futures/DOGEUSDT"
         },
         {
           "source": "venues",
-          "summary": "Over the 76 days, DOGE experienced returns between -0.23029 and -0.220084 alongside annualized volatilities from 0.626659 to 0.670685, while current mark prices span 0.05682 to 0.05684 with 24-hour price changes ranging from 0.040856 to 0.044669.",
-          "time": "2026-11-26T04:52:19.104Z",
+          "summary": "Over the 76 days, medium returns ranged from -23.5584% to -22.0084% with annualized volatility between 62.6659% and 67.0557%, while last funding rates spanned -0.000015 to 0.0001 across venues.",
+          "time": "2026-11-26T16:52:48.975Z",
           "url": "https://www.coinglass.com/currencies/DOGE"
         }
       ],
@@ -214,74 +214,74 @@
     "oracle": "Cournot Intelligence Oracle (live)",
     "claimScope": "USDT peg stress — proxy for THB settlement-asset risk (demo)",
     "claim": "XRP price above $0.4999 at 2027-01-01 05:00 UTC",
-    "probability": 0.0055,
+    "probability": 0.0049,
     "decision": "PROCEED",
     "holdAbove": 0.5,
     "basis": [
       {
         "source": "kalshi",
-        "summary": "kalshi latest yes price 0.0055 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
-        "time": "2026-11-26T08:42:41Z",
+        "summary": "kalshi latest yes price 0.0049 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
+        "time": "2026-11-26T20:17:59Z",
         "url": "https://kalshi.com/markets/kxbtcy/kxbtcy-27jan0100?op_market_ticker=KXBTCY-27JAN0100-T149999.99"
       },
       {
         "source": "binance",
-        "summary": "Over 76 days of coverage, XRP fell by -0.254084 from 1.3956 to 1.041, fluctuating between 1.0158 and 1.6582 with an annualized volatility of 0.588746 and a maximum drawdown of -0.337786.",
-        "time": "2026-11-26T04:52:16.184Z",
+        "summary": "Over the 76-day period, XRP dropped -25.4084% from 1.3956 to 1.041 with an annualized volatility of 0.588746 and a maximum drawdown of -33.7786%.",
+        "time": "2026-11-26T16:52:37.849Z",
         "url": "https://www.binance.com/en/futures/XRPUSDT"
       },
       {
         "source": "venues",
-        "summary": "Across venues over the 76 days, XRP medium-term returns ranged from -0.262803 to -0.254013 with annualized volatility between 0.588143 and 0.624977, while 24-hour mark prices traded from 0.9588 to 0.9591 amid positive funding rates between 0.00001 and 0.0001.",
-        "time": "2026-11-26T04:52:16.184Z",
+        "summary": "Over the 76-day window, XRP returns ranged from -27.0425% to -25.4013%, with annualized volatility between 58.8143% and 62.4755% and maximum drawdowns between -35.2837% and -33.7723%.",
+        "time": "2026-11-26T16:52:37.849Z",
         "url": "https://www.coinglass.com/currencies/XRP"
       },
       {
         "source": "binance",
-        "summary": "Across 76 days of coverage, BTC declined -8.6667% from 78200.7 to 71423.3, moving between 71082 and 87385.1 with a maximum drawdown of -17.5048% and annualized volatility of 36.6415%.",
-        "time": "2026-11-26T06:01:31.492Z",
+        "summary": "Over the 76 days, BTC fell -8.6667% from 78200.7 to 71423.3, recording a maximum drawdown of -17.5048% and an annualized volatility of 36.6415%.",
+        "time": "2026-11-26T18:01:37.398Z",
         "url": "https://www.binance.com/en/futures/BTCUSDT"
       },
       {
         "source": "venues",
-        "summary": "Across venues over 76 days, BTC returns ranged from -8.667% to -7.8879% with annualized volatility between 36.6415% and 37.0399%, while mark prices spanned from 60667.1 to 60680.4.",
-        "time": "2026-11-26T06:01:31.492Z",
+        "summary": "Across venues over the 76-day medium window, returns ranged from -0.125833 to -0.086469 with annualized volatility between 0.366415 and 0.378821, while mark prices spanned from 60530 to 60545.",
+        "time": "2026-11-26T18:01:37.398Z",
         "url": "https://www.coinglass.com/currencies/BTC"
       },
       {
         "source": "deribit",
-        "summary": "Over the 76-day window, BTC options showed a DVOL of 0.3878, an ATM IV of 0.57465, call open interest of 13554, put open interest of 8963.4, a put-call ratio of 0.66131, and a max pain price of 66000.",
-        "time": "2026-11-26T06:01:31.492Z",
+        "summary": "Over the 76-day medium horizon ending November 12, 2026, BTC market structure registered a 66000 max pain, 15088.6 in volume, 13554 call open interest, 8963.4 put open interest, a 0.66131 put-call ratio, 0.3878 DVOL, and 0.57465 ATM implied volatility.",
+        "time": "2026-11-26T18:01:37.398Z",
         "url": "https://www.deribit.com/options/BTC"
       },
       {
         "source": "binance",
-        "summary": "Over the 14-day window covering 15 days, XRP fell from 1.041 to 0.9529 with a -8.463% return, reaching a mark price of 0.9528 alongside open interest of 335851241.5 and a long-short ratio of 2.6887.",
-        "time": "2026-11-26T08:27:58.208Z",
+        "summary": "Over the 14 calendar days ending November 26, 2026, XRP declined by -8.684% from 1.041 to 0.9506, recording a minimum price of 0.8591, a maximum of 1.0438, and a mark price of 0.950643.",
+        "time": "2026-11-26T20:18:17.188Z",
         "url": "https://www.binance.com/en/futures/XRPUSDT"
       },
       {
         "source": "venues",
-        "summary": "Across venues, XRP mark prices range from 0.9526 to 0.9529 with 24-hour price changes between 3.6202% and 3.779%, while funding rates span 0.000013 to 0.0001 and 24-hour open interest changes fluctuate from -16.6256% to 2.8936%.",
-        "time": "2026-11-26T08:27:58.208Z",
+        "summary": "Across venues, XRP mark prices range from 0.9504 to 0.9507 with 24-hour price changes between 0.01246 and 0.01343, while funding rates span 0.000013 to 0.0001 and open interest changes range from -0.166256 to 0.028936.",
+        "time": "2026-11-26T20:18:17.188Z",
         "url": "https://www.coinglass.com/currencies/XRP"
       },
       {
         "source": "forecast",
-        "summary": "Across 3 models generated on 2026-11-26, XRP forecasts indicate upward probabilities of 0, 0.75, and 1, with 1 downward direction.",
-        "time": "2026-11-26T08:27:58.208Z",
+        "summary": "All 3 models forecast an upward direction for XRP on 2026-11-26, with Kronos assigning a 0.75 probability and both Chronos and TimesFM assigning a 1 probability.",
+        "time": "2026-11-26T20:18:17.188Z",
         "url": ""
       },
       {
         "source": "binance",
-        "summary": "Over the 76 days covered, DOGE dropped by -0.220084 from an initial price of 0.08524 to 0.06648, experiencing a maximum drawdown of -0.337849 and an annualized volatility of 0.627522.",
-        "time": "2026-11-26T04:52:19.104Z",
+        "summary": "Over the 76 days, DOGE fell by -22.0084% from 0.08524 to 0.06648 with an annualized volatility of 0.627522 and a maximum drawdown of -0.337849.",
+        "time": "2026-11-26T16:52:48.975Z",
         "url": "https://www.binance.com/en/futures/DOGEUSDT"
       },
       {
         "source": "venues",
-        "summary": "Over the 76 days, DOGE experienced returns between -0.23029 and -0.220084 alongside annualized volatilities from 0.626659 to 0.670685, while current mark prices span 0.05682 to 0.05684 with 24-hour price changes ranging from 0.040856 to 0.044669.",
-        "time": "2026-11-26T04:52:19.104Z",
+        "summary": "Over the 76 days, medium returns ranged from -23.5584% to -22.0084% with annualized volatility between 62.6659% and 67.0557%, while last funding rates spanned -0.000015 to 0.0001 across venues.",
+        "time": "2026-11-26T16:52:48.975Z",
         "url": "https://www.coinglass.com/currencies/DOGE"
       }
     ],
@@ -334,12 +334,12 @@
     ],
     "httpStatus": 200,
     "quota": {
-      "ip": "203.170.214.212",
+      "ip": "171.96.154.1",
       "total": 3,
-      "used": 3,
-      "remaining": 0
+      "used": 2,
+      "remaining": 1
     },
     "billing": "free_quota",
-    "checkedAt": "2026-11-26T08:43:26.617Z"
+    "checkedAt": "2026-11-26T20:21:00.594Z"
   }
 }
