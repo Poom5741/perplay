@@ -102,6 +102,15 @@ async function readBody(req, limit = 15 * 1024 * 1024) {
 // #19: mark client-fault errors so the outer catch answers 4xx, never 500
 const clientError = (status, message) => Object.assign(new Error(message), { clientError: status });
 
+// settlement fires ONLY after verification — an unverified play must never
+// pull the fan's money (found by live probe 2026-11-26: setlist-mismatch
+// play had its mTHB pulled with no royalties paid and no receipt)
+function settleVerified(play) {
+  settlePlay(play.amountTHB)
+    .then(s => { if (s) { const p = plays.get(play.id); if (p) { p.settlement = s; plays.set(play.id, p); } } })
+    .catch(e => { const p = plays.get(play.id); if (p) { p.settlementError = String(e.message || e).slice(0, 140); plays.set(play.id, p); } });
+}
+
 function json(res, code, obj) {
   const body = JSON.stringify(obj);
   res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
@@ -208,11 +217,6 @@ const server = http.createServer(async (req, res) => {
         if (play.status !== 'qr_pending') return json(res, 409, { error: `bad state ${play.status}` });
         play.status = 'paid';
         play.timings.paidConfirmed = Date.now();
-        // checkpoint 3: on-chain settlement in Mock THB (demo token) — fan → 70 label / 10 venue / 20 platform
-        // fire-and-forget: state machine (paid→verified→anchored) never waits on it; result stamped on the play
-        settlePlay(play.amountTHB)
-          .then(s => { if (s) { const p = plays.get(play.id); if (p) { p.settlement = s; plays.set(play.id, p); } } })
-          .catch(e => { const p = plays.get(play.id); if (p) { p.settlementError = String(e.message || e).slice(0, 140); plays.set(play.id, p); } });
         // PoC: payment simulated (PromptPay payload real, confirm button = simulate)
         // verify: setlist mode auto-verifies if song is on tonight's setlist
         const today = new Date().toISOString().slice(0, 10);
@@ -223,12 +227,13 @@ const server = http.createServer(async (req, res) => {
             play.verifyResult = { method: 'setlist', ok: true, detail: `อยู่ในเซ็ตลิสต์คืนนี้ (${today})` };
             play.timings.verified = Date.now();
             plays.set(play.id, play);
+            settleVerified(play);
             anchorIfReady(play).then(() => {}); // async anchor
             return json(res, 200, { play: plays.get(play.id) });
           }
           return json(res, 409, { error: 'เพลงไม่อยู่ในเซ็ตลิสต์คืนนี้ — วงต้องลงทะเบียนเซ็ตลิสต์ล่วงหน้า', play });
         }
-        // acr mode: wait for /verify/scan upload
+        // acr mode: wait for /verify/scan upload (settlement fires only after verification)
         plays.set(play.id, play);
         return json(res, 200, { play, next: 'scan-audio' });
       }
@@ -252,6 +257,7 @@ const server = http.createServer(async (req, res) => {
           play.verifyResult = { method: 'audio-scan (mock fingerprint)', ok: true, matchedSong: match[0], detail: 'fingerprint ตรงกับ catalog (PoC: ใช้ mock fingerprint — production ใช้ ACRCloud ~0.17฿/จับ)' };
           play.timings.verified = Date.now();
           plays.set(play.id, play);
+          settleVerified(play);
           anchorIfReady(play).then(() => {});
           return json(res, 200, { play: plays.get(play.id) });
         }

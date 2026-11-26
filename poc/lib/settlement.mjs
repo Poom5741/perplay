@@ -43,6 +43,17 @@ function getWalletClient() {
 // THB is 2-decimal money; mTHB is 18 decimals — scale without floats.
 const toWei = (amountTHB) => BigInt(Math.round(amountTHB * 1e6)) * 10n ** 12n;
 
+// publicnode occasionally rejects a raw tx once ("Missing or invalid parameters",
+// nonce/rate flake seen live 2026-11-26) — one retry after a short pause fixes it
+const sendTx = async (fn) => {
+  try { return await fn(); }
+  catch (e) {
+    if (!/Missing or invalid parameters/i.test(String(e.message))) throw e;
+    await new Promise(r => setTimeout(r, 3000));
+    return fn();
+  }
+};
+
 // Pull full amount from fan → platform, then push 70% label / 10% venue (platform keeps 20%).
 // The settlement-risk guard DRIVES conversion (decision #33 amendment): the fan pull is
 // always safe (settlement asset stays on the platform); the payout-side conversion happens
@@ -52,7 +63,7 @@ export async function settlePlay(amountTHB) {
   if (!settlementEnabled()) return null;
   const amt = toWei(amountTHB);
   const self = getWalletClient().account.address;
-  const pullTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transferFrom', args: [process.env.FAN_WALLET_ADDRESS, self, amt] });
+  const pullTx = await sendTx(() => getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transferFrom', args: [process.env.FAN_WALLET_ADDRESS, self, amt] }));
   const pullRc = await publicClient().waitForTransactionReceipt({ hash: pullTx });
   if (pullRc.status !== 'success') throw new Error(`mTHB pull reverted (${pullTx})`);
   const base = {
@@ -68,8 +79,8 @@ export async function settlePlay(amountTHB) {
   if (guardState && guardState.decision === 'HOLD') {
     return { ...base, labelTx: null, venueTx: null, held: true, guard: guardState, note: 'conversion HELD by settlement-risk guard — payout funds held on platform (admin can release)' };
   }
-  const labelTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.LABEL_WALLET_ADDRESS || self, amt * 70n / 100n] });
-  const venueTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.VENUE_WALLET_ADDRESS, amt * 10n / 100n] });
+  const labelTx = await sendTx(() => getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.LABEL_WALLET_ADDRESS || self, amt * 70n / 100n] }));
+  const venueTx = await sendTx(() => getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.VENUE_WALLET_ADDRESS, amt * 10n / 100n] }));
   return {
     ...base,
     labelTx, venueTx,
