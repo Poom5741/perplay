@@ -1,0 +1,55 @@
+1
+00:00:02,150 --> 00:00:08,620
+Bangkok. Live music all night. Almost none of it paid for.
+
+2
+00:00:09,270 --> 00:00:21,020
+16,000 THB/year. Same bill on a packed Saturday as an empty Tuesday.
+
+3
+00:00:21,870 --> 00:00:38,900
+No log, no proof. 40 requests a night = ~2,640 THB/month to the venue.
+
+4
+00:00:40,150 --> 00:00:52,380
+Blanket fees. No play-level proof. Artists get nothing per play.
+
+5
+00:00:54,030 --> 00:00:56,420
+PerPlay — every play pays.
+
+6
+00:00:57,170 --> 00:01:04,120
+One tap. One QR. ฿30.
+
+7
+00:01:04,870 --> 00:01:17,580
+Real PromptPay payload. Bank capture simulated.
+
+8
+00:01:18,230 --> 00:01:24,220
+Licensed · paid · anchoring on-chain.
+
+9
+00:01:25,270 --> 00:01:38,620
+70 / 10 / 20 · three real BSC transactions · 22.4 s
+
+10
+00:01:39,370 --> 00:01:47,760
+One ledger. Both sides.
+
+11
+00:01:48,410 --> 00:01:59,920
+No bond, no business. HTTP 402.
+
+12
+00:02:00,670 --> 00:02:06,900
+Only tonight's setlist clears. HTTP 409.
+
+13
+00:02:07,550 --> 00:02:30,260
+$PLAY — pair with the stablecoin, stake, earn yield paid as royalty credits.
+
+14
+00:02:32,510 --> 00:02:52,780
+One play. One on-chain license.
