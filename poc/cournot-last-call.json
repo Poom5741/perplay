@@ -14,19 +14,332 @@
       10
     ]
   },
-  "response": {},
+  "response": {
+    "code": 0,
+    "msg": "Success",
+    "data": {
+      "charged": false,
+      "x402": null,
+      "free_quota": {
+        "ip": "203.170.214.212",
+        "total": 3,
+        "used": 3,
+        "remaining": 0
+      },
+      "probability": 0.0055,
+      "markets": [
+        {
+          "market_info": {
+            "id": 11,
+            "title": "XRP price above $0.4999 at 2027-01-01 05:00 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T05:00:00Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 12,
+            "title": "XRP price above $6.00 at 2027-01-01 05:00 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T05:00:00Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 13,
+            "title": "Bitcoin price above $20,000 at 2027-01-01 05:00 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T05:00:00Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 14,
+            "title": "Bitcoin price above $150,000 at 2027-01-01 05:00 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T05:00:00Z",
+            "market_outcome": "YES",
+            "market_outcome_price": 0.0055
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 15,
+            "title": "XRP price above $1.78 at 2026-08-28 21:00 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2026-08-28T21:00:00Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 16,
+            "title": "Dogecoin price above $0.1 at any time before 2027-01-01 04:59 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T04:59:59Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 17,
+            "title": "Dogecoin price above $0.11 at any time before 2027-01-01 04:59 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T04:59:59Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 18,
+            "title": "Dogecoin price above $0.12 at any time before 2027-01-01 04:59 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T04:59:59Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        },
+        {
+          "market_info": {
+            "id": 19,
+            "title": "Dogecoin price above $0.13 at any time before 2027-01-01 04:59 UTC",
+            "description": "",
+            "start_time": "",
+            "end_time": "2027-01-01T04:59:59Z",
+            "market_outcome": "",
+            "market_outcome_price": 0
+          },
+          "matching_confidence": 0
+        }
+      ],
+      "basis": [
+        {
+          "source": "kalshi",
+          "summary": "kalshi latest yes price 0.0055 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
+          "time": "2026-11-26T08:42:41Z",
+          "url": "https://kalshi.com/markets/kxbtcy/kxbtcy-27jan0100?op_market_ticker=KXBTCY-27JAN0100-T149999.99"
+        },
+        {
+          "source": "binance",
+          "summary": "Over 76 days of coverage, XRP fell by -0.254084 from 1.3956 to 1.041, fluctuating between 1.0158 and 1.6582 with an annualized volatility of 0.588746 and a maximum drawdown of -0.337786.",
+          "time": "2026-11-26T04:52:16.184Z",
+          "url": "https://www.binance.com/en/futures/XRPUSDT"
+        },
+        {
+          "source": "venues",
+          "summary": "Across venues over the 76 days, XRP medium-term returns ranged from -0.262803 to -0.254013 with annualized volatility between 0.588143 and 0.624977, while 24-hour mark prices traded from 0.9588 to 0.9591 amid positive funding rates between 0.00001 and 0.0001.",
+          "time": "2026-11-26T04:52:16.184Z",
+          "url": "https://www.coinglass.com/currencies/XRP"
+        },
+        {
+          "source": "binance",
+          "summary": "Across 76 days of coverage, BTC declined -8.6667% from 78200.7 to 71423.3, moving between 71082 and 87385.1 with a maximum drawdown of -17.5048% and annualized volatility of 36.6415%.",
+          "time": "2026-11-26T06:01:31.492Z",
+          "url": "https://www.binance.com/en/futures/BTCUSDT"
+        },
+        {
+          "source": "venues",
+          "summary": "Across venues over 76 days, BTC returns ranged from -8.667% to -7.8879% with annualized volatility between 36.6415% and 37.0399%, while mark prices spanned from 60667.1 to 60680.4.",
+          "time": "2026-11-26T06:01:31.492Z",
+          "url": "https://www.coinglass.com/currencies/BTC"
+        },
+        {
+          "source": "deribit",
+          "summary": "Over the 76-day window, BTC options showed a DVOL of 0.3878, an ATM IV of 0.57465, call open interest of 13554, put open interest of 8963.4, a put-call ratio of 0.66131, and a max pain price of 66000.",
+          "time": "2026-11-26T06:01:31.492Z",
+          "url": "https://www.deribit.com/options/BTC"
+        },
+        {
+          "source": "binance",
+          "summary": "Over the 14-day window covering 15 days, XRP fell from 1.041 to 0.9529 with a -8.463% return, reaching a mark price of 0.9528 alongside open interest of 335851241.5 and a long-short ratio of 2.6887.",
+          "time": "2026-11-26T08:27:58.208Z",
+          "url": "https://www.binance.com/en/futures/XRPUSDT"
+        },
+        {
+          "source": "venues",
+          "summary": "Across venues, XRP mark prices range from 0.9526 to 0.9529 with 24-hour price changes between 3.6202% and 3.779%, while funding rates span 0.000013 to 0.0001 and 24-hour open interest changes fluctuate from -16.6256% to 2.8936%.",
+          "time": "2026-11-26T08:27:58.208Z",
+          "url": "https://www.coinglass.com/currencies/XRP"
+        },
+        {
+          "source": "forecast",
+          "summary": "Across 3 models generated on 2026-11-26, XRP forecasts indicate upward probabilities of 0, 0.75, and 1, with 1 downward direction.",
+          "time": "2026-11-26T08:27:58.208Z",
+          "url": ""
+        },
+        {
+          "source": "binance",
+          "summary": "Over the 76 days covered, DOGE dropped by -0.220084 from an initial price of 0.08524 to 0.06648, experiencing a maximum drawdown of -0.337849 and an annualized volatility of 0.627522.",
+          "time": "2026-11-26T04:52:19.104Z",
+          "url": "https://www.binance.com/en/futures/DOGEUSDT"
+        },
+        {
+          "source": "venues",
+          "summary": "Over the 76 days, DOGE experienced returns between -0.23029 and -0.220084 alongside annualized volatilities from 0.626659 to 0.670685, while current mark prices span 0.05682 to 0.05684 with 24-hour price changes ranging from 0.040856 to 0.044669.",
+          "time": "2026-11-26T04:52:19.104Z",
+          "url": "https://www.coinglass.com/currencies/DOGE"
+        }
+      ],
+      "api_key_quota": null,
+      "billing": "free_quota"
+    }
+  },
   "result": {
     "configured": true,
     "oracle": "Cournot Intelligence Oracle (live)",
-    "claim": "USDT loses its US dollar peg (trades below $0.99) on a major exchange before 2027-01-01",
-    "probability": null,
-    "decision": "UNAVAILABLE",
+    "claimScope": "USDT peg stress — proxy for THB settlement-asset risk (demo)",
+    "claim": "XRP price above $0.4999 at 2027-01-01 05:00 UTC",
+    "probability": 0.0055,
+    "decision": "PROCEED",
     "holdAbove": 0.5,
-    "basis": null,
-    "marketsMatched": [],
-    "httpStatus": 402,
-    "quota": null,
-    "billing": null,
-    "checkedAt": "2026-11-26T08:30:20.203Z"
+    "basis": [
+      {
+        "source": "kalshi",
+        "summary": "kalshi latest yes price 0.0055 for \"Bitcoin price above $150,000 at 2027-01-01 05:00 UTC\" (2 legs), ends 2027-01-01T05:00:00Z",
+        "time": "2026-11-26T08:42:41Z",
+        "url": "https://kalshi.com/markets/kxbtcy/kxbtcy-27jan0100?op_market_ticker=KXBTCY-27JAN0100-T149999.99"
+      },
+      {
+        "source": "binance",
+        "summary": "Over 76 days of coverage, XRP fell by -0.254084 from 1.3956 to 1.041, fluctuating between 1.0158 and 1.6582 with an annualized volatility of 0.588746 and a maximum drawdown of -0.337786.",
+        "time": "2026-11-26T04:52:16.184Z",
+        "url": "https://www.binance.com/en/futures/XRPUSDT"
+      },
+      {
+        "source": "venues",
+        "summary": "Across venues over the 76 days, XRP medium-term returns ranged from -0.262803 to -0.254013 with annualized volatility between 0.588143 and 0.624977, while 24-hour mark prices traded from 0.9588 to 0.9591 amid positive funding rates between 0.00001 and 0.0001.",
+        "time": "2026-11-26T04:52:16.184Z",
+        "url": "https://www.coinglass.com/currencies/XRP"
+      },
+      {
+        "source": "binance",
+        "summary": "Across 76 days of coverage, BTC declined -8.6667% from 78200.7 to 71423.3, moving between 71082 and 87385.1 with a maximum drawdown of -17.5048% and annualized volatility of 36.6415%.",
+        "time": "2026-11-26T06:01:31.492Z",
+        "url": "https://www.binance.com/en/futures/BTCUSDT"
+      },
+      {
+        "source": "venues",
+        "summary": "Across venues over 76 days, BTC returns ranged from -8.667% to -7.8879% with annualized volatility between 36.6415% and 37.0399%, while mark prices spanned from 60667.1 to 60680.4.",
+        "time": "2026-11-26T06:01:31.492Z",
+        "url": "https://www.coinglass.com/currencies/BTC"
+      },
+      {
+        "source": "deribit",
+        "summary": "Over the 76-day window, BTC options showed a DVOL of 0.3878, an ATM IV of 0.57465, call open interest of 13554, put open interest of 8963.4, a put-call ratio of 0.66131, and a max pain price of 66000.",
+        "time": "2026-11-26T06:01:31.492Z",
+        "url": "https://www.deribit.com/options/BTC"
+      },
+      {
+        "source": "binance",
+        "summary": "Over the 14-day window covering 15 days, XRP fell from 1.041 to 0.9529 with a -8.463% return, reaching a mark price of 0.9528 alongside open interest of 335851241.5 and a long-short ratio of 2.6887.",
+        "time": "2026-11-26T08:27:58.208Z",
+        "url": "https://www.binance.com/en/futures/XRPUSDT"
+      },
+      {
+        "source": "venues",
+        "summary": "Across venues, XRP mark prices range from 0.9526 to 0.9529 with 24-hour price changes between 3.6202% and 3.779%, while funding rates span 0.000013 to 0.0001 and 24-hour open interest changes fluctuate from -16.6256% to 2.8936%.",
+        "time": "2026-11-26T08:27:58.208Z",
+        "url": "https://www.coinglass.com/currencies/XRP"
+      },
+      {
+        "source": "forecast",
+        "summary": "Across 3 models generated on 2026-11-26, XRP forecasts indicate upward probabilities of 0, 0.75, and 1, with 1 downward direction.",
+        "time": "2026-11-26T08:27:58.208Z",
+        "url": ""
+      },
+      {
+        "source": "binance",
+        "summary": "Over the 76 days covered, DOGE dropped by -0.220084 from an initial price of 0.08524 to 0.06648, experiencing a maximum drawdown of -0.337849 and an annualized volatility of 0.627522.",
+        "time": "2026-11-26T04:52:19.104Z",
+        "url": "https://www.binance.com/en/futures/DOGEUSDT"
+      },
+      {
+        "source": "venues",
+        "summary": "Over the 76 days, DOGE experienced returns between -0.23029 and -0.220084 alongside annualized volatilities from 0.626659 to 0.670685, while current mark prices span 0.05682 to 0.05684 with 24-hour price changes ranging from 0.040856 to 0.044669.",
+        "time": "2026-11-26T04:52:19.104Z",
+        "url": "https://www.coinglass.com/currencies/DOGE"
+      }
+    ],
+    "marketsMatched": [
+      {
+        "id": 11,
+        "title": "XRP price above $0.4999 at 2027-01-01 05:00 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 12,
+        "title": "XRP price above $6.00 at 2027-01-01 05:00 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 13,
+        "title": "Bitcoin price above $20,000 at 2027-01-01 05:00 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 14,
+        "title": "Bitcoin price above $150,000 at 2027-01-01 05:00 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 15,
+        "title": "XRP price above $1.78 at 2026-08-28 21:00 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 16,
+        "title": "Dogecoin price above $0.1 at any time before 2027-01-01 04:59 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 17,
+        "title": "Dogecoin price above $0.11 at any time before 2027-01-01 04:59 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 18,
+        "title": "Dogecoin price above $0.12 at any time before 2027-01-01 04:59 UTC",
+        "confidence": 0
+      },
+      {
+        "id": 19,
+        "title": "Dogecoin price above $0.13 at any time before 2027-01-01 04:59 UTC",
+        "confidence": 0
+      }
+    ],
+    "httpStatus": 200,
+    "quota": {
+      "ip": "203.170.214.212",
+      "total": 3,
+      "used": 3,
+      "remaining": 0
+    },
+    "billing": "free_quota",
+    "checkedAt": "2026-11-26T08:43:26.617Z"
   }
 }

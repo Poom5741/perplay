@@ -12,6 +12,7 @@
 import { createPublicClient, createWalletClient, http } from 'viem';
 import { bscTestnet } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
+import { guard } from './cournot.mjs';
 
 const RPC = () => process.env.BSC_RPC_URL || 'https://bsc-testnet.publicnode.com';
 const PERK_THRESHOLD = () => BigInt(process.env.PERK_THRESHOLD || '500000000') * 10n ** 18n; // 500M $PLAY
@@ -43,6 +44,10 @@ function getWalletClient() {
 const toWei = (amountTHB) => BigInt(Math.round(amountTHB * 1e6)) * 10n ** 12n;
 
 // Pull full amount from fan → platform, then push 70% label / 10% venue (platform keeps 20%).
+// The settlement-risk guard DRIVES conversion (decision #33 amendment): the fan pull is
+// always safe (settlement asset stays on the platform); the payout-side conversion happens
+// only when the guard says PROCEED. HOLD → funds stay held on the platform. Oracle
+// UNAVAILABLE → pre-agreed fallback: conversion proceeds, admin-gated.
 export async function settlePlay(amountTHB) {
   if (!settlementEnabled()) return null;
   const amt = toWei(amountTHB);
@@ -50,14 +55,26 @@ export async function settlePlay(amountTHB) {
   const pullTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transferFrom', args: [process.env.FAN_WALLET_ADDRESS, self, amt] });
   const pullRc = await publicClient().waitForTransactionReceipt({ hash: pullTx });
   if (pullRc.status !== 'success') throw new Error(`mTHB pull reverted (${pullTx})`);
-  const labelTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.LABEL_WALLET_ADDRESS || self, amt * 70n / 100n] });
-  const venueTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.VENUE_WALLET_ADDRESS, amt * 10n / 100n] });
-  return {
+  const base = {
     token: 'Mock THB (demo token)',
     amountTHB,
     splits: { label: '70%', venue: '10%', platform: '20%' },
-    pullTx, labelTx, venueTx,
+    pullTx,
     explorer: 'https://testnet.bscscan.com/tx/',
+  };
+  // guard() caches 10 min — repeated plays do not spend free-call quota
+  const g = await guard();
+  const guardState = g?.configured ? { claim: g.claim, claimScope: g.claimScope, probability: g.probability, decision: g.decision, holdAbove: g.holdAbove } : null;
+  if (guardState && guardState.decision === 'HOLD') {
+    return { ...base, labelTx: null, venueTx: null, held: true, guard: guardState, note: 'conversion HELD by settlement-risk guard — payout funds held on platform (admin can release)' };
+  }
+  const labelTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.LABEL_WALLET_ADDRESS || self, amt * 70n / 100n] });
+  const venueTx = await getWalletClient().writeContract({ address: process.env.MTHB_ADDRESS, abi: ERC20, functionName: 'transfer', args: [process.env.VENUE_WALLET_ADDRESS, amt * 10n / 100n] });
+  return {
+    ...base,
+    labelTx, venueTx,
+    guard: guardState,
+    ...(guardState && guardState.decision !== 'PROCEED' ? { note: 'oracle unavailable — conversion proceeded on the pre-agreed admin-gated fallback' } : {}),
   };
 }
 

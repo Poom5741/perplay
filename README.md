@@ -42,7 +42,7 @@ npm run e2e
 ## Measured numbers (from the PoC run)
 
 - **Speed:** 0.6–3.5 s per play end-to-end, including the real on-chain tx (setlist ~0.7 s, fingerprint 0.6–1.1 s) — well inside the ≤30 s business target.
-- **Cost:** ~40,000 gas per receipt ≈ **0.0000006 BNB-equivalent per receipt on testnet** (measured from wallet balance before/after); same tx shape on mainnet ≈ **<$0.01 per receipt**.
+- **Cost:** ~40,000 gas per receipt ≈ **0.000004 BNB per receipt on testnet** (40k × 0.1 gwei, measured block 144927204); same tx shape on mainnet (0.05 gwei) ≈ **<$0.01 per receipt**.
 - **Split ledger:** exact 70/10/20 accounting per play, verified by unit/integration tests and manual runs (`qa/`, `tests/qa-baseline.md`).
 
 ## Hackathon

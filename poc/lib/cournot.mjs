@@ -19,9 +19,8 @@ const HOLD_ABOVE = () => Number(process.env.COURNOT_HOLD_ABOVE || '0.5'); // pro
 const CACHE_MS = () => Number(process.env.COURNOT_CACHE_MS || 600_000);
 
 export function guardEnabled() {
-  return process.env.COURNOT_ENABLED === 'true'
-    && !process.env.E2E
-    && Boolean(process.env.COURNOT_API_KEY || true); // anonymous tier allowed; key optional
+  // key optional — the anonymous tier works without one (3 free calls per IP)
+  return process.env.COURNOT_ENABLED === 'true' && !process.env.E2E;
 }
 
 const cache = { at: 0, val: null };
@@ -63,6 +62,7 @@ export async function guard({ force = false } = {}) {
   const result = {
     configured: true,
     oracle: 'Cournot Intelligence Oracle (live)',
+    claimScope: 'USDT peg stress — proxy for THB settlement-asset risk (demo)',
     claim: claimText,
     probability: Number.isFinite(probability) ? probability : null,
     decision: Number.isFinite(probability) ? (probability > HOLD_ABOVE() ? 'HOLD' : 'PROCEED') : 'UNAVAILABLE',

@@ -12,8 +12,8 @@ import { buildCatalog, ensureFingerprints, sha256Buf } from './lib/catalog.mjs';
 import { promptPayPayload, crc16 } from './lib/promptpay.mjs';
 import { initChain, chainStatus, anchorReceipt } from './lib/chain.mjs';
 import { Store } from './lib/store.mjs';
-import { settlePlay, perk, settlementEnabled } from './lib/settlement.mjs';
-import { guard, guardEnabled } from './lib/cournot.mjs';
+import { settlePlay, perk } from './lib/settlement.mjs';
+import { guard } from './lib/cournot.mjs';
 
 const PORT = process.env.PORT || 3000;
 try { process.loadEnvFile(); } catch { /* no .env — fine */ }
@@ -37,10 +37,11 @@ const VENUE_WALLET = process.env.VENUE_WALLET_ADDRESS;
 const GATE_ABI = [{ name: 'isMember', type: 'function', stateMutability: 'view', inputs: [{ name: 'venue', type: 'address' }], outputs: [{ type: 'bool' }] }];
 const gateClient = createPublicClient({ chain: bscTestnet, transport: httpTransport(process.env.BSC_RPC_URL || 'https://bsc-testnet.publicnode.com') });
 const gateCache = { ok: null, at: 0 };
+// 15s TTL: a slash must bite fast during the demo (60s let an unbonded venue sell for a minute)
 async function venueIsMember() {
   if (!VENUE_STAKE || !VENUE_WALLET) return { gated: false, member: null };
   const now = Date.now();
-  if (gateCache.at && now - gateCache.at < 60_000) return { gated: true, member: gateCache.ok };
+  if (gateCache.at && now - gateCache.at < 15_000) return { gated: true, member: gateCache.ok };
   let member;
   try {
     member = await gateClient.readContract({ address: VENUE_STAKE, abi: GATE_ABI, functionName: 'isMember', args: [VENUE_WALLET] });

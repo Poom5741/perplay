@@ -10,7 +10,7 @@ A venue posts a $PLAY stake to join the protocol. The stake is **collateral — 
 
 - **Token:** $PLAY (ERC-20, "PerPlay Protocol").
 - **Contract:** `VenueStake` — one contract; `admin` is the platform EOA tonight, a multisig in production.
-- **Interface sketch (the Foundry build implements this 1:1):**
+- **Interface sketch (the Foundry build implements this shape; events carry additive fields — `StakeAdded` adds `total`, `StakeSlashed` adds `to` and `remaining`):**
 
 ```solidity
 interface IVenueStake {

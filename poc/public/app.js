@@ -155,9 +155,16 @@ function renderReceipt(p) {
   } else if (p.explorerUrl) html += `<br><span class="muted">receipt on-chain:</span> <a class="txlink" target="_blank" href="${p.explorerUrl}">${p.txHash.slice(0, 10)}…${p.txHash.slice(-8)}</a> <span class="muted">(BSC Testnet)</span>`;
   else if (p.anchorError) html += `<br><span class="warn">anchor รอ wallet เงินใน testnet: ${p.anchorError.slice(0, 80)}… <a href="#" onclick="fetch('/api/plays/${p.id}/retry-anchor',{method:'POST'}).then(()=>0);return false">retry</a></span>`;
   if (p.e2eSeconds != null) html += `<br><span class="muted">end-to-end ทั้ง flow: <b style="color:var(--txt)">${p.e2eSeconds}s</b> ${p.e2eSeconds <= 30 ? '✅ ตามสมมติฐาน ≤30s' : '⚠️ เกิน 30s'}</span>`;
-  if (p.settlement) html += `<br><span class="muted">settled on-chain (${p.settlement.token}): ค่าย 70 / ร้าน 10 / แพลตฟอร์ม 20 ·</span> ` +
-    ['pullTx', 'labelTx', 'venueTx'].map(k => `<a class="txlink" target="_blank" href="${p.settlement.explorer}${p.settlement[k]}">${p.settlement[k].slice(0, 8)}…</a>`).join(' ');
-  else if (p.settlementError) html += `<br><span class="warn">settlement ยังไม่สำเร็จ: ${p.settlementError.slice(0, 90)}</span>`;
+  if (p.settlement) {
+    const links = ['pullTx', 'labelTx', 'venueTx'].filter(k => p.settlement[k]).map(k => `<a class="txlink" target="_blank" href="${p.settlement.explorer}${p.settlement[k]}">${p.settlement[k].slice(0, 8)}…</a>`).join(' ');
+    if (p.settlement.held) {
+      html += `<br><span class="warn">⏸ conversion HELD by settlement-risk guard — payout funds held on platform ·</span> ${links}` +
+        (p.settlement.guard ? `<br><span class="muted" style="font-size:.8rem">guard: ${p.settlement.guard.claim} @ ${p.settlement.guard.probability} (HOLD above ${(p.settlement.guard.holdAbove * 100).toFixed(0)}%)</span>` : '');
+    } else {
+      html += `<br><span class="muted">settled on-chain (${p.settlement.token}): ค่าย 70 / ร้าน 10 / แพลตฟอร์ม 20 ·</span> ${links}` +
+        (p.settlement.note ? `<br><span class="warn" style="font-size:.8rem">${p.settlement.note}</span>` : '');
+    }
+  } else if (p.settlementError) html += `<br><span class="warn">settlement ยังไม่สำเร็จ: ${p.settlementError.slice(0, 90)}</span>`;
   el.innerHTML = html;
 }
 
@@ -189,6 +196,7 @@ async function pageDashboard() {
     <div class="panel"><h2>ค่าย — รับตาม catalog</h2><table>${partyRows}</table></div>
     <div class="panel"><h2>ร้าน — venue share</h2><table>${venueRows}</table></div>
   </div>
+  <div class="panel" id="bondpanel"><h2>🏦 Venue bond — VenueStake <span class="tag" style="font-size:.7rem">slash authority: admin (demo)</span></h2><p class="muted">กำลังอ่านสถานะ bond…</p></div>
   <div class="panel" id="guardpanel"><h2>🛡 Settlement-risk guard — royalty conversion <span class="muted" style="font-size:.75rem">Cournot Intelligence Oracle (live · demo)</span></h2><p class="muted">กำลังเรียก oracle…</p></div>
   <div class="panel"><h2>รายการล่าสุด</h2>
     <table><tr><th>#</th><th>เพลง</th><th>ยอด</th><th>สถานะ</th><th>e2e</th><th>receipt</th></tr>
@@ -198,6 +206,15 @@ async function pageDashboard() {
     const el = document.getElementById('chaininfo'); if (!el) return;
     el.innerHTML = h.chain.funded ? `✅ BSC Testnet <span class="muted">block ${h.chain.blockNumber}</span>` : h.chain.error ? '⚠️ RPC error' : h.chain.configured ? `⚠️ wallet ${h.chain.address} ยังไม่มีเงิน testnet` : 'ยังไม่ configure wallet';
   });
+  // venue bond status: gate state from /api/health + VenueStake address from /api/health.chain
+  api('/health').then(h => {
+    const el = document.getElementById('bondpanel'); if (!el) return;
+    const g = h.venueGate || {};
+    el.innerHTML = `<h2>🏦 Venue bond — VenueStake <span class="tag" style="font-size:.7rem">slash authority: admin (demo)</span></h2>
+    <p>membership gate: <b style="${g.member === false ? 'color:var(--warn)' : 'color:var(--ok)'}">${g.gated === false ? 'disabled (not configured)' : g.member ? '✅ bonded — venue may sell plays' : g.rpcError ? '⚠️ RPC read failed — failing open this request' : '⛔ not bonded — plays refused (402)'}</b></p>
+    <p class="muted" style="font-size:.8rem">A venue must stake a bond before it can sell plays; proven fake plays are slashed to the protocol treasury. Demo slashing is executed by the admin key; production moves to dispute review + multisig.</p>
+    ${g.gated === false ? '<p class="muted">set VENUE_STAKE_ADDRESS in poc/.env to enable the gate</p>' : ''}`;
+  }).catch(() => {});
   // settlement-risk guard: live Cournot oracle probability drives the royalty-conversion decision
   api('/guard').then(g => {
     const el = document.getElementById('guardpanel'); if (!el || g.configured === false) return;
@@ -209,7 +226,7 @@ async function pageDashboard() {
     const pctProb = g.probability != null ? `${(g.probability * 100).toFixed(2)}%` : '—';
     const basis = Array.isArray(g.basis) ? g.basis.slice(0, 3).map(b => `<li>${b.source}: ${(b.summary || '').slice(0, 110)}… ${b.url ? `<a class="txlink" target="_blank" href="${b.url}">source ↗</a>` : ''}</li>`).join('') : '';
     el.innerHTML = `<h2>🛡 Settlement-risk guard — royalty conversion <span class="muted" style="font-size:.75rem">Cournot Intelligence Oracle (live · demo)</span></h2>
-    <p><b>Claim checked:</b> ${g.claim}</p>
+    <p><b>Claim checked:</b> ${g.claim} ${g.claimScope ? `<span class="muted" style="font-size:.8rem">(${g.claimScope})</span>` : ''}</p>
     <p>Probability: <b>${pctProb}</b> (HOLD above ${(g.holdAbove * 100).toFixed(0)}%) → decision:
       <b style="${g.decision === 'HOLD' ? 'color:var(--warn)' : 'color:var(--ok)'}">${g.decision === 'HOLD' ? '⏸ HOLD — pause royalty conversion' : '✅ PROCEED — convert settled royalties'}</b></p>
     ${basis ? `<p class="muted" style="margin-bottom:4px">Evidence (oracle basis):</p><ul style="margin:0 0 6px 18px;font-size:.85rem">${basis}</ul>` : ''}
