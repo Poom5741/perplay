@@ -1,23 +1,43 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PlayRight PoC — ขอเพลงในผับ · จ่ายต่อเพลง · จ่ายจริงให้ค่าย</title>
+<title>PerPlay — every play pays · demo on BSC Testnet</title>
+<meta name="description" content="Per-play music licensing for Thai venues. Demo on BSC Testnet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Kanit:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<header>
-  <div class="brand">PlayRight <span class="tag">PoC · TED Fund</span></div>
-  <nav>
-    <a href="#/catalog">🎤 ขอเพลง</a>
-    <a href="#/setlist">📋 เซ็ตลิสต์วง</a>
-    <a href="#/dashboard">📊 Dashboard split</a>
-    <a href="#/health" id="chaindot" class="dot" title="chain status">●</a>
-  </nav>
+<a class="skip" href="#app">Skip to content</a>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="#/catalog" aria-label="PerPlay home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="6" fill="#A87B2D" stroke="#23262B" stroke-width="1.5"/><rect x="3" y="14" width="16" height="6" fill="#F6F4EF" stroke="#23262B" stroke-width="1.5"/></svg>
+      <b>PerPlay</b>
+    </a>
+    <nav class="site-nav" aria-label="Pages">
+      <a href="#/catalog" data-route="catalog">Catalog</a>
+      <a href="#/setlist" data-route="setlist">Setlist</a>
+      <a href="#/dashboard" data-route="dashboard">Dashboard</a>
+      <a href="#/health" data-route="health">System</a>
+    </nav>
+    <span class="demo-chip"><i id="chaindot" aria-hidden="true"></i>Demo on BSC Testnet</span>
+  </div>
 </header>
-<main id="app"><p class="muted">กำลังโหลด…</p></main>
-<footer>Per-play licensing · ค่าย 70 / ร้าน 10 / แพลตฟอร์ม 20 · PoC: PromptPay payload จริง · payment simulate · receipt บน BSC Testnet (chain 97) · <a href="https://github.com/Poom5741" style="color:#9db4d0">playright</a></footer>
+
+<main id="main" class="ruled">
+  <div class="wrap" id="app"><p class="muted">Loading…</p></div>
+</main>
+
+<footer>
+  <div class="foot-in">
+    Per-play licensing · label 70 / venue 10 / platform 20 · PoC: real PromptPay payload · payment simulated · receipts anchored on BSC Testnet (chain 97) · Mock THB and $PLAY are demo tokens · slash authority: admin (demo)
+  </div>
+</footer>
 <script src="/app.js"></script>
 </body>
 </html>
