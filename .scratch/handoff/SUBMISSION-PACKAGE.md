@@ -56,6 +56,69 @@ Bring a **phone hotspot with a fresh IP** to Demo Night to get 3 more.
 
 ---
 
+## 0a. Tech stack — "Tech Tag (0/8)" field
+
+The form offers these 8 presets: **React, Next, Vue, Web3, Ethers, Node, Java, Go, Python,
+Solidity, Cardano, Rust, Move, Compact**. Pick the ones that are actually true — **do not
+tick React / Next / Vue / Python / Go / Rust / Java / Cardano / Move**, none are used.
+
+### ✅ Tick these 4 (verified in the repo)
+
+| Tag | Why it is true | Evidence |
+|---|---|---|
+| **Solidity** | The protocol contracts are Solidity `^0.8.20`, compiled with solc `0.8.28`, optimizer on | `contracts/src/{MockTHB,VenueStake,IERC20}.sol`, `contracts/foundry.toml` |
+| **Web3** | Wallet + ERC-20 reads/writes against BSC Testnet, receipts anchored as data txs | `poc/lib/chain.mjs`, `poc/lib/settlement.mjs`, live txs on chain 97 |
+| **Node** | The whole backend is Node.js ESM — server, worker, and all libs | `poc/package.json` (`"type":"module"`), `poc/server.mjs`, `poc/worker.mjs`, `poc/lib/*.mjs` |
+| **Ethers** | **Literally true** — `ethers` v6 signs and encodes the $PLAY token launch (the OpenFour fork call) | `launchpad/package.json` → `"ethers": "^6.17.0"`, `launchpad/launch-play.js` (`ethers.AbiCoder`, `ethers.parseUnits`, `ethers.ZeroAddress`) |
+
+> The main PoC uses **viem**; the **$PLAY launchpad uses ethers v6**. Both are in the repo, so
+> both tags are honest. If a judge asks, the answer is: viem for the demo path, ethers for the
+> token launch.
+
+### ✅ Recommended 5th
+
+| Tag | Why |
+|---|---|
+| **"Add New" → `Cloudflare Workers`** | The live demo runs on Cloudflare Workers with a Durable Object for state. It is the single most distinctive part of the stack and no preset covers it. |
+
+### ❌ Do NOT tick
+
+**React · Next · Vue** — the front end is **vanilla JS** (`poc/public/{index.html,app.js,style.css}`),
+no framework, no bundler, no build step. **Python** — the only `.py` file is
+`contracts/lib/forge-std/scripts/vm.py` (vendored Forge test helper, not our code).
+**Go · Rust · Java · Cardano · Move · Compact** — none used.
+
+### Paste-ready summary
+
+```
+Stack: Solidity (Foundry) · Node.js (vanilla JS SPA) · viem + ethers v6 (EVM) ·
+Cloudflare Workers + Durable Objects · BSC Testnet (chain 97) · qrcode (PromptPay EMVCo) ·
+Cournot Intelligence Oracle (HTTP)
+```
+
+**Full stack for the "tech stack" prose field:**
+
+```
+PerPlay is built on Solidity smart contracts (Foundry, solc 0.8.28) deployed to BNB Smart Chain
+Testnet (chainId 97), with a Node.js backend and a dependency-free vanilla JavaScript front end.
+The live demo runs on Cloudflare Workers with a Durable Object for strongly consistent state.
+Chain interaction uses viem for ERC-20 reads and data-only receipt anchoring, and ethers v6 to
+sign and encode the $PLAY token launch. Payment is a genuine EMVCo dynamic PromptPay QR
+generated server-side, and an on-chain settlement-risk guard calls the Cournot Intelligence
+Oracle over HTTP and gates royalty conversion on the returned probability.
+```
+
+### Also on this form
+
+- **MVP Link** → `https://perplay-demo.poom-a1d.workers.dev` (already visible in the screenshot)
+- **Project Link** → `https://github.com/Poom5741/perplay`
+- **X (Twitter) Link** → leave blank unless you want to post the video publicly first
+- **Categories already ticked** → DeFi + RWA. Both correct: music licensing is a real-world
+  asset, and the royalty split + venue bond is DeFi. Optionally add **AI** — the Cournot oracle
+  is an AI agent making a settlement decision on-chain, which is the angle the AI track rewards.
+
+---
+
 ## 1. Video upload (the only blocking human step)
 
 File to upload: `study/perplay/video/out/perplay-demo-v2.mp4` — 1920×1080, 30 fps,  
