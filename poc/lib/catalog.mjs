@@ -1,5 +1,6 @@
-// Song catalog — 100 MOCK Grammy-style songs (fictional titles/artists, clearly demo data)
-// Split config per spec: ค่าย 70 / ร้าน 10 / แพลตฟอร์ม 20 (% ของราคาเพลง)
+// Song catalog — 100 MOCK songs, mixed Thai + English (fictional titles/artists, clearly demo data).
+// English songs keep international judges oriented; Thai songs keep the home-market story.
+// Split config per spec: label 70 / venue 10 / platform 20 (% of play price)
 import crypto from 'node:crypto';
 import { readFileSync, existsSync, mkdirSync, writeFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -8,11 +9,15 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const FP_FILE = path.join(DATA_DIR, 'fingerprints.json');
 
 const PRICES = [25, 30, 35, 40, 50];
-const LABELS = ['GMM-Mock A', 'GMM-Mock B', 'GMM-Mock C'];
+const LABELS = ['GMM-Mock A', 'GMM-Mock B', 'GMM-Mock C', 'Intl-Mock'];
 const TITLE_A = ['รอยไหม้', 'ฝนด้านเทอมสุดท้าย', 'ดาวตกหล่นกลางกรุง', 'เพลงที่ยังไม่ได้ร้อง', 'คืนที่เสียงหาย', 'เงาในลิฟท์', 'หอมกลิ่นฝนอำเภอเก่า', 'นาฬิกาทรายอันเดิม', 'รถไฟสายหลับใหล', 'เท็ปเก่าในตู้เสื้อ'];
 const TITLE_B = ['ของดาวรอสาย', 'ตอนที่เธอหันกลับ', 'สายลมคนเบาๆ', 'ปลายถนนไม่มีเพลง', 'วงเล็บกลางคืน', 'หน้าต่างชั้นเก้า', 'จดหมายที่ไม่เคยส่ง', 'เที่ยวสุดท้ายของบ่าย', 'เส้นขนานหัวใจ', 'แสงนีออนตาเปียก'];
 const ARTIST_A = ['วง ม้วนเพลง', 'แพรวา ใจดี', 'โฟร์ท เสียงดี', 'ดีเจ เอ๋ย', 'ธันย์ ขับกล่อม', 'มิ้นต์ อคูสติก', 'ต้นข้าว บร๊ะเดอร์', 'น้ำหวาน ซินธ์', 'กลุ่มเสียงรอ', 'โจทย์ แอนด์ เดอะเฟด'];
-const ARTIST_B = ['พลอย พาราด็อกซ์', 'วง เทปซ้ำ', 'เบนซ์ มิดไนท์', 'อรุณ สามยาม', 'วง ห้องซ้อม', 'ฟ้าใส โฟล์ค', 'ราตรี แอมพลิไฟเออร์', 'หมาก มะเขือเทศ', 'วง คลื่นซ้อน', 'แม่มด นครินทร์'];
+const ARTIST_B = ['พลอย พาราด็อกซ์', 'วง เทปซ้ำ', 'เบนซ์ มิดไนท์', 'อรุณ สามยาม', 'วง ห้องซ้อม', 'ฟ้าใส โฟล์ค', 'ราตรี แอมพลิไฟเออร์', 'หมาก มะเขือเทศ', 'วง คลื่นซ้อน', 'แม่มด นครินท์'];
+const TITLE_EN_A = ['Neon Rain on Fifth Street', 'Last Train to Anywhere', 'Paper Planes at Midnight', 'The Song We Never Sang', 'Static in the Hollow', 'Elevator Ghost', 'Old Town Rain', 'Hourglass Heart', 'Sleeping Car Blues', 'Mixtape in the Jean Jacket'];
+const TITLE_EN_B = ['Waiting on a Star', 'When You Turn Around', 'Soft Wind, Loud Night', 'Where the Road Runs Out', 'Held Breath at Midnight', 'Ninth-Floor Window', 'The Letter Never Sent', 'Last Swim of Summer', 'Parallel Hearts', 'Neon Eyes Wet'];
+const ARTIST_EN_A = ['The Vinyl Club', 'Praewa & the Paradox', 'Northbound Sound', 'DJ Aey', 'Thanys Lullaby', 'Mint Acoustic', 'Rice Field Brothers', 'Namwan Synth', 'The Echo Circle', 'Prompt & The Fade'];
+const ARTIST_EN_B = ['Ploy Paradox', 'Tape Rewind', 'Benz Midnight', 'Arun 3AM', 'The Rehearsal Room', 'Clear Sky Folk', 'Ratri Amplifier', 'Maak Tomato', 'Overlap Waves', 'Witch of Nakhon'];
 
 function mulberry32(seed) {
   return function () {
@@ -27,13 +32,15 @@ export function buildCatalog(n = 100) {
   const rand = mulberry32(20261121);
   const songs = [];
   for (let i = 1; i <= n; i++) {
-    const title = `${TITLE_A[Math.floor(rand() * TITLE_A.length)]} ${TITLE_B[Math.floor(rand() * TITLE_B.length)]}${i % 7 === 0 ? ' (Acoustic)' : ''}`;
-    const artist = rand() > 0.5 ? ARTIST_A[Math.floor(rand() * ARTIST_A.length)] : ARTIST_B[Math.floor(rand() * ARTIST_B.length)];
+    const english = i % 2 === 0; // deterministic 50/50 Thai/English mix
+    const [tA, tB, aA, aB] = english ? [TITLE_EN_A, TITLE_EN_B, ARTIST_EN_A, ARTIST_EN_B] : [TITLE_A, TITLE_B, ARTIST_A, ARTIST_B];
+    const title = `${tA[Math.floor(rand() * tA.length)]} ${tB[Math.floor(rand() * tB.length)]}${i % 7 === 0 ? ' (Acoustic)' : ''}`;
+    const artist = rand() > 0.5 ? aA[Math.floor(rand() * aA.length)] : aB[Math.floor(rand() * aB.length)];
     songs.push({
       id: `S${String(i).padStart(3, '0')}`,
       title,
       artist,
-      label: LABELS[Math.floor(rand() * LABELS.length)],
+      label: english ? 'Intl-Mock' : LABELS[Math.floor(rand() * 3)],
       priceTHB: PRICES[Math.floor(rand() * PRICES.length)],
       splits: { label: 0.70, venue: 0.10, platform: 0.20 }, // per POC-SPEC
       mock: true,
